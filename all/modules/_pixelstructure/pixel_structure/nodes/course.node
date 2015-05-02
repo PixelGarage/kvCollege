@@ -1,5 +1,5 @@
 <?php
-$export_time = 1430406200;
+$export_time = 1430596490;
 $data = array(
   'bundles' => array(
     'course' => (object) array(
@@ -90,84 +90,18 @@ $data = array(
       ),
       'bundles' => array(
         'node' => array(
-          0 => 'course',
-          1 => 'course_times',
-          2 => 'webform',
-          3 => 'location',
-          4 => 'video',
-          5 => 'page',
-          6 => 'testimonial',
-          7 => 'course_tabs',
-          8 => 'block',
-          9 => 'news',
-          10 => 'media',
-          11 => 'segment_blocks',
-          12 => 'segment_sidebar_block',
-          13 => 'remoteform',
-        ),
-      ),
-    ),
-    'field_fachgebiet' => array(
-      'translatable' => '0',
-      'entity_types' => array(),
-      'settings' => array(
-        'allowed_values' => array(
-          0 => array(
-            'vocabulary' => 'menugroup',
-            'parent' => '0',
-          ),
-        ),
-      ),
-      'storage' => array(
-        'type' => 'field_sql_storage',
-        'settings' => array(),
-        'module' => 'field_sql_storage',
-        'active' => '1',
-        'details' => array(
-          'sql' => array(
-            'FIELD_LOAD_CURRENT' => array(
-              'field_data_field_fachgebiet' => array(
-                'tid' => 'field_fachgebiet_tid',
-              ),
-            ),
-            'FIELD_LOAD_REVISION' => array(
-              'field_revision_field_fachgebiet' => array(
-                'tid' => 'field_fachgebiet_tid',
-              ),
-            ),
-          ),
-        ),
-      ),
-      'foreign keys' => array(
-        'tid' => array(
-          'table' => 'taxonomy_term_data',
-          'columns' => array(
-            'tid' => 'tid',
-          ),
-        ),
-      ),
-      'indexes' => array(
-        'tid' => array(
-          0 => 'tid',
-        ),
-      ),
-      'field_name' => 'field_fachgebiet',
-      'type' => 'taxonomy_term_reference',
-      'module' => 'taxonomy',
-      'active' => '1',
-      'locked' => '0',
-      'cardinality' => '1',
-      'deleted' => '0',
-      'columns' => array(
-        'tid' => array(
-          'type' => 'int',
-          'unsigned' => TRUE,
-          'not null' => FALSE,
-        ),
-      ),
-      'bundles' => array(
-        'node' => array(
-          0 => 'course',
+          0 => 'page',
+          1 => 'article',
+          2 => 'pxltest',
+          3 => 'course',
+          4 => 'course_tabs',
+          5 => 'course_times',
+          6 => 'location',
+          7 => 'remoteform',
+          8 => 'segment_blocks',
+          9 => 'introstep',
+          10 => 'in_depth_course',
+          11 => 'banner',
         ),
       ),
     ),
@@ -211,14 +145,15 @@ $data = array(
         ),
       ),
       'bundles' => array(
-        'node' => array(
-          0 => 'location',
-          1 => 'contact',
-          2 => 'course',
-          3 => 'course_times',
-        ),
         'taxonomy_term' => array(
           0 => 'brands',
+          1 => 'segments',
+        ),
+        'node' => array(
+          0 => 'contact',
+          1 => 'course',
+          2 => 'course_times',
+          3 => 'location',
         ),
       ),
     ),
@@ -337,14 +272,9 @@ $data = array(
       ),
       'bundles' => array(
         'node' => array(
-          0 => 'fachwissen',
-          1 => 'contact',
-          2 => 'course',
-          3 => 'banner',
-          4 => 'segment_blocks',
-          5 => 'page',
-          6 => 'youtube_playlist',
-          7 => 'segment_sidebar_block',
+          0 => 'contact',
+          1 => 'course',
+          2 => 'segment_blocks',
         ),
       ),
     ),
@@ -442,66 +372,6 @@ $data = array(
         ),
       ),
     ),
-    'field_teaser_tabs' => array(
-      'translatable' => '0',
-      'entity_types' => array(),
-      'settings' => array(
-        'hide_blank_items' => 1,
-        'path' => '',
-      ),
-      'storage' => array(
-        'type' => 'field_sql_storage',
-        'settings' => array(),
-        'module' => 'field_sql_storage',
-        'active' => '1',
-        'details' => array(
-          'sql' => array(
-            'FIELD_LOAD_CURRENT' => array(
-              'field_data_field_teaser_tabs' => array(
-                'value' => 'field_teaser_tabs_value',
-                'revision_id' => 'field_teaser_tabs_revision_id',
-              ),
-            ),
-            'FIELD_LOAD_REVISION' => array(
-              'field_revision_field_teaser_tabs' => array(
-                'value' => 'field_teaser_tabs_value',
-                'revision_id' => 'field_teaser_tabs_revision_id',
-              ),
-            ),
-          ),
-        ),
-      ),
-      'foreign keys' => array(),
-      'indexes' => array(
-        'revision_id' => array(
-          0 => 'revision_id',
-        ),
-      ),
-      'field_name' => 'field_teaser_tabs',
-      'type' => 'field_collection',
-      'module' => 'field_collection',
-      'active' => '1',
-      'locked' => '0',
-      'cardinality' => '-1',
-      'deleted' => '0',
-      'columns' => array(
-        'value' => array(
-          'type' => 'int',
-          'not null' => FALSE,
-          'description' => 'The field collection item id.',
-        ),
-        'revision_id' => array(
-          'type' => 'int',
-          'not null' => FALSE,
-          'description' => 'The field collection item revision id.',
-        ),
-      ),
-      'bundles' => array(
-        'node' => array(
-          0 => 'course',
-        ),
-      ),
-    ),
   ),
   'instances' => array(
     'body' => array(
@@ -538,48 +408,8 @@ $data = array(
         ),
         'required' => FALSE,
         'description' => '',
-        'field_name' => 'body',
-        'entity_type' => 'node',
-        'bundle' => 'course',
-        'deleted' => '0',
         'default_value' => NULL,
-      ),
-    ),
-    'field_fachgebiet' => array(
-      0 => array(
-        'label' => 'Menu-Group',
-        'widget' => array(
-          'weight' => '6',
-          'type' => 'options_select',
-          'module' => 'options',
-          'active' => 1,
-          'settings' => array(),
-        ),
-        'settings' => array(
-          'user_register_form' => FALSE,
-        ),
-        'display' => array(
-          'default' => array(
-            'label' => 'above',
-            'type' => 'hidden',
-            'weight' => '1',
-            'settings' => array(),
-          ),
-          'teaser' => array(
-            'type' => 'hidden',
-            'label' => 'above',
-            'settings' => array(),
-            'weight' => 0,
-          ),
-        ),
-        'required' => 0,
-        'description' => '',
-        'default_value' => array(
-          0 => array(
-            'tid' => '63',
-          ),
-        ),
-        'field_name' => 'field_fachgebiet',
+        'field_name' => 'body',
         'entity_type' => 'node',
         'bundle' => 'course',
         'deleted' => '0',
@@ -675,7 +505,9 @@ $data = array(
           'type' => 'options_select',
           'module' => 'options',
           'active' => 1,
-          'settings' => array(),
+          'settings' => array(
+            'apply_chosen' => '',
+          ),
         ),
         'settings' => array(
           'user_register_form' => FALSE,
@@ -711,7 +543,9 @@ $data = array(
           'type' => 'options_select',
           'module' => 'options',
           'active' => 1,
-          'settings' => array(),
+          'settings' => array(
+            'apply_chosen' => '',
+          ),
         ),
         'settings' => array(
           'user_register_form' => FALSE,
@@ -738,49 +572,6 @@ $data = array(
           ),
         ),
         'field_name' => 'field_sort',
-        'entity_type' => 'node',
-        'bundle' => 'course',
-        'deleted' => '0',
-      ),
-    ),
-    'field_teaser_tabs' => array(
-      0 => array(
-        'label' => 'Teaser Tabs',
-        'widget' => array(
-          'weight' => '3',
-          'type' => 'field_collection_embed',
-          'module' => 'field_collection',
-          'active' => 0,
-          'settings' => array(),
-        ),
-        'settings' => array(
-          'user_register_form' => FALSE,
-        ),
-        'display' => array(
-          'default' => array(
-            'label' => 'above',
-            'type' => 'hidden',
-            'weight' => '11',
-            'settings' => array(),
-          ),
-          'teaser' => array(
-            'label' => 'hidden',
-            'type' => 'field_collection_view',
-            'weight' => '0',
-            'settings' => array(
-              'edit' => '',
-              'delete' => '',
-              'add' => '',
-              'description' => 0,
-              'view_mode' => 'full',
-            ),
-            'module' => 'field_collection',
-          ),
-        ),
-        'required' => 0,
-        'description' => '',
-        'default_value' => NULL,
-        'field_name' => 'field_teaser_tabs',
         'entity_type' => 'node',
         'bundle' => 'course',
         'deleted' => '0',

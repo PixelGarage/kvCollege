@@ -1,5 +1,5 @@
 <?php
-$export_time = 1430508050;
+$export_time = 1430596612;
 $data = array(
   'bundles' => array(
     'banner' => (object) array(
@@ -21,6 +21,90 @@ $data = array(
     ),
   ),
   'fields' => array(
+    'body' => array(
+      'entity_types' => array(
+        0 => 'node',
+      ),
+      'foreign keys' => array(
+        'format' => array(
+          'table' => 'filter_format',
+          'columns' => array(
+            'format' => 'format',
+          ),
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'settings' => array(),
+      'translatable' => '0',
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_body' => array(
+                'value' => 'body_value',
+                'summary' => 'body_summary',
+                'format' => 'body_format',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_body' => array(
+                'value' => 'body_value',
+                'summary' => 'body_summary',
+                'format' => 'body_format',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'field_name' => 'body',
+      'type' => 'text_with_summary',
+      'module' => 'text',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'text',
+          'size' => 'big',
+          'not null' => FALSE,
+        ),
+        'summary' => array(
+          'type' => 'text',
+          'size' => 'big',
+          'not null' => FALSE,
+        ),
+        'format' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'page',
+          1 => 'article',
+          2 => 'pxltest',
+          3 => 'course',
+          4 => 'course_tabs',
+          5 => 'course_times',
+          6 => 'location',
+          7 => 'remoteform',
+          8 => 'segment_blocks',
+          9 => 'introstep',
+          10 => 'in_depth_course',
+          11 => 'banner',
+        ),
+      ),
+    ),
     'field_banner_links' => array(
       'translatable' => '0',
       'entity_types' => array(),
@@ -70,7 +154,7 @@ $data = array(
       'module' => 'link',
       'active' => '1',
       'locked' => '0',
-      'cardinality' => '3',
+      'cardinality' => '-1',
       'deleted' => '0',
       'columns' => array(
         'url' => array(
@@ -94,6 +178,7 @@ $data = array(
       'bundles' => array(
         'node' => array(
           0 => 'banner',
+          1 => 'introstep',
         ),
       ),
     ),
@@ -190,17 +275,10 @@ $data = array(
         ),
       ),
     ),
-    'field_segment' => array(
+    'field_weight' => array(
       'translatable' => '0',
       'entity_types' => array(),
-      'settings' => array(
-        'allowed_values' => array(
-          0 => array(
-            'vocabulary' => 'segments',
-            'parent' => '0',
-          ),
-        ),
-      ),
+      'settings' => array(),
       'storage' => array(
         'type' => 'field_sql_storage',
         'settings' => array(),
@@ -209,62 +287,91 @@ $data = array(
         'details' => array(
           'sql' => array(
             'FIELD_LOAD_CURRENT' => array(
-              'field_data_field_segment' => array(
-                'tid' => 'field_segment_tid',
+              'field_data_field_weight' => array(
+                'value' => 'field_weight_value',
               ),
             ),
             'FIELD_LOAD_REVISION' => array(
-              'field_revision_field_segment' => array(
-                'tid' => 'field_segment_tid',
+              'field_revision_field_weight' => array(
+                'value' => 'field_weight_value',
               ),
             ),
           ),
         ),
       ),
-      'foreign keys' => array(
-        'tid' => array(
-          'table' => 'taxonomy_term_data',
-          'columns' => array(
-            'tid' => 'tid',
-          ),
-        ),
-      ),
-      'indexes' => array(
-        'tid' => array(
-          0 => 'tid',
-        ),
-      ),
-      'field_name' => 'field_segment',
-      'type' => 'taxonomy_term_reference',
-      'module' => 'taxonomy',
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'field_name' => 'field_weight',
+      'type' => 'number_integer',
+      'module' => 'number',
       'active' => '1',
       'locked' => '0',
       'cardinality' => '1',
       'deleted' => '0',
       'columns' => array(
-        'tid' => array(
+        'value' => array(
           'type' => 'int',
-          'unsigned' => TRUE,
           'not null' => FALSE,
         ),
       ),
       'bundles' => array(
         'node' => array(
-          0 => 'banner',
-          1 => 'page',
-          2 => 'contact',
-          3 => 'course',
-          4 => 'segment_blocks',
+          0 => 'introstep',
+          1 => 'in_depth_course',
+          2 => 'banner',
         ),
       ),
     ),
   ),
   'instances' => array(
+    'body' => array(
+      0 => array(
+        'label' => 'Body',
+        'widget' => array(
+          'weight' => '2',
+          'type' => 'text_textarea_with_summary',
+          'module' => 'text',
+          'active' => 1,
+          'settings' => array(
+            'rows' => '20',
+            'summary_rows' => 5,
+          ),
+        ),
+        'settings' => array(
+          'text_processing' => '1',
+          'display_summary' => 0,
+          'user_register_form' => FALSE,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'text_default',
+            'weight' => '1',
+            'settings' => array(),
+            'module' => 'text',
+          ),
+          'full' => array(
+            'label' => 'hidden',
+            'type' => 'text_default',
+            'weight' => '2',
+            'settings' => array(),
+            'module' => 'text',
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'body',
+        'entity_type' => 'node',
+        'bundle' => 'banner',
+        'deleted' => '0',
+      ),
+    ),
     'field_banner_links' => array(
       0 => array(
         'label' => 'Links',
         'widget' => array(
-          'weight' => '2',
+          'weight' => '3',
           'type' => 'advanced_link',
           'module' => 'advanced_link',
           'active' => 1,
@@ -299,11 +406,11 @@ $data = array(
         ),
         'display' => array(
           'default' => array(
-            'label' => 'above',
+            'label' => 'hidden',
             'type' => 'link_default',
+            'weight' => '2',
             'settings' => array(),
             'module' => 'link',
-            'weight' => 3,
           ),
           'teaser' => array(
             'type' => 'hidden',
@@ -312,10 +419,11 @@ $data = array(
             'weight' => 0,
           ),
           'full' => array(
-            'label' => 'above',
-            'type' => 'hidden',
-            'weight' => '0',
+            'label' => 'hidden',
+            'type' => 'link_default',
+            'weight' => '3',
             'settings' => array(),
+            'module' => 'link',
           ),
         ),
         'required' => 0,
@@ -353,14 +461,14 @@ $data = array(
         ),
         'display' => array(
           'default' => array(
-            'label' => 'above',
+            'label' => 'hidden',
             'type' => 'image',
+            'weight' => '0',
             'settings' => array(
               'image_style' => '',
               'image_link' => '',
             ),
             'module' => 'image',
-            'weight' => 2,
           ),
           'teaser' => array(
             'type' => 'hidden',
@@ -369,10 +477,14 @@ $data = array(
             'weight' => 0,
           ),
           'full' => array(
-            'label' => 'above',
-            'type' => 'hidden',
+            'label' => 'hidden',
+            'type' => 'image',
             'weight' => '0',
-            'settings' => array(),
+            'settings' => array(
+              'image_style' => '',
+              'image_link' => '',
+            ),
+            'module' => 'image',
           ),
         ),
         'required' => 1,
@@ -383,46 +495,51 @@ $data = array(
         'deleted' => '0',
       ),
     ),
-    'field_segment' => array(
+    'field_weight' => array(
       0 => array(
-        'label' => 'Segment',
+        'label' => 'Weight',
         'widget' => array(
-          'weight' => '3',
-          'type' => 'options_select',
-          'module' => 'options',
-          'active' => 1,
-          'settings' => array(
-            'apply_chosen' => '',
-          ),
+          'weight' => '4',
+          'type' => 'number',
+          'module' => 'number',
+          'active' => 0,
+          'settings' => array(),
         ),
         'settings' => array(
+          'min' => '',
+          'max' => '',
+          'prefix' => '',
+          'suffix' => '',
           'user_register_form' => FALSE,
         ),
         'display' => array(
           'default' => array(
             'label' => 'above',
-            'type' => 'taxonomy_term_reference_link',
-            'settings' => array(),
-            'module' => 'taxonomy',
-            'weight' => 1,
+            'type' => 'number_integer',
+            'settings' => array(
+              'thousand_separator' => ' ',
+              'decimal_separator' => '.',
+              'scale' => 0,
+              'prefix_suffix' => TRUE,
+            ),
+            'module' => 'number',
+            'weight' => 3,
           ),
-          'teaser' => array(
+          'full' => array(
             'type' => 'hidden',
             'label' => 'above',
             'settings' => array(),
             'weight' => 0,
           ),
-          'full' => array(
-            'label' => 'above',
-            'type' => 'hidden',
-            'weight' => '0',
-            'settings' => array(),
-          ),
         ),
         'required' => 0,
-        'description' => '',
-        'default_value' => NULL,
-        'field_name' => 'field_segment',
+        'description' => 'USed to sort banners. Lower value means higher up in list (lighter).',
+        'default_value' => array(
+          0 => array(
+            'value' => '0',
+          ),
+        ),
+        'field_name' => 'field_weight',
         'entity_type' => 'node',
         'bundle' => 'banner',
         'deleted' => '0',
