@@ -1,0 +1,16 @@
+Index: sites/all/modules/libraries/libraries.module
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- sites/all/modules/libraries/libraries.module	(revision 0f1d30734844105c3fc03ed6a5b9f24d41db4fb3)
++++ sites/all/modules/libraries/libraries.module	(revision )
+@@ -861,7 +861,7 @@
+   while ($options['lines'] && $line = fgets($file, $options['cols'])) {
+     if (preg_match($options['pattern'], $line, $version)) {
+       fclose($file);
+-      return $version[1];
++      return $version[0];
+     }
+     $options['lines']--;
+   }
