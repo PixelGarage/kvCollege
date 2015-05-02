@@ -1,0 +1,236 @@
+<?php
+/**
+ * Provides a light-weight interface to externalize site structures to code, e.g. views, nodes, taxonomies etc.
+ *
+ * User: ralph
+ * Date: 27.04.15
+ * Time: 16:57
+ */
+
+/* =============================================================================
+ *   Configuration form to manage content types
+ * ========================================================================== */
+/**
+ * Implements hook_help().
+ */
+function pixel_structure_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#pixel_structure':
+    case 'admin/structure/pixel_structure':
+      $output = '<p>' . t('Pixel structure makes it a snap to externalize supported entity types, views and more to code. Use this code files to easily keep site structure synchronized between different locations (e.g. development, stage and Live server).');
+      $output .= '<br>' . t('All entity types found in the database and on the file system (inside this module) are made available and can be managed. ');
+      $output .= '<br><br>' . t('<strong>CAUTION!</strong> Deletion of an entity type makes all content of this type irrevocably unusable.');
+      $output .= '</p>';
+
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_menu.
+ */
+function pixel_structure_menu() {
+  $items = array();
+  $bc_info = bundle_copy_get_info();
+
+  $items['admin/structure/pixel_structure'] = array(
+    'title' => t('Pixel structure'),
+    'description' => 'Summarize all changed bundles.',
+    'page callback' => 'pixel_structure_summary_list',
+    'access callback' => 'user_access',
+    'access arguments' => array('administer pixel structures'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'pixel_structure.admin.inc',
+  );
+  $items['admin/structure/pixel_structure/list'] = array(
+    'title' => t('Summary'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -20,
+  );
+  // add tab for each entity type
+  foreach ($bc_info as $entity_type => $info) {
+    $module = $entity_type == 'taxonomy_term' ? 'taxonomy' : $entity_type;
+    if (!module_exists($module)) continue;
+
+    // add entity type list callbacks
+    $items['admin/structure/pixel_structure/' . $entity_type] = array(
+      'title' => drupal_ucfirst(str_replace('_', ' ', $entity_type)) . 's',
+      'description' => 'Manage externalized bundles.',
+      'page callback' => 'pixel_structure_entity_type_list',
+      'page arguments' => array($entity_type),
+      'access arguments' => array('administer pixel structures'),
+      'type' => MENU_LOCAL_TASK,
+      'file' => 'pixel_structure.admin.inc',
+    );
+
+    // add entity type bulk operations
+    $items['admin/structure/pixel_structure/' . $entity_type . '/import_changed'] = array(
+      'title' => 'Import changed bundles',
+      'description' => 'Import all changed bundles.',
+      'page callback' => 'pixel_structure_entity_type_import_changed',
+      'page arguments' => array($entity_type),
+      'access arguments' => array('administer pixel structures'),
+      'type' => MENU_CALLBACK,
+      'file' => 'pixel_structure.admin.inc',
+    );
+
+  }
+
+  // add bundle operation callbacks
+  $items['admin/structure/pixel_structure/%/%/import'] = array(
+    'title' => 'Import bundle',
+    'page callback' => 'pixel_structure_entity_type_import',
+    'page arguments' => array(3, 4),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer pixel structures'),
+    'type' => MENU_CALLBACK,
+    'file' => 'pixel_structure.admin.inc',
+  );
+  $items['admin/structure/pixel_structure/%/%/export'] = array(
+    'title' => 'Export bundle',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('pixel_structure_entity_type_export_form', 3, 4),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer pixel structures'),
+    'type' => MENU_CALLBACK,
+    'file' => 'pixel_structure.admin.inc',
+  );
+  $items['admin/structure/pixel_structure/%/%/delete'] = array(
+    'title' => 'Delete bundle',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('pixel_structure_entity_type_delete_confirm', 3, 4),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer pixel structures'),
+    'type' => MENU_CALLBACK,
+    'file' => 'pixel_structure.admin.inc',
+  );
+  $items['admin/structure/pixel_structure/%/%/clone'] = array(
+    'title' => 'Clone bundle',
+    'page callback' => 'pixel_structure_entity_type_clone',
+    'page arguments' => array(3, 4),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer pixel structures'),
+    'type' => MENU_CALLBACK,
+    'file' => 'pixel_structure.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function pixel_structure_permission() {
+  return array(
+    'administer pixel structures' => array(
+      'title' => t('Administer pixel structures'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function pixel_structure_views_api() {
+  return array('api' => 3);
+}
+
+
+/* =============================================================================
+ *   Export / import entity types
+ * ========================================================================== */
+/**
+ * Read the bundle data of an entity type from the specific export file, if the file exists and contains correct bundle data.
+ *
+ * @param $entity_type  string  The entity type of the bundle.
+ * @param $bundle_key   string  The bundle name to be imported.
+ *
+ * @return  mixed  Returns imported bundle data as associative array, if available.
+ *                 Otherwise returns FALSE.
+ */
+function pixel_structure_entity_type_import_data($entity_type, $bundle_key) {
+  // file path
+  $filepath = _pixel_structure_file_path($entity_type, $bundle_key);
+  if (!file_exists($filepath)) return FALSE;
+
+  // import node type data
+  if (($file = file_get_contents($filepath)) !== false) {
+    // delete php tag, if any
+    $file = str_replace('<?php', '', $file);
+
+    // get node type and export time from file and return import array
+    if (eval($file) !== false && isset($data) && is_array($data)) {
+      // get export timestamp in file
+      $code_exported = isset($export_time) ? $export_time : 0;
+
+      // Create array entries.
+      foreach ($data['bundles'] as $key => $bundle) {
+        $title = $key; // fallback for title is machine name
+        if (is_object($bundle)) {
+          $title = $bundle->name;
+        }
+        elseif (is_array($bundle)) {
+          $title = $bundle['name'];
+        }
+
+        // return bundle data
+        return array(
+          'title' => $title,
+          'storage' => ENTITY_TYPE_IN_CODE,
+          'code_exported' => $code_exported,
+          'data' => $file,
+          'values' => array('macro' => $file), // compatibility to bundle_copy
+        );
+      }
+    }
+  }
+
+  // file has no import data
+  return FALSE;
+}
+
+/**
+ * Exports a bundle of the given entity type to an export file.
+ *
+ * @param $entity_type  string  The entity type
+ * @param $bundle_key   string  The bundle name to be exported
+ * @param $bundle_data  array   An associative array holding the bundle data to be exported. Array structure is as follows:
+ *                                array(
+ *                                'title'=> name,
+ *                                'code_exported' => export_timestamp,
+ *                                'data' => exported bundle data as string
+ *                                );
+ */
+function pixel_structure_entity_type_export_data($entity_type, $bundle_key, $bundle_data) {
+  // export bundle of entity type to file (creates or updates file)
+  $filepath = _pixel_structure_file_path($entity_type, $bundle_key);
+
+  // create export data and write it to a file
+  $code_exported = $bundle_data['code_exported'];
+  variable_set('pixel_structure_last_import_export_' . $entity_type . '_' . $bundle_key, $code_exported);
+  $data = "<?php\n\$export_time = " . $code_exported . ";\n" . $bundle_data['data'];
+
+  if (file_put_contents($filepath, $data) === FALSE) {
+    drupal_set_message(t('%entity_type "%bundle" could not be exported to file %file .', array('%entity_type' => $entity_type, '%bundle' => $bundle_data['title'], '%file' => $filepath)), 'error');
+
+  } else {
+    drupal_set_message(t('%entity_type "%bundle" has been successfully exported to file %file .', array('%entity_type' => $entity_type, '%bundle' => $bundle_data['title'], '%file' => $filepath)));
+
+  }
+}
+
+/**
+ * Helper function creating the file path for a specific entity type - bundle.
+ *
+ * @param $entity_type
+ * @param $bundle_key
+ *
+ * @return string The specific import/export file path
+ */
+function _pixel_structure_file_path($entity_type, $bundle_key) {
+  $dir = '/' . $entity_type . 's/';
+  $ext = '.' . substr($entity_type, 0, 4);
+  return drupal_get_path('module', 'pixel_structure') . $dir . $bundle_key . $ext;
+
+}
+

@@ -1,0 +1,185 @@
+<?php
+
+$view = new view();
+$view->name = 'locations';
+$view->description = '';
+$view->tag = 'default';
+$view->base_table = 'node';
+$view->human_name = 'Locations';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Kontaktieren Sie uns...';
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'none';
+$handler->display->display_options['style_plugin'] = 'list';
+$handler->display->display_options['style_options']['grouping'] = array(
+  0 => array(
+    'field' => 'field_tab_text',
+    'rendered' => 1,
+    'rendered_strip' => 0,
+  ),
+);
+$handler->display->display_options['row_plugin'] = 'fields';
+/* Footer: Global: Text area */
+$handler->display->display_options['footer']['area']['id'] = 'area';
+$handler->display->display_options['footer']['area']['table'] = 'views';
+$handler->display->display_options['footer']['area']['field'] = 'area';
+$handler->display->display_options['footer']['area']['content'] = '<p><a class="kontakt_link" href="/node/1052">Zum Kontaktformular</a></p>
+<p style="text-align: center; margin: 0 -7px;">
+<a class="social facebook" href="https://www.facebook.com/pages/HMZ-academy-AG-offizielle-Seite/126996354069918" target="_blank">Facebook</a>
+  <a class="social xing" href="https://www.xing.com/companies/hmzacademyag" target="_blank">Xing</a>
+</p>';
+$handler->display->display_options['footer']['area']['format'] = 'html';
+/* Field: Content: Tab title */
+$handler->display->display_options['fields']['field_tab_text']['id'] = 'field_tab_text';
+$handler->display->display_options['fields']['field_tab_text']['table'] = 'field_data_field_tab_text';
+$handler->display->display_options['fields']['field_tab_text']['field'] = 'field_tab_text';
+$handler->display->display_options['fields']['field_tab_text']['label'] = '';
+$handler->display->display_options['fields']['field_tab_text']['exclude'] = TRUE;
+$handler->display->display_options['fields']['field_tab_text']['element_label_colon'] = FALSE;
+/* Field: Content: Address */
+$handler->display->display_options['fields']['field_address']['id'] = 'field_address';
+$handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
+$handler->display->display_options['fields']['field_address']['field'] = 'field_address';
+$handler->display->display_options['fields']['field_address']['label'] = '';
+$handler->display->display_options['fields']['field_address']['alter']['text'] = '<p><strong>[field_address-organisation_name]</strong><br>
+[field_address-thoroughfare]<br>
+[field_address-postal_code] [field_address-locality]</p>
+<p><span class="phone">[field_address-phone]</span></p>
+<p><span class="fax">[field_address-fax]</span></p>';
+$handler->display->display_options['fields']['field_address']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['field_address']['click_sort_column'] = 'country';
+$handler->display->display_options['fields']['field_address']['settings'] = array(
+  'use_widget_handlers' => 1,
+  'format_handlers' => array(
+    'address' => 'address',
+    'phone' => 'phone',
+    'organisation' => 'organisation',
+  ),
+);
+/* Field: Content: Email */
+$handler->display->display_options['fields']['field_email']['id'] = 'field_email';
+$handler->display->display_options['fields']['field_email']['table'] = 'field_data_field_email';
+$handler->display->display_options['fields']['field_email']['field'] = 'field_email';
+$handler->display->display_options['fields']['field_email']['label'] = '';
+$handler->display->display_options['fields']['field_email']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['field_email']['type'] = 'invisimail_js_entities';
+$handler->display->display_options['fields']['field_email']['settings'] = array(
+  'chunk' => 0,
+  'link' => 1,
+);
+/* Sort criterion: Content: Title */
+$handler->display->display_options['sorts']['title']['id'] = 'title';
+$handler->display->display_options['sorts']['title']['table'] = 'node';
+$handler->display->display_options['sorts']['title']['field'] = 'title';
+/* Filter criterion: Content: Published */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'node';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['value'] = 1;
+$handler->display->display_options['filters']['status']['group'] = 1;
+$handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'location' => 'location',
+);
+/* Filter criterion: Content: Standorte (field_standorte) */
+$handler->display->display_options['filters']['field_standorte_value']['id'] = 'field_standorte_value';
+$handler->display->display_options['filters']['field_standorte_value']['table'] = 'field_data_field_standorte';
+$handler->display->display_options['filters']['field_standorte_value']['field'] = 'field_standorte_value';
+$handler->display->display_options['filters']['field_standorte_value']['value'] = array(
+  1 => '1',
+);
+/* Filter criterion: Content: Brand (field_brand) */
+$handler->display->display_options['filters']['field_brand_tid']['id'] = 'field_brand_tid';
+$handler->display->display_options['filters']['field_brand_tid']['table'] = 'field_data_field_brand';
+$handler->display->display_options['filters']['field_brand_tid']['field'] = 'field_brand_tid';
+$handler->display->display_options['filters']['field_brand_tid']['value'] = array(
+  94 => '94',
+);
+$handler->display->display_options['filters']['field_brand_tid']['type'] = 'select';
+$handler->display->display_options['filters']['field_brand_tid']['vocabulary'] = 'brands';
+
+/* Display: Block */
+$handler = $view->new_display('block', 'Block', 'block');
+$handler->display->display_options['defaults']['filter_groups'] = FALSE;
+$handler->display->display_options['defaults']['filters'] = FALSE;
+/* Filter criterion: Content: Published */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'node';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['value'] = 1;
+$handler->display->display_options['filters']['status']['group'] = 1;
+$handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'location' => 'location',
+);
+/* Filter criterion: Content: Standorte (field_standorte) */
+$handler->display->display_options['filters']['field_standorte_value']['id'] = 'field_standorte_value';
+$handler->display->display_options['filters']['field_standorte_value']['table'] = 'field_data_field_standorte';
+$handler->display->display_options['filters']['field_standorte_value']['field'] = 'field_standorte_value';
+$handler->display->display_options['filters']['field_standorte_value']['value'] = array(
+  1 => '1',
+);
+/* Filter criterion: Content: Brand (field_brand) */
+$handler->display->display_options['filters']['field_brand_tid']['id'] = 'field_brand_tid';
+$handler->display->display_options['filters']['field_brand_tid']['table'] = 'field_data_field_brand';
+$handler->display->display_options['filters']['field_brand_tid']['field'] = 'field_brand_tid';
+$handler->display->display_options['filters']['field_brand_tid']['value'] = array(
+  94 => '94',
+);
+$handler->display->display_options['filters']['field_brand_tid']['type'] = 'select';
+$handler->display->display_options['filters']['field_brand_tid']['vocabulary'] = 'brands';
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page_1');
+$handler->display->display_options['defaults']['title'] = FALSE;
+$handler->display->display_options['title'] = 'Standorte';
+$handler->display->display_options['defaults']['style_plugin'] = FALSE;
+$handler->display->display_options['style_plugin'] = 'default';
+$handler->display->display_options['defaults']['style_options'] = FALSE;
+$handler->display->display_options['defaults']['row_plugin'] = FALSE;
+$handler->display->display_options['row_plugin'] = 'node';
+$handler->display->display_options['row_options']['view_mode'] = 'full';
+$handler->display->display_options['row_options']['links'] = FALSE;
+$handler->display->display_options['defaults']['row_options'] = FALSE;
+$handler->display->display_options['defaults']['footer'] = FALSE;
+$handler->display->display_options['path'] = 'standorte';
+$translatables['locations'] = array(
+  t('Master'),
+  t('Kontaktieren Sie uns...'),
+  t('more'),
+  t('Apply'),
+  t('Reset'),
+  t('Sort by'),
+  t('Asc'),
+  t('Desc'),
+  t('<p><a class="kontakt_link" href="/node/1052">Zum Kontaktformular</a></p>
+<p style="text-align: center; margin: 0 -7px;">
+<a class="social facebook" href="https://www.facebook.com/pages/HMZ-academy-AG-offizielle-Seite/126996354069918" target="_blank">Facebook</a>
+  <a class="social xing" href="https://www.xing.com/companies/hmzacademyag" target="_blank">Xing</a>
+</p>'),
+  t('<p><strong>[field_address-organisation_name]</strong><br>
+[field_address-thoroughfare]<br>
+[field_address-postal_code] [field_address-locality]</p>
+<p><span class="phone">[field_address-phone]</span></p>
+<p><span class="fax">[field_address-fax]</span></p>'),
+  t('Block'),
+  t('Page'),
+  t('Standorte'),
+);

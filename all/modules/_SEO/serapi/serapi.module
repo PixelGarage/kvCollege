@@ -1,0 +1,172 @@
+<?php
+// $Id: serapi.module,v 1.12 2010/10/13 19:39:27 yaph Exp $
+/**
+ * @file
+ * Author: Ramiro Gómez - http://www.ramiro.org
+ * A Drupal module that provides an API for extracting Information about searches
+ * from users that come to a page via a search engine.
+ */
+
+/**
+ * Returns an array with information on the performed search
+ * if the user comes from one of the supported search engines.
+ */
+function serapi_get_search($referer = '') {
+  if (!$referer) {
+    if (!isset($_SERVER['HTTP_REFERER'])) {
+      return FALSE;
+    }
+    $referer = $_SERVER['HTTP_REFERER'];
+  }
+  if (!valid_url($referer)) {
+    watchdog('serapi', 'The referring URL @url could not be validated', array('@url' => $referer));
+    return FALSE;
+  }
+  $engines = module_invoke_all('search_engine_list');
+  return serapi_get_search_data($referer, $engines);
+}
+
+/**
+ * Returns an array with data on the performed search
+ * if the user comes from one of the supported search engines.
+ *
+ * @param $url_parts
+ * Result of parse_url on referer URL
+ *
+ * @param $url
+ * URL string
+ *
+ * @return $search
+ * Array with data on search
+ */
+function serapi_get_search_data($url, $engines) {
+  // always check arrays before using them in foreach
+  if (!is_array($engines)) {
+    return FALSE;
+  }
+  $url_parts = parse_url($url);
+  // only check urls that contain a query string, hell awaits when
+  // search engines start to use url rewriting for serps
+  if (!is_array($url_parts) || !isset($url_parts['host']) || !isset($url_parts['query'])) {
+    return FALSE;
+  }
+  $host = $url_parts['host'];
+  $query = $url_parts['query'];
+  foreach ($engines as $name => $prop) {
+    if (FALSE !== stripos($host, $prop['host_pattern'])) {
+      $param = $prop['query_param'];
+      $query_parts = array();
+      parse_str($query, $query_parts);
+      // check that the query contains the search parameter
+      if (isset($query_parts[$param])) {
+        $search_string = $query_parts[$param];
+        // check whether there is more than one search keyword
+        if (FALSE !== strpos($search_string, ' ')) {
+          $search['keywords'] = explode(' ', $search_string);
+        }
+        else {
+          $search['keywords'] = array($search_string);
+        }
+        $search['string'] = $search_string;
+        $search['url'] = $url;
+        $search['engine'] = $name;
+        $search['host'] = $host;
+        return $search;
+      }
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_search_engine_list().
+ *
+ * Returns an array of search engines supported
+ * by this module
+ *
+ * @return array
+ * Array of search engines
+ */
+function serapi_search_engine_list() {
+  return array(
+    'google' => array(
+      'host_pattern' => 'www.google.',
+      'query_param' => 'q',
+    ),
+    'yahoo' => array(
+      'host_pattern' => 'search.yahoo.com',
+      'query_param' => 'p',
+    ),
+    'bing' => array(
+      'host_pattern' => 'bing.com',
+      'query_param' => 'q',
+    ),
+    'ask' => array(
+      'host_pattern' => 'ask.com',
+      'query_param' => 'q',
+    ),
+    'aol.de' => array(
+      'host_pattern' => '.aol.de',
+      'query_param' => 'q',
+    ),
+    'aol' => array(
+      'host_pattern' => '.aol.',
+      'query_param' => 'query',
+    ),
+    'altavista' => array(
+      'host_pattern' => 'altavista.com',
+      'query_param' => 'q',
+    ),
+    'alltheweb' => array(
+      'host_pattern' => 'alltheweb.com',
+      'query_param' => 'q',
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function serapi_block_info() {
+  if (TRUE) {
+    $blocks = array();
+    $blocks['serapi'] = array(
+      'info' => t('Search Engine Referer Information'),
+      'weight' => 0,
+    );
+    return $blocks;
+  }
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function serapi_block_view($delta) {
+  if (TRUE) {
+    switch ($delta) {
+    case 'serapi':
+      $block['content'] = serapi_block_search_engine_information();
+      $block['subject'] = t('Search Engine Referer Information');
+      break;
+    }
+    return $block;
+  }
+}
+
+/**
+ * Returns Information about how the search engine found this page
+ */
+function serapi_block_search_engine_information() {
+  $search_info = serapi_get_search();
+  if (FALSE !== $search_info) {
+    return t('You came from @host and searched for !search_link.',
+      array(
+        '@host' => $search_info['host'],
+        '!search_link' => l($search_info['string'],
+        $search_info['url'],
+        array('attributes' => array('rel' => 'nofollow'))),
+      )
+    );
+  }
+  return FALSE;
+}

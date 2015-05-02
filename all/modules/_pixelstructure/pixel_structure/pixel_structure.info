@@ -1,0 +1,10 @@
+name = Pixel structure
+description = "Externalize parts of the site structure to code. Views, nodes, taxonomies are supported."
+core = 7.x
+package = PixelGarage
+configure = admin/structure/pixel_structure
+
+dependencies[] = views
+dependencies[] = bundle_copy
+
+;files[] = views_plugin_style_custom_map.inc

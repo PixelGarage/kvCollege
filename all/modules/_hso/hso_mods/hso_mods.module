@@ -1,0 +1,268 @@
+<?php
+/**
+* Implements hook_init().
+*/
+function hso_mods_init() {
+	if (drupal_is_front_page() && $search_info = serapi_get_search()) {
+		$keywords = strtolower($search_info['string']);
+		$query = new EntityFieldQuery();
+		$result = $query
+			->entityCondition('entity_type', 'taxonomy_term')
+			->propertyCondition('vid', 1)
+			->propertyOrderBy('weight')
+			->propertyOrderBy('name')
+			->execute();
+		if (isset($result['taxonomy_term'])) {
+			$segments = taxonomy_term_load_multiple(array_keys($result['taxonomy_term']));
+			foreach ($segments as $tid => $segment) {
+				if (!empty($segment->field_seo_keywords)) {
+					$s_keywords = array_unique(array_map('trim', array_map('strtolower', explode(PHP_EOL, $segment->field_seo_keywords[LANGUAGE_NONE][0]['value']))));
+					foreach ($s_keywords as $k) {
+						if (empty($k)) continue;
+						if (strpos($keywords, $k) !== FALSE) {
+							drupal_goto('taxonomy/term/' . $tid);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+/**
+* Implements hook_entity_info_alter().
+*/
+function hso_mods_entity_info_alter(&$info) {
+  $info['field_collection_item']['metatags'] = FALSE;
+}
+/**
+ * Implements of hook_node_view
+ */
+function hso_mods_node_view($node, $view_mode, $langcode) {
+  if ($view_mode == 'full') {
+		if (in_array($node->type, array('banner', 'block', 'contact', 'fachwissen', 'location', 'media', 'segment_blocks', 'segment_sidebar_block', 'testimonial'))) return;
+  	$node_to_check = $node;
+  	if ($node->type == 'course_times') {
+  		if (!empty($node->field_course)) {
+  			$node_to_check = node_load($node->field_course[LANGUAGE_NONE][0]['target_id']);
+  		}
+  	}
+		if ($node->type == 'video') {
+			$nid = feeds_get_feed_nid($node->nid, 'node');
+			if ($nid) {
+				$node_to_check = node_load($nid);
+			}
+  	}
+  	$ctid = FALSE;
+  	if ($node_to_check->type == 'news' && !empty($node_to_check->field_centers)) {
+	  	$ctid = $node_to_check->field_centers[LANGUAGE_NONE][0]['tid'];
+  		context_set('hso', 'current_segment_center', $ctid);
+  	} elseif ($node_to_check->type == 'page' && !empty($node_to_check->field_center)) {
+	  	$ctid = $node_to_check->field_center[LANGUAGE_NONE][0]['tid'];
+  		context_set('hso', 'current_segment_center', $ctid);
+  	}
+  	if (isset($node_to_check->field_segment) && !empty($node_to_check->field_segment)) {
+  		$tid = $node_to_check->field_segment[LANGUAGE_NONE][0]['tid'];
+  		$tid = $tid == 5 ? 2 : $tid;
+  		context_set('hso', 'current_segment', $tid);
+  		if (!$ctid) {
+	  		context_set('hso', 'current_segment_center', $tid);
+	  	}
+  		_hso_mods_trigger_context($tid);
+  	} elseif (isset($node_to_check->field_segments) && !empty($node_to_check->field_segments)) {
+  		$tid = $node_to_check->field_segments[LANGUAGE_NONE][0]['tid'];
+  		$tid = $tid == 5 ? 2 : $tid;
+  		context_set('hso', 'current_segment', $tid);
+  		if (!$ctid) {
+	  		context_set('hso', 'current_segment_center', $tid);
+	  	}
+  		_hso_mods_trigger_context($tid);
+  	}
+  }
+}
+/**
+* Implements ctools_render_alter().
+*
+* This is done since hook_node_view never gets called if the node is rendered by Ctools.
+*/
+function hso_mods_ctools_render_alter($info, $page, $context) {
+  if ($page && is_array($context['subtask']) && $context['subtask']['name'] == 'course_anmeldung') {
+  	hso_mods_node_view($context['contexts']['argument_entity_id:node_1']->data, 'full', LANGUAGE_NONE);
+  	$contexts = context_enabled_contexts();
+		foreach ($contexts as $context_name => $data) {
+			if (array_key_exists('node', $data->conditions) && in_array($context['contexts']['argument_entity_id:node_1']->data->type, $data->conditions['node']['values'])) {
+				context_condition_met($data, 'node');
+			}
+		}
+  } elseif ($page && isset($context['task']['admin path']) && $context['task']['admin path'] == 'taxonomy/term/%taxonomy_term') {
+  	hso_mods_taxonomy_term_view($context['contexts']['argument_term_1']->data, 'full', LANGUAGE_NONE);
+	} elseif ($page && isset($context['task']['admin path']) && $context['task']['admin path'] == 'node/%node') {
+  	hso_mods_node_view($context['contexts']['argument_entity_id:node_1']->data, 'full', LANGUAGE_NONE);
+	}
+}
+/**
+ * Implements of hook_taxonomy_term_view
+ */
+function hso_mods_taxonomy_term_view($term, $view_mode, $langcode) {
+	if ($term->vid == 1 && $view_mode == 'full') {
+		$tid = $term->tid == 5 ? 2 : $term->tid;
+		context_set('hso', 'current_segment', $tid);
+  	context_set('hso', 'current_segment_center', $tid);
+	}
+}
+
+function _hso_mods_trigger_context($segment_id) {
+	$contexts = context_enabled_contexts();
+  foreach ($contexts as $context_name => $data) {
+  	if (array_key_exists('node_taxonomy', $data->conditions) && in_array($segment_id, $data->conditions['node_taxonomy']['values'])) {
+  		context_condition_met($data, 'node_taxonomy');
+  	}
+  }
+}
+/**
+ * Implements hook_field_formatter_info().
+ */
+function hso_mods_field_formatter_info() {
+  return array(
+    // the key must be unique, so it's best to prefix with your module's name.
+    'hso_mods_date_vom_bis' => array(
+      // the label is is what is displayed in the select box in the UI.
+      'label' => t('Date Vom Bis'),
+      // field types is the important bit!! List the field types your formatter is for.
+      'field types' => array('datetime'),
+      // You can usually leave 'multiple values' as follows:
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+    ),
+    'hso_mods_date_start_ende' => array(
+      // the label is is what is displayed in the select box in the UI.
+      'label' => t('Date Start Ende'),
+      // field types is the important bit!! List the field types your formatter is for.
+      'field types' => array('datetime'),
+      // You can usually leave 'multiple values' as follows:
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+    ),
+  );
+}
+/**
+ * Implements hook_field_formatter_view().
+ */
+function hso_mods_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $elements = array();
+  foreach ($items as $delta => $item) {
+    $elements[$delta] = array(
+      '#markup' => theme('hso_mods_formatter_'. $display['type'], array('element' => $item, 'field' => $instance)),
+    );
+  }
+  return $elements;
+}
+/**
+ * Implements hook_theme().
+ */
+function hso_mods_theme() {
+  return array(
+    // The theme function that our formatter uses:
+    'hso_mods_formatter_hso_mods_date_vom_bis' => array(
+      // Don't forget that all Drupal 7 theme functions have only one argument,
+      // so you declare what variables get passed within that argument instead.
+      // See http://drupal.org/node/224333#theme_changes
+      'variables' => array('element' => NULL),
+    ),
+    'hso_mods_formatter_hso_mods_date_start_ende' => array(
+      // Don't forget that all Drupal 7 theme functions have only one argument,
+      // so you declare what variables get passed within that argument instead.
+      // See http://drupal.org/node/224333#theme_changes
+      'variables' => array('element' => NULL),
+    ),
+  );
+}
+
+function theme_hso_mods_formatter_hso_mods_date_vom_bis($element) {
+	$from_date = strtotime($element['element']['value']);
+	$string = '<strong>' . t('Since') . '</strong> ';
+	if (date('H:i', $from_date) == '00:00') {
+		$string .= date('d.m.Y', $from_date);
+	} else {
+		$string .= date('d.m.Y H:i', $from_date);
+	}
+	if ($element['element']['value2']) {
+		$string .= ' <strong>' . t('Until') . '</strong> ' . date('d.m.Y', strtotime($element['element']['value2']));
+	}
+  return $string;
+}
+function theme_hso_mods_formatter_hso_mods_date_start_ende($element) {
+	$from_date = strtotime($element['element']['value']);
+	$string = t('Start') . ': ';
+	if (date('H:i', $from_date) == '00:00') {
+		$string .= date('d.m.Y', $from_date);
+	} else {
+		$string .= date('d.m.Y, H:i', $from_date);
+	}
+	if ($element['element']['value2']) {
+		$string .= '<br />' . t('End') . ': ' . date('d.m.Y', strtotime($element['element']['value2']));
+	}
+  return $string;
+}
+
+/*
+ * Implements hook_block_info
+ */
+function hso_mods_block_info() {
+	$blocks['hso_pager'] = array(
+    'info' => t('Content Prev/Next'), 
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+/*
+ * Implements hook_block_view
+ */
+function hso_mods_block_view($delta = '') {
+	$block = array();
+	switch ($delta) {
+		case 'hso_pager':
+			if (arg(0) == 'node' && is_numeric(arg(1))) {
+				$node = node_load(arg(1));
+				$query_prev = new EntityFieldQuery();
+				$query_prev->entityCondition('entity_type', 'node')
+					->entityCondition('bundle', $node->type)
+					->propertyCondition('status', 1)
+					->range(0, 1);
+				$query_next = new EntityFieldQuery();
+				$query_next->entityCondition('entity_type', 'node')
+					->entityCondition('bundle', $node->type)
+					->propertyCondition('status', 1)
+					->range(0, 1);
+				$query_prev->propertyOrderBy('created', 'ASC');
+				$query_prev->propertyCondition('created', $node->created, '>');
+				$query_next->propertyOrderBy('created', 'DESC');
+				$query_next->propertyCondition('created', $node->created, '<');
+				$result_prev = $query_prev->execute();
+				$result_next = $query_next->execute();
+				$items = array();
+				if (isset($result_prev['node'])) {
+					$items[] = l('< ' . t('Previous Post'), 'node/' . key($result_prev['node']), array('attributes' => array('class' => array('pprevious'))));
+				}
+				if (isset($result_next['node'])) {
+					$items[] = l(t('Next Post') . ' >', 'node/' . key($result_next['node']), array('attributes' => array('class' => array('nnext'))));
+				}
+				$block['content'] = theme('item_list', array('items' => $items));
+			}
+			break;
+	}
+  return $block;
+}
+/**
+* Implements hook_form_alter().
+*/
+function hso_mods_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'webform_client_form_1301') {
+  	$form['#suffix'] = '<p style="text-align: center;">News Feed abonnieren</p><p style="text-align: center;"><a class="rss social" target="_blank" href="' . url('rss.xml') . '">RSS</a></p>';
+  } elseif ($form_id == 'views_exposed_form') {
+  	if (in_array('views_exposed_form__blog__panel_pane_1', $form['#theme'])) {
+			$form['#action'] = url('blog');
+			$form['keys']['#attributes']['placeholder'] = 'HSO dursuchen';
+		}
+  } elseif ($form_id == 'search_block_form') {
+		$form['search_block_form']['#attributes']['placeholder'] = 'HSO dursuchen';
+  }
+}

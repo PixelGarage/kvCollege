@@ -1,0 +1,1110 @@
+<?php
+$export_time = 1430406224;
+$data = array(
+  'bundles' => array(
+    'location' => (object) array(
+      'type' => 'location',
+      'name' => 'Location',
+      'base' => 'node_content',
+      'module' => 'node',
+      'description' => '',
+      'help' => '',
+      'has_title' => '1',
+      'title_label' => 'Name',
+      'custom' => '1',
+      'modified' => '1',
+      'locked' => '0',
+      'disabled' => '0',
+      'orig_type' => 'locations',
+      'disabled_changed' => FALSE,
+      'bc_entity_type' => 'node',
+    ),
+  ),
+  'fields' => array(
+    'body' => array(
+      'entity_types' => array(
+        0 => 'node',
+      ),
+      'foreign keys' => array(
+        'format' => array(
+          'table' => 'filter_format',
+          'columns' => array(
+            'format' => 'format',
+          ),
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'settings' => array(),
+      'translatable' => '0',
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_body' => array(
+                'value' => 'body_value',
+                'summary' => 'body_summary',
+                'format' => 'body_format',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_body' => array(
+                'value' => 'body_value',
+                'summary' => 'body_summary',
+                'format' => 'body_format',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'field_name' => 'body',
+      'type' => 'text_with_summary',
+      'module' => 'text',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'text',
+          'size' => 'big',
+          'not null' => FALSE,
+        ),
+        'summary' => array(
+          'type' => 'text',
+          'size' => 'big',
+          'not null' => FALSE,
+        ),
+        'format' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'course',
+          1 => 'course_times',
+          2 => 'webform',
+          3 => 'location',
+          4 => 'video',
+          5 => 'page',
+          6 => 'testimonial',
+          7 => 'course_tabs',
+          8 => 'block',
+          9 => 'news',
+          10 => 'media',
+          11 => 'segment_blocks',
+          12 => 'segment_sidebar_block',
+          13 => 'remoteform',
+        ),
+      ),
+    ),
+    'field_address' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_address' => array(
+                'country' => 'field_address_country',
+                'administrative_area' => 'field_address_administrative_area',
+                'sub_administrative_area' => 'field_address_sub_administrative_area',
+                'locality' => 'field_address_locality',
+                'dependent_locality' => 'field_address_dependent_locality',
+                'postal_code' => 'field_address_postal_code',
+                'thoroughfare' => 'field_address_thoroughfare',
+                'premise' => 'field_address_premise',
+                'sub_premise' => 'field_address_sub_premise',
+                'organisation_name' => 'field_address_organisation_name',
+                'name_line' => 'field_address_name_line',
+                'first_name' => 'field_address_first_name',
+                'last_name' => 'field_address_last_name',
+                'data' => 'field_address_data',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_address' => array(
+                'country' => 'field_address_country',
+                'administrative_area' => 'field_address_administrative_area',
+                'sub_administrative_area' => 'field_address_sub_administrative_area',
+                'locality' => 'field_address_locality',
+                'dependent_locality' => 'field_address_dependent_locality',
+                'postal_code' => 'field_address_postal_code',
+                'thoroughfare' => 'field_address_thoroughfare',
+                'premise' => 'field_address_premise',
+                'sub_premise' => 'field_address_sub_premise',
+                'organisation_name' => 'field_address_organisation_name',
+                'name_line' => 'field_address_name_line',
+                'first_name' => 'field_address_first_name',
+                'last_name' => 'field_address_last_name',
+                'data' => 'field_address_data',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'field_name' => 'field_address',
+      'type' => 'addressfield',
+      'module' => 'addressfield',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'country' => array(
+          'description' => 'Two letter ISO country code of this address.',
+          'type' => 'varchar',
+          'length' => 2,
+          'not null' => FALSE,
+          'default' => '',
+        ),
+        'administrative_area' => array(
+          'description' => 'The administrative area of this address. (i.e. State/Province)',
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+          'not null' => FALSE,
+        ),
+        'sub_administrative_area' => array(
+          'description' => 'The sub administrative area of this address.',
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+          'not null' => FALSE,
+        ),
+        'locality' => array(
+          'description' => 'The locality of this address. (i.e. City)',
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+          'not null' => FALSE,
+        ),
+        'dependent_locality' => array(
+          'description' => 'The dependent locality of this address.',
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+          'not null' => FALSE,
+        ),
+        'postal_code' => array(
+          'description' => 'The postal code of this address.',
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+          'not null' => FALSE,
+        ),
+        'thoroughfare' => array(
+          'description' => 'The thoroughfare of this address. (i.e. Street address)',
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+          'not null' => FALSE,
+        ),
+        'premise' => array(
+          'description' => 'The premise of this address. (i.e. Apartment / Suite number)',
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+          'not null' => FALSE,
+        ),
+        'sub_premise' => array(
+          'description' => 'The sub_premise of this address.',
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+          'not null' => FALSE,
+        ),
+        'organisation_name' => array(
+          'description' => 'Contents of a primary OrganisationName element in the xNL XML.',
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+          'default' => '',
+        ),
+        'name_line' => array(
+          'description' => 'Contents of a primary NameLine element in the xNL XML.',
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+          'default' => '',
+        ),
+        'first_name' => array(
+          'description' => 'Contents of the FirstName element of a primary PersonName element in the xNL XML.',
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+          'default' => '',
+        ),
+        'last_name' => array(
+          'description' => 'Contents of the LastName element of a primary PersonName element in the xNL XML.',
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+          'default' => '',
+        ),
+        'data' => array(
+          'description' => 'Additional data for this address.',
+          'type' => 'text',
+          'size' => 'big',
+          'not null' => FALSE,
+          'serialize' => TRUE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'location',
+        ),
+      ),
+    ),
+    'field_brand' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(
+        'allowed_values' => array(
+          0 => array(
+            'vocabulary' => 'brands',
+            'parent' => '0',
+          ),
+        ),
+      ),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_brand' => array(
+                'tid' => 'field_brand_tid',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_brand' => array(
+                'tid' => 'field_brand_tid',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(
+        'tid' => array(
+          'table' => 'taxonomy_term_data',
+          'columns' => array(
+            'tid' => 'tid',
+          ),
+        ),
+      ),
+      'indexes' => array(
+        'tid' => array(
+          0 => 'tid',
+        ),
+      ),
+      'field_name' => 'field_brand',
+      'type' => 'taxonomy_term_reference',
+      'module' => 'taxonomy',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'tid' => array(
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'course_times',
+          1 => 'location',
+        ),
+      ),
+    ),
+    'field_email' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_email' => array(
+                'email' => 'field_email_email',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_email' => array(
+                'email' => 'field_email_email',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'field_name' => 'field_email',
+      'type' => 'email',
+      'module' => 'email',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'email' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'location',
+          1 => 'contact',
+        ),
+      ),
+    ),
+    'field_internal_id' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_internal_id' => array(
+                'value' => 'field_internal_id_value',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_internal_id' => array(
+                'value' => 'field_internal_id_value',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'field_name' => 'field_internal_id',
+      'type' => 'number_integer',
+      'module' => 'number',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'int',
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'location',
+          1 => 'contact',
+          2 => 'course',
+          3 => 'course_times',
+        ),
+        'taxonomy_term' => array(
+          0 => 'brands',
+        ),
+      ),
+    ),
+    'field_map_details' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_map_details' => array(
+                'value' => 'field_map_details_value',
+                'format' => 'field_map_details_format',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_map_details' => array(
+                'value' => 'field_map_details_value',
+                'format' => 'field_map_details_format',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(
+        'format' => array(
+          'table' => 'filter_format',
+          'columns' => array(
+            'format' => 'format',
+          ),
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'field_name' => 'field_map_details',
+      'type' => 'text_long',
+      'module' => 'text',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'text',
+          'size' => 'big',
+          'not null' => FALSE,
+        ),
+        'format' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'location',
+        ),
+      ),
+    ),
+    'field_picture' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(
+        'uri_scheme' => 'public',
+        'default_image' => 0,
+      ),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_picture' => array(
+                'fid' => 'field_picture_fid',
+                'alt' => 'field_picture_alt',
+                'title' => 'field_picture_title',
+                'width' => 'field_picture_width',
+                'height' => 'field_picture_height',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_picture' => array(
+                'fid' => 'field_picture_fid',
+                'alt' => 'field_picture_alt',
+                'title' => 'field_picture_title',
+                'width' => 'field_picture_width',
+                'height' => 'field_picture_height',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(
+        'fid' => array(
+          'table' => 'file_managed',
+          'columns' => array(
+            'fid' => 'fid',
+          ),
+        ),
+      ),
+      'indexes' => array(
+        'fid' => array(
+          0 => 'fid',
+        ),
+      ),
+      'field_name' => 'field_picture',
+      'type' => 'image',
+      'module' => 'image',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'fid' => array(
+          'description' => 'The {file_managed}.fid being referenced in this field.',
+          'type' => 'int',
+          'not null' => FALSE,
+          'unsigned' => TRUE,
+        ),
+        'alt' => array(
+          'description' => 'Alternative image text, for the image\'s \'alt\' attribute.',
+          'type' => 'varchar',
+          'length' => 512,
+          'not null' => FALSE,
+        ),
+        'title' => array(
+          'description' => 'Image title text, for the image\'s \'title\' attribute.',
+          'type' => 'varchar',
+          'length' => 1024,
+          'not null' => FALSE,
+        ),
+        'width' => array(
+          'description' => 'The width of the image in pixels.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+        ),
+        'height' => array(
+          'description' => 'The height of the image in pixels.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'contact',
+          1 => 'location',
+          2 => 'testimonial',
+          3 => 'news',
+          4 => 'banner',
+          5 => 'media',
+        ),
+      ),
+    ),
+    'field_standorte' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(
+        'allowed_values' => array(
+          0 => '',
+          1 => '',
+        ),
+        'allowed_values_function' => '',
+      ),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_standorte' => array(
+                'value' => 'field_standorte_value',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_standorte' => array(
+                'value' => 'field_standorte_value',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(),
+      'indexes' => array(
+        'value' => array(
+          0 => 'value',
+        ),
+      ),
+      'field_name' => 'field_standorte',
+      'type' => 'list_boolean',
+      'module' => 'list',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'int',
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'location',
+        ),
+      ),
+    ),
+    'field_tab_text' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(
+        'max_length' => '100',
+      ),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_tab_text' => array(
+                'value' => 'field_tab_text_value',
+                'format' => 'field_tab_text_format',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_tab_text' => array(
+                'value' => 'field_tab_text_value',
+                'format' => 'field_tab_text_format',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(
+        'format' => array(
+          'table' => 'filter_format',
+          'columns' => array(
+            'format' => 'format',
+          ),
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'field_name' => 'field_tab_text',
+      'type' => 'text',
+      'module' => 'text',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'varchar',
+          'length' => '100',
+          'not null' => FALSE,
+        ),
+        'format' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'location',
+        ),
+      ),
+    ),
+  ),
+  'instances' => array(
+    'body' => array(
+      0 => array(
+        'label' => 'Body',
+        'widget' => array(
+          'weight' => '2',
+          'type' => 'text_textarea_with_summary',
+          'module' => 'text',
+          'active' => 1,
+          'settings' => array(
+            'rows' => '20',
+            'summary_rows' => 5,
+          ),
+        ),
+        'settings' => array(
+          'text_processing' => '1',
+          'display_summary' => 0,
+          'better_formats' => array(
+            'allowed_formats_toggle' => 0,
+            'allowed_formats' => array(
+              'html' => 'html',
+              'plain_text' => 'plain_text',
+            ),
+            'default_order_toggle' => 0,
+            'default_order_wrapper' => array(
+              'formats' => array(
+                'html' => array(
+                  'weight' => '0',
+                ),
+                'plain_text' => array(
+                  'weight' => '10',
+                ),
+              ),
+            ),
+          ),
+          'user_register_form' => FALSE,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'text_default',
+            'weight' => '3',
+            'settings' => array(),
+            'module' => 'text',
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'body',
+        'entity_type' => 'node',
+        'bundle' => 'location',
+        'deleted' => '0',
+      ),
+    ),
+    'field_address' => array(
+      0 => array(
+        'label' => 'Address',
+        'widget' => array(
+          'weight' => '4',
+          'type' => 'addressfield_standard',
+          'module' => 'addressfield',
+          'active' => 1,
+          'settings' => array(
+            'available_countries' => array(
+              'CH' => 'CH',
+            ),
+            'default_country' => 'CH',
+            'format_handlers' => array(
+              'address' => 'address',
+              'phone' => 'phone',
+              'address-hide-country' => 'address-hide-country',
+              'organisation' => 'organisation',
+              'address-hide-postal-code' => 0,
+              'address-hide-street' => 0,
+              'name-full' => 0,
+              'name-oneline' => 0,
+              'address-optional' => 0,
+            ),
+          ),
+        ),
+        'settings' => array(
+          'user_register_form' => FALSE,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'addressfield_default',
+            'weight' => '1',
+            'settings' => array(
+              'use_widget_handlers' => 1,
+              'format_handlers' => array(
+                'address' => 'address',
+                'phone' => 'phone',
+                'address-hide-country' => 'address-hide-country',
+                'organisation' => 'organisation',
+              ),
+            ),
+            'module' => 'addressfield',
+          ),
+        ),
+        'required' => 1,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_address',
+        'entity_type' => 'node',
+        'bundle' => 'location',
+        'deleted' => '0',
+      ),
+    ),
+    'field_brand' => array(
+      0 => array(
+        'label' => 'Brand',
+        'widget' => array(
+          'weight' => '1',
+          'type' => 'options_select',
+          'module' => 'options',
+          'active' => 1,
+          'settings' => array(),
+        ),
+        'settings' => array(
+          'user_register_form' => FALSE,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'above',
+            'type' => 'hidden',
+            'weight' => '7',
+            'settings' => array(),
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_brand',
+        'entity_type' => 'node',
+        'bundle' => 'location',
+        'deleted' => '0',
+      ),
+    ),
+    'field_email' => array(
+      0 => array(
+        'label' => 'Email',
+        'widget' => array(
+          'weight' => '5',
+          'type' => 'email_textfield',
+          'module' => 'email',
+          'active' => 1,
+          'settings' => array(
+            'size' => '60',
+          ),
+        ),
+        'settings' => array(
+          'user_register_form' => FALSE,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'hidden',
+            'weight' => '2',
+            'settings' => array(),
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_email',
+        'entity_type' => 'node',
+        'bundle' => 'location',
+        'deleted' => '0',
+      ),
+    ),
+    'field_internal_id' => array(
+      0 => array(
+        'label' => 'Internal ID',
+        'widget' => array(
+          'weight' => '9',
+          'type' => 'number',
+          'module' => 'number',
+          'active' => 0,
+          'settings' => array(),
+        ),
+        'settings' => array(
+          'min' => '',
+          'max' => '',
+          'prefix' => '',
+          'suffix' => '',
+          'user_register_form' => FALSE,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'above',
+            'type' => 'hidden',
+            'weight' => '8',
+            'settings' => array(),
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_internal_id',
+        'entity_type' => 'node',
+        'bundle' => 'location',
+        'deleted' => '0',
+      ),
+    ),
+    'field_map_details' => array(
+      0 => array(
+        'label' => 'Map Details',
+        'widget' => array(
+          'weight' => '6',
+          'type' => 'text_textarea',
+          'module' => 'text',
+          'active' => 1,
+          'settings' => array(
+            'rows' => '5',
+          ),
+        ),
+        'settings' => array(
+          'text_processing' => '1',
+          'better_formats' => array(
+            'allowed_formats_toggle' => 0,
+            'allowed_formats' => array(
+              'html' => 'html',
+              'plain_text' => 'plain_text',
+            ),
+            'default_order_toggle' => 0,
+            'default_order_wrapper' => array(
+              'formats' => array(
+                'html' => array(
+                  'weight' => '0',
+                ),
+                'plain_text' => array(
+                  'weight' => '10',
+                ),
+              ),
+            ),
+          ),
+          'user_register_form' => FALSE,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'text_default',
+            'weight' => '4',
+            'settings' => array(),
+            'module' => 'text',
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_map_details',
+        'entity_type' => 'node',
+        'bundle' => 'location',
+        'deleted' => '0',
+      ),
+    ),
+    'field_picture' => array(
+      0 => array(
+        'label' => 'Picture',
+        'widget' => array(
+          'weight' => '3',
+          'type' => 'image_image',
+          'module' => 'image',
+          'active' => 1,
+          'settings' => array(
+            'progress_indicator' => 'throbber',
+            'preview_image_style' => 'thumbnail',
+          ),
+        ),
+        'settings' => array(
+          'file_directory' => 'locations',
+          'file_extensions' => 'png gif jpg jpeg',
+          'max_filesize' => '',
+          'max_resolution' => '',
+          'min_resolution' => '',
+          'alt_field' => 0,
+          'title_field' => 0,
+          'default_image' => 0,
+          'user_register_form' => FALSE,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'image',
+            'weight' => '0',
+            'settings' => array(
+              'image_style' => '',
+              'image_link' => '',
+            ),
+            'module' => 'image',
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'field_name' => 'field_picture',
+        'entity_type' => 'node',
+        'bundle' => 'location',
+        'deleted' => '0',
+      ),
+    ),
+    'field_standorte' => array(
+      0 => array(
+        'label' => 'Standorte',
+        'widget' => array(
+          'weight' => '7',
+          'type' => 'options_onoff',
+          'module' => 'options',
+          'active' => 1,
+          'settings' => array(
+            'display_label' => 1,
+          ),
+        ),
+        'settings' => array(
+          'user_register_form' => FALSE,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'above',
+            'type' => 'hidden',
+            'weight' => '9',
+            'settings' => array(),
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => array(
+          0 => array(
+            'value' => 0,
+          ),
+        ),
+        'field_name' => 'field_standorte',
+        'entity_type' => 'node',
+        'bundle' => 'location',
+        'deleted' => '0',
+      ),
+    ),
+    'field_tab_text' => array(
+      0 => array(
+        'label' => 'Tab title',
+        'widget' => array(
+          'weight' => '8',
+          'type' => 'text_textfield',
+          'module' => 'text',
+          'active' => 1,
+          'settings' => array(
+            'size' => '60',
+          ),
+        ),
+        'settings' => array(
+          'text_processing' => '0',
+          'better_formats' => array(
+            'allowed_formats_toggle' => 0,
+            'allowed_formats' => array(
+              'html' => 'html',
+              'plain_text' => 'plain_text',
+            ),
+            'default_order_toggle' => 0,
+            'default_order_wrapper' => array(
+              'formats' => array(
+                'html' => array(
+                  'weight' => '0',
+                ),
+                'plain_text' => array(
+                  'weight' => '10',
+                ),
+              ),
+            ),
+          ),
+          'user_register_form' => FALSE,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'above',
+            'type' => 'hidden',
+            'weight' => '6',
+            'settings' => array(),
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_tab_text',
+        'entity_type' => 'node',
+        'bundle' => 'location',
+        'deleted' => '0',
+      ),
+    ),
+  ),
+);

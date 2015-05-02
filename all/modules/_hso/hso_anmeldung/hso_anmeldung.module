@@ -1,0 +1,618 @@
+<?php
+/**
+ * Implements hook_menu
+ */
+function hso_anmeldung_menu() {
+	$items = array();
+	$items['get_anmeldung/%'] = array(
+    'title' => 'Get Anmeldung PDF',
+    'access callback' => TRUE,
+    'page callback' => '_hso_get_anmeldung_pdf',
+    'page arguments' => array(1),
+    'type' => MENU_CALLBACK,
+  );
+  $items['node/%/salesfunnel'] = array(
+    'title' => 'Salesfunnel redirect',
+    'access callback' => TRUE,
+    'page callback' => '_hso_redirect_salesfunnel_call',
+    'page arguments' => array(1),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Downloads the pdf-anmeldung contract with the given hash.
+ *
+ * @param $hash
+ */
+function _hso_get_anmeldung_pdf($hash) {
+	if (preg_match('/^[a-z0-9]{32}$/i', $hash)) {
+    $dir_uri = file_stream_wrapper_get_instance_by_uri('private://anmeldung');
+		$pdf = $dir_uri->realpath() . '/anmeldung_logo_' . $hash . '.pdf';
+		if (file_exists($pdf)) {
+			if (filemtime($pdf) >= time() - 28 * 86400) {
+				file_transfer('private://anmeldung/anmeldung_logo_' . $hash . '.pdf', array(
+					'Cache-control'       => 'private',
+					'Content-Type'        => 'application/octet-stream',
+					'Content-Disposition' => 'attachment; filename="Ausbildungsvertrag.pdf"',
+					'Content-Length' => filesize($pdf)
+				));
+			}
+		}
+	}
+	drupal_not_found();
+	drupal_exit();
+}
+
+/**
+ * Redirect salesfunnel call to correct course time.
+ *
+ * @param $times_int_id  int   Internal id of course time.
+ */
+function _hso_redirect_salesfunnel_call($times_int_id) {
+  // course time node id
+  $nid = 0;
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'course_times')
+    ->fieldCondition('field_internal_id', 'value', $times_int_id)
+    ->range(0, 1);
+  $result = $query->execute();
+  if (isset($result['node'])) {
+    // Update existing
+    $node = node_load(key($result['node']));
+    $nid = $node->nid;
+  } else {
+    // node not found
+    watchdog('Sales funnel', 'The course time with the internal id = @int_id could not be found', array('@int_id' => $times_int_id), WATCHDOG_ERROR);
+    drupal_not_found();
+    drupal_exit();
+  }
+
+  //TODO: implement redirect with submitted parameters
+  drupal_goto('node/' . $nid . '/anmeldung');
+}
+
+/* --------------------------------------------------
+ * HSO Anmeldungs-Mail (with contract as PDF attachment)
+ * --------------------------------------------------*/
+
+/**
+ * Implements hook_mail_alter
+ */
+function hso_anmeldung_mail_alter(&$message) {
+	if ($message['module'] == 'webform') {
+		$standorte_emails = array(
+      1052 => 4,  // Kontakt
+      1335 => 10, // Bildungsberatung
+      1336 => 9   // Broschüre bestellen
+    );
+		if (array_key_exists($message['params']['email']['nid'], $standorte_emails)) {
+		  // Kontakt forms
+			$field = $standorte_emails[$message['params']['email']['nid']];
+			if (array_key_exists($field, $message['params']['submission']->data) && !empty($message['params']['submission']->data[$field]['value'][0])) {
+				$message['to'] = array('name' => $message['params']['submission']->data[$field]['value'][0], 'mail' => $message['params']['submission']->data[$field]['value'][0] . '@hso.ch');
+			}
+
+		} else {
+      // alter mail if custom form template are used (Client and Admin email with attachment)
+			$template = variable_get('webform_template_' . $message['params']['email']['nid'] . '_' . $message['params']['email']['eid'], 'default');
+			if (in_array($template, array('admin', 'client'))) {
+				$message['send'] = FALSE;
+				$webform_components = $message['params']['node']->webform['components'];
+				$course_time_nid = FALSE;
+				$anrede = '';
+				foreach ($webform_components as $key => $data) {
+					if ($data['form_key'] == 'course_times_nid') {
+            // get course time nid from form submission
+						$course_time_nid = $message['params']['submission']->data[$key]['value'][0];
+
+					} else if ($data['form_key'] == 'anrede') {
+            // get anrede
+						$anrede = $message['params']['submission']->data[$key]['value'][0];
+
+					} else if ($data['form_key'] == 'name') {
+            // get name
+						$client_name = ucwords(strtolower($message['params']['submission']->data[$key]['value'][0]));
+					}
+				}
+				$grussformel = ($anrede == 'Herr' ? 'Sehr geehrter Herr ' : ($anrede == 'Frau' ? 'Sehr geehrte Frau ' : 'Sehr geehrte/r Herr/Frau ')) . $client_name;
+
+        // load course time and fill mail template with the node data
+				if ($course_time_nid) {
+					$course_time_node = node_load($course_time_nid);
+					if ($course_time_node && !empty($course_time_node->field_course)) {
+						$message['send'] = TRUE;
+						$course = node_load($course_time_node->field_course[LANGUAGE_NONE][0]['target_id']);
+						$segment = !empty($course->field_segment) ? taxonomy_term_load($course->field_segment[LANGUAGE_NONE][0]['tid']) : FALSE;
+						$location = !empty($course_time_node->field_location) ? node_load($course_time_node->field_location[LANGUAGE_NONE][0]['target_id']) : FALSE;
+						$contact = FALSE;
+						if ($segment && $location) {
+							$contact = _hso_get_contact($course->nid, $location->nid);
+						}
+            // assign mail tokens
+						$to_search = array(
+							'%log_id%' => $message['params']['submission']->sid,
+							'%pdf_link%' => url('get_anmeldung/' . md5($message['params']['submission']->sid . '2I7L1N1'), array('absolute' => true)),
+							'%course_title%' => $course->title,
+							'%segment_name%' => $segment ? $segment->name : '-',
+							'%location_name%' => $location ? $location->title : '-',
+							'%course_time_start_date%' => date('d.m.Y', strtotime($course_time_node->field_course_date[LANGUAGE_NONE][0]['value'])),
+							'%course_time_start_time%' => date('H:i', strtotime($course_time_node->field_course_date[LANGUAGE_NONE][0]['value'])),
+							'%course_time_end_date%' => $course_time_node->field_course_date[LANGUAGE_NONE][0]['value2'] ? date('d.m.Y', strtotime($course_time_node->field_course_date[LANGUAGE_NONE][0]['value2'])) : '-',
+							'%gruss_formel%' => $grussformel,
+							'%contact_name%' => $contact ? $contact->title : '',
+							'%contact_phone%' => $contact ? $contact->field_phone[LANGUAGE_NONE][0]['value'] : '',
+              '%course_time_variante%' => !empty($course_time_node->body) ? $course_time_node->body[LANGUAGE_NONE][0]['value'] : '',
+						);
+
+            // replace tokens with values in mail and complete mail with attachment and address
+						$message['subject'] = str_replace(array_keys($to_search), array_values($to_search), $message['subject']);
+						$message['params']['plaintext'] = str_replace(array_keys($to_search), array_values($to_search), $message['params']['plaintext']);
+						if ($template == 'admin') {
+              // add admin mail address and attach pdfs
+							if ($location) {
+                // send to main address
+								$message['to'] = array('name' => $location->title, 'mail' => $location->field_email[LANGUAGE_NONE][0]['email']);
+							} elseif ($contact) {
+                // send to responsible person
+								$message['to'] = array('name' => $contact->title, 'mail' => $contact->field_email[LANGUAGE_NONE][0]['email']);
+							}
+							$message['params']['attachments'][] = _hso_make_h4i($course, $course_time_node, $webform_components, $message['params']['submission']->data);
+							$message['params']['attachments'][] = _hso_make_anmeldung_pdf($location, $segment, $contact, $grussformel, $course, $course_time_node, $webform_components, $message['params']['submission']->data, $message['params']['submission']->sid, FALSE);
+
+						} else {
+              // add client mail address and attach pdf
+							if ($contact && $course_time_node->field_template[LANGUAGE_NONE][0]['value'] != 'ecdl') {
+								$message['from'] = array('name' => $contact->title, 'mail' => $contact->field_email[LANGUAGE_NONE][0]['email']);
+								unset($message['headers']['From']);
+							}
+							$message['params']['attachments'][] = _hso_make_anmeldung_pdf($location, $segment, $contact, $grussformel, $course, $course_time_node, $webform_components, $message['params']['submission']->data, $message['params']['submission']->sid, TRUE);
+
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Get the contact responsible for the course at the given location (branch).
+ *
+ * @param $course_nid
+ * @param $location_nid
+ */
+function _hso_get_contact($course_nid, $location_nid) {
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'contact')
+		->fieldCondition('field_course', 'target_id', $course_nid)
+		->fieldCondition('field_location', 'target_id', $location_nid)
+		->range(0, 1);
+	$result = $query->execute();
+	if (isset($result['node'])) {
+		return node_load(key($result['node']));
+	}
+	return FALSE;
+}
+
+/**
+ * Replace the tokens in the html-template with the given course time data and create pdf from it.
+ *
+ * Destination where to send the document. It can take one of the following values:
+ * <ul>
+ *  <li>I: send the file inline to the browser (default). The plug-in is used if available. The name given by name is used when one selects the "Save as" option on the link generating the PDF.</li>
+ *  <li>D: send to the browser and force a file download with the name given by name.</li>
+ *  <li>F: save to a local server file with the name given by name.</li>
+ *  <li>S: return the document as a string (name is ignored).</li>
+ *  <li>FI: equivalent to F + I option</li>
+ *  <li>FD: equivalent to F + D option</li>
+ *  <li>E: return the document as base64 mime multi-part email attachment (RFC 2045)</li>
+ * </ul>
+ *
+ */
+function _hso_make_anmeldung_pdf($location, $segment, $contact, $grussformel, $course, $course_time_node, $webform_components, $submission, $submission_sid, $to_client) {
+	$template = $course_time_node->field_template[LANGUAGE_NONE][0]['value'];
+	$to_search = array();
+	$additional_fields = array();
+	$mod_count = 0;
+
+  // loop through all webform fields and get submitted values
+	foreach ($webform_components as $key => $data) {
+		if (!empty($data['extra']['hso_anmeldung_course_ids']) || !empty($data['extra']['hso_anmeldung_exclude_course_ids'])) {
+			$conditional_courses = explode(',', $data['extra']['hso_anmeldung_course_ids']);
+			$exclude_conditional_courses = empty($data['extra']['hso_anmeldung_exclude_course_ids']) ? array() : explode(',', $data['extra']['hso_anmeldung_exclude_course_ids']);
+			if (
+				(!empty($conditional_courses) && !empty($course->field_internal_id) && !in_array($course->field_internal_id[LANGUAGE_NONE][0]['value'], $conditional_courses)) ||
+				(!empty($exclude_conditional_courses) && !empty($course->field_internal_id) && in_array($course->field_internal_id[LANGUAGE_NONE][0]['value'], $exclude_conditional_courses))
+			) {
+				continue;
+			}
+		}
+		if (array_key_exists($key, $submission)) {
+			if (!empty($data['extra']['hso_anmeldung_is_additional'])) {
+				$additional_fields[] = sprintf('%-26s', $data['name'] . ':') . $submission[$key]['value'][0] . '\par';
+			} else {
+				$to_search['%' . strtoupper($data['form_key']) . '%'] = $submission[$key]['value'][0];
+			}
+			if ($template == 'ecdl' && preg_match('/^m(\d+)$/', $data['form_key']) && $submission[$key]['value'][0]) {
+        // count number of selected modules
+				$mod_count++;
+			}
+		} elseif ($template == 'ecdl' && preg_match('/^m(\d+)$/', $data['form_key'])) {
+			$to_search['%' . strtoupper($data['form_key']) . '%'] = ' ';
+		}
+	}
+	if ($template == 'ecdl') {
+		$to_search['%NOFMODULE%'] = $mod_count;
+		$to_search['%KOSTEN%'] = $mod_count * 65;
+	} 
+	$course_time_description = !empty($course_time_node->body) ? strip_tags($course_time_node->body[LANGUAGE_NONE][0]['value']) : '';
+	$to_search['%ADDITIONALFIELDS%'] = implode(PHP_EOL, $additional_fields);
+	$to_search['%LEHRGANG%'] = $course->title . (empty($course_time_description) ? '' : ', ' . $course_time_description);
+  $to_search['%ABTEILUNG%'] = $segment ? $segment->name : '-';
+  $to_search['%DAUERVON%'] = date('d.m.Y', strtotime($course_time_node->field_course_date[LANGUAGE_NONE][0]['value']));
+  $to_search['%DAUERBIS%'] = $course_time_node->field_course_date[LANGUAGE_NONE][0]['value2'] ? date('d.m.Y', strtotime($course_time_node->field_course_date[LANGUAGE_NONE][0]['value2'])) : '-';
+  $to_search['%KONTAKTTEL%'] = $contact ? $contact->field_phone[LANGUAGE_NONE][0]['value'] : '';
+  $to_search['%KONTAKTPERSON%'] = $contact ? $contact->title : '';
+  $to_search['%KONTAKTEMAIL%'] = $contact ? $contact->field_email[LANGUAGE_NONE][0]['email'] : '';
+  $to_search['%LOCATION%'] = $location ? $location->title : '';
+	$to_search['%HSO_ADRESSE%'] = $location ? $location->field_address[LANGUAGE_NONE][0]['thoroughfare'] : '';
+  $to_search['%HSO_PLZORT%'] = $location ? $location->field_address[LANGUAGE_NONE][0]['postal_code'] . ' ' . $location->field_address[LANGUAGE_NONE][0]['locality'] : '';
+  $to_search['%HSO_FAX%'] = $location ? $location->field_address[LANGUAGE_NONE][0]['fax_number'] : '';
+  $to_search['%HSO_TEL%'] = $location ? $location->field_address[LANGUAGE_NONE][0]['phone_number'] : '';
+  $to_search['%HSO_EMAIL%'] = $location ? $location->field_email[LANGUAGE_NONE][0]['email'] : '';
+	
+	$start_time = date('H:i', strtotime($course_time_node->field_course_date[LANGUAGE_NONE][0]['value']));
+	$start_date = date('d.m.Y', strtotime($course_time_node->field_course_date[LANGUAGE_NONE][0]['value']));
+  $to_search['%LGSTART%'] = $start_time == '00:00' ? $start_date : $start_date . ', ' . $start_time;
+  $to_search['%DATUM%'] = date('d.m.Y');
+  $to_search['%COSTS%'] = 'CHF ' . $course_time_node->field_brutto_price[LANGUAGE_NONE][0]['value'];
+  $to_search['%GRUSSFORMEL%'] = $grussformel;
+  // detail costs
+  //$detail_costs = '<strong>Ich bin mir &#252;ber folgende Kosten bewusst:</strong><br />';
+  $detail_costs = $course_time_node->field_detailed_price[LANGUAGE_NONE][0]['value'];
+  if (!empty($course_time_node->field_additional_info_price) && !empty($course_time_node->field_additional_info_price[LANGUAGE_NONE][0]['value'])) {
+    $detail_costs .= '<br />' . $course_time_node->field_additional_info_price[LANGUAGE_NONE][0]['value'];
+  }
+  $to_search['%DETAILEDCOSTS%'] = $detail_costs;
+
+  // get brand specific html file
+  $brand_short = taxonomy_term_load($course_time_node->field_brand[LANGUAGE_NONE][0]['tid'])->name;
+  $brand = ($brand_short != 'HSO') ? '_' . strtolower($brand_short) : '';
+  $html_file = drupal_get_path('module', 'hso_anmeldung') . '/html_templates/' . $template . '_anmeldung_template' . $brand . '.html';
+
+  // replace tokens in html file, if it exists
+  if (file_exists($html_file)) {
+    //libxml_use_internal_errors(true);
+    $doc = new DOMDocument();
+    $doc->loadHTMLFile($html_file);
+    $doc->normalizeDocument();
+    $pdf_string = $doc->saveHTML($doc->getElementsByTagName('style')->item(0));
+    $pdf_string .= $doc->saveHTML($doc->getElementsByTagName('body')->item(0));
+    $pdf_string = str_replace(array_keys($to_search), array_values($to_search), $pdf_string);
+
+    // convert html string to pdf
+    $dir_uri = file_stream_wrapper_get_instance_by_uri('private://anmeldung');
+    $filepath = $dir_uri->realpath() . '/anmeldung_' . ($to_client ? 'logo_' : '' ) . md5($submission_sid . '2I7L1N1') . '.pdf';
+    $options = array(
+      'title' => $to_client ? 'Anmeldereservation' : 'Anmeldung',
+      'subject' => $brand_short,
+      'author' => $brand_short,
+      'keywords' => $brand_short . 'Anmeldung, tcpdf, PDF, Drupal, Pixelgarage',
+      'header' => array(
+        'callback' => array(
+          'function' => '_hso_add_pdf_header',
+          'context' => array(
+            'client_copy' => $to_client ? 'yes' : 'no',
+            'brand' => strtolower($brand_short),
+          ),
+        ),
+      ),
+      'footer' => array(
+        'callback' => array(
+          'function' => 'hso_add_pdf_footer',
+          'context' => array(
+          ),
+        ),
+      ),
+    );
+    $pdf = tcpdf_document_instance($options);
+    $pdf->setHtmlVSpace(array('p' => array(array('h' => 1, 'n' => 0.1), array('h' => 1, 'n' => 0.1))));
+    $pdf->writeHtml($pdf_string, true, false, true, false, '');
+    $pdf->lastPage();
+    $pdf->Output($filepath, 'F');
+
+
+    // create file class and return it
+		$file = new StdClass();
+		if ($template == 'ecdl') {
+			$file->filename = $to_client ? 'anmeldereservation.pdf' : 'anmeldung.pdf';
+		} else {
+			$file->filename = $to_client ? 'ausbildungsvertrag.pdf' : 'anmeldung.pdf';
+		}
+		$file->filepath = $filepath;
+		return $file;
+
+  } else {
+    watchdog('Create Anmeldung PDF', 'The template file @file does not exist.', array('@file' => $html_file), WATCHDOG_ERROR);
+
+  }
+}
+
+function _hso_make_h4i($course, $course_time_node, $webform_components, $submission) {
+	$values_4hi = array();
+	$values_4hi['id'] = $course->nid;
+	$values_4hi['df_id'] = $course_time_node->field_internal_id[LANGUAGE_NONE][0]['value'];
+	$values_4hi['lg_' . $course->field_internal_id[LANGUAGE_NONE][0]['value']] = $values_4hi['df_id'];
+	foreach ($webform_components as $key => $data) {
+		if (!empty($data['extra']['hso_anmeldung_course_ids']) || !empty($data['extra']['hso_anmeldung_exclude_course_ids'])) {
+			$conditional_courses = explode(',', $data['extra']['hso_anmeldung_course_ids']);
+			$exclude_conditional_courses = empty($data['extra']['hso_anmeldung_exclude_course_ids']) ? array() : explode(',', $data['extra']['hso_anmeldung_exclude_course_ids']);
+			if (
+				(!empty($conditional_courses) && !empty($course->field_internal_id) && !in_array($course->field_internal_id[LANGUAGE_NONE][0]['value'], $conditional_courses)) ||
+				(!empty($exclude_conditional_courses) && !empty($course->field_internal_id) && in_array($course->field_internal_id[LANGUAGE_NONE][0]['value'], $exclude_conditional_courses))
+			) {
+				continue;
+			}
+		}
+		if (array_key_exists($key, $submission) && !in_array($data['form_key'], array('course_times_nid', 'agbcheck'))) {
+			if (!empty($data['extra']['hso_anmeldung_custom_key'])) {
+				$values_4hi[$data['extra']['hso_anmeldung_custom_key']] = $submission[$key]['value'][0];
+			} else {
+				$values_4hi[$data['form_key']] = $submission[$key]['value'][0];
+			}
+		}
+	}
+	$file_content = '[H4i:Anmeldung]' . PHP_EOL;
+  $file_content .= print_r($values_4hi, TRUE);
+  $file = new StdClass();
+  $file->filename = 'anmeldung.h4i';
+  $file->filecontent = $file_content;
+  return $file;
+}
+
+/**
+ * Callback function to define header.
+ * @param $pdf_document
+ * @param $context
+ */
+function _hso_add_pdf_header(&$pdf_document, $context) {
+  if ($context['client_copy'] == 'yes') {
+    // draw Logo top right, if document is for client
+    $image_file = drupal_get_path('module', 'hso_anmeldung') . '/html_templates/template_logo_' . $context['brand'] . '.png';
+    $pdf_document->Image($image_file, 5, 10, 30, '', '', '', 'T', 2, 300, 'R');
+  }
+}
+
+/**
+ * Callback function to define footer.
+ * @param $pdf_document
+ * @param $context
+ */
+function _hso_add_pdf_footer(&$pdf_document, $context) {
+  // no footer
+}
+
+
+
+/* --------------------------------------------------
+ * HSO Anmeldung-Webform alteration
+ * --------------------------------------------------*/
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Alters the anmeldung webforms with additional text.
+*/
+function hso_anmeldung_form_alter(&$form, &$form_state, $form_id) {
+  // extend all anmeldungs forms (default, european, ecdl)
+  if ($form_id == 'webform_client_form_264' || $form_id == 'webform_client_form_475' || $form_id == 'webform_client_form_476') {
+  	$prevent_access = TRUE;
+    // leave when in admin mode
+    if (arg(0) == 'admin') return;
+
+    if (arg(0) == 'node' && is_numeric(arg(1)) && arg(2) == 'anmeldung') {
+      // Anmeldung called from course time
+  		$course_time_node = node_load(arg(1));
+  		$prevent_access = $course_time_node->type != 'course_times' || !$course_time_node->status || empty($course_time_node->field_course);
+  	}
+  	if ($prevent_access) {
+  		drupal_not_found();
+  		drupal_exit();
+  	}
+
+    // prepare to alter form with additional course time info's
+  	$course = node_load($course_time_node->field_course[LANGUAGE_NONE][0]['target_id']);
+  	$form['submitted']['course_times_nid']['#value'] = $course_time_node->nid;
+  	$segment = !empty($course->field_segment) ? taxonomy_term_load($course->field_segment[LANGUAGE_NONE][0]['tid']) : FALSE;
+  	$agb_nid = 1036;
+    $text = '';
+
+    // get AGB nid
+  	if ($segment && !empty($segment->field_agb_nid)) {
+  		$agb_nid = $segment->field_agb_nid[LANGUAGE_NONE][0]['value'];
+  	}
+
+    // add Anmeldungs conditions
+    if ($form_id == 'webform_client_form_476') {
+      // ecdl form
+  		$text = 'Ich habe die ' . l('Allgemeinen Geschäftsbedingungen (AGB)', 'node/' . $agb_nid) . ' gelesen und bin mir &#252;ber die Kosten von ' .
+        '<strong id="agb_costs">CHF 0.--</strong> bewusst, welche mir auch bei Nicht-Erscheinen zum Pr&#252;fungstermin verrechnet werden.';
+
+  	} else {
+      // default & european form
+			if (empty($course_time_node->field_detailed_price) || empty($course_time_node->field_detailed_price[LANGUAGE_NONE][0]['value'])) {
+				$form['submitted']['agbcheck']['#access'] = FALSE;
+
+			} else {
+				$text = $course_time_node->field_detailed_price[LANGUAGE_NONE][0]['value'];
+        if (!empty($course_time_node->field_additional_info_price) && !empty($course_time_node->field_additional_info_price[LANGUAGE_NONE][0]['value'])) {
+          $text .= $course_time_node->field_additional_info_price[LANGUAGE_NONE][0]['value'];
+        }
+        $form['submitted']['markup']['#markup'] = $text;
+        $text = '<strong>Ich habe die ' . l('Allgemeinen Geschäftsbedingungen (AGB)', 'node/' . $agb_nid) . ' gelesen und bin damit einverstanden.</strong><br />';
+			}
+
+		}
+		$form['submitted']['agbcheck']['#options'][1] = $text;
+		_hso_anmeldung_check_form_fields($form['submitted'], $course);
+  }
+}
+function _hso_anmeldung_check_form_fields(&$fields, $course) {
+	$to_return = 0;
+	foreach ($fields as $key => $element) {
+		if (is_array($element) && isset($element['#webform_component'])) {
+			$to_return++;
+			if (!empty($element['#webform_component']['extra']['hso_anmeldung_course_ids']) || !empty($element['#webform_component']['extra']['hso_anmeldung_exclude_course_ids'])) {
+				$conditional_courses = explode(',', $element['#webform_component']['extra']['hso_anmeldung_course_ids']);
+				$exclude_conditional_courses = empty($element['#webform_component']['extra']['hso_anmeldung_exclude_course_ids']) ? array() : explode(',', $element['#webform_component']['extra']['hso_anmeldung_exclude_course_ids']);
+				if (
+						(!empty($conditional_courses) && !empty($course->field_internal_id) && !in_array($course->field_internal_id[LANGUAGE_NONE][0]['value'], $conditional_courses)) ||
+						(!empty($exclude_conditional_courses) && !empty($course->field_internal_id) && in_array($course->field_internal_id[LANGUAGE_NONE][0]['value'], $exclude_conditional_courses))
+					) {
+					$fields[$key]['#access'] = FALSE;
+					$to_return--;
+				}
+			}
+			if (isset($element['#type']) && $element['#type'] == 'fieldset') {
+				$check_empty = _hso_anmeldung_check_form_fields($fields[$key], $course);
+				if (!$check_empty) {
+					$fields[$key]['#access'] = FALSE;
+				}
+			}
+		}
+	}
+	return $to_return;
+}
+
+/**
+ * Alters a anmeldungs-webform submission before rendering.
+ *
+ * @param $renderable
+ */
+function hso_anmeldung_webform_submission_render_alter(&$renderable) {
+  $submission = $renderable['#submission'];
+
+  // only anmeldungs forms (default, european, ecdl)
+  if (in_array($submission->nid, array(264, 475, 476))) {
+    // get course time nid from form, if any
+    $course_time_nid = FALSE;
+    $webform_components = $renderable['#node']->webform['components'];
+    foreach ($webform_components as $key => $data) {
+      if ($data['form_key'] == 'course_times_nid') {
+        $course_time_nid = $submission->data[$key]['value'][0];
+        break;
+      }
+    }
+
+    // if course time nid has been found
+    if ($course_time_nid) {
+      $course_time_node = node_load($course_time_nid);
+      if ($course_time_node && !empty($course_time_node->field_course)) {
+        $course = node_load($course_time_node->field_course[LANGUAGE_NONE][0]['target_id']);
+        foreach ($webform_components as $key => $data) {
+          if (!empty($data['extra']['hso_anmeldung_course_ids']) || !empty($data['extra']['hso_anmeldung_exclude_course_ids'])) {
+            $conditional_courses = explode(',', $data['extra']['hso_anmeldung_course_ids']);
+            $exclude_conditional_courses = empty($data['extra']['hso_anmeldung_exclude_course_ids']) ? array() : explode(',', $data['extra']['hso_anmeldung_exclude_course_ids']);
+            if (
+              (!empty($conditional_courses) && !empty($course->field_internal_id) && !in_array($course->field_internal_id[LANGUAGE_NONE][0]['value'], $conditional_courses)) ||
+              (!empty($exclude_conditional_courses) && !empty($course->field_internal_id) && in_array($course->field_internal_id[LANGUAGE_NONE][0]['value'], $exclude_conditional_courses))
+            ) {
+              if (!empty($data['pid'])) {
+                unset($renderable[$webform_components[$data['pid']]['form_key']][$data['form_key']]);
+              } else {
+                unset($renderable[$data['form_key']]);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+/* --------------------------------------------------
+ * Webform admin form alteration
+ * --------------------------------------------------*/
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ * Extends the webform email templates.
+ */
+function hso_anmeldung_form_webform_email_edit_form_alter(&$form, &$form_state) {
+  $form['template']['template_option']['#options']['client'] = 'Client Email (w/PDF)';
+  $form['template']['template_option']['#options']['admin'] = 'Admin Email (w/PDF and h4i)';
+  $form['template']['template_option']['#default_value'] = variable_get('webform_template_' . $form['node']['#value']->nid . '_' . $form['eid']['#value'], 'default');
+  $form['#submit'][] = 'hso_anmeldung_form_webform_email_edit_form_submit';
+}
+/**
+ * Saves the chosen webform email template.
+ */
+function hso_anmeldung_form_webform_email_edit_form_submit($form, $form_state) {
+  variable_set('webform_template_' . $form_state['values']['node']->nid . '_' . $form_state['values']['eid'], $form_state['values']['template_option']);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ * Extends the webform component form with HSO extra fields.
+ */
+function hso_anmeldung_form_webform_component_edit_form_alter(&$form, &$form_state) {
+  if ($form['nid']['#value'] == 264 || $form['nid']['#value'] == 475 || $form['nid']['#value'] == 476) {
+    array_unshift($form['#submit'], 'hso_anmeldung_component_edit_submit');
+    $form['hso'] = array(
+      '#type' => 'fieldset',
+      '#title' => 'HSO Settings',
+      '#access' => TRUE
+    );
+    $form['hso']['extra']['course_ids'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Show only for these course ids',
+      '#description' => 'Use the internal ID from HSO System. Leave blank to show for every course',
+      '#default_value' => '',
+    );
+    $form['hso']['extra']['exclude_course_ids'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Exclude for these course ids',
+      '#description' => 'Use the internal ID from HSO System. Leave blank to show for every course',
+      '#default_value' => '',
+    );
+    $form['hso']['extra']['custom_key'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Custom key for the export file sent by email',
+      '#description' => 'Leave blank if it\'s the same than field key',
+      '#default_value' => '',
+    );
+    $form['hso']['extra']['is_additional'] = array(
+      '#type' => 'checkbox',
+      '#title' => 'Include as additional field into PDF',
+      '#return_value' => 1,
+    );
+    if (!empty($form['cid']['#value'])) {
+      $sql = "SELECT extra FROM {webform_component} where nid = :nid and cid = :cid";
+      $result = db_query($sql, array(':nid' => $form['nid']['#value'], ':cid' => $form['cid']['#value']));
+      if ($row = $result->fetchAssoc()) {
+        $extra = unserialize($row['extra']);
+        $form['hso']['extra']['course_ids']['#default_value'] = trim(isset($extra['hso_anmeldung_course_ids']) ? $extra['hso_anmeldung_course_ids'] : '');
+        $form['hso']['extra']['exclude_course_ids']['#default_value'] = trim(isset($extra['hso_anmeldung_exclude_course_ids']) ? $extra['hso_anmeldung_exclude_course_ids'] : '');
+        $form['hso']['extra']['custom_key']['#default_value'] = trim(isset($extra['hso_anmeldung_custom_key']) ? $extra['hso_anmeldung_custom_key'] : '');
+        $form['hso']['extra']['is_additional']['#default_value'] = trim(isset($extra['hso_anmeldung_is_additional']) ? $extra['hso_anmeldung_is_additional'] : 0);
+      }
+    }
+  }
+}
+
+function hso_anmeldung_component_edit_submit($form, &$form_state) {
+  $form_state['values']['extra']['hso_anmeldung_course_ids'] = trim($form_state['values']['hso']['extra']['course_ids']);
+  $form_state['values']['extra']['hso_anmeldung_exclude_course_ids'] = trim($form_state['values']['hso']['extra']['exclude_course_ids']);
+  $form_state['values']['extra']['hso_anmeldung_custom_key'] = trim($form_state['values']['hso']['extra']['custom_key']);
+  $form_state['values']['extra']['hso_anmeldung_is_additional'] = $form_state['values']['hso']['extra']['is_additional'];
+  $form_state['values']['hso']['extra']['course_ids'] = '';
+  $form_state['values']['hso']['extra']['custom_key'] = '';
+  $form_state['values']['hso']['extra']['is_additional'] = NULL;
+}
+
+

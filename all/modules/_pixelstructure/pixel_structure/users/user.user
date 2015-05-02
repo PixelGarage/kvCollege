@@ -1,0 +1,1240 @@
+<?php
+$export_time = 1430515229;
+
+
+$data = array(
+  'bundles' => array(
+    'user' => NULL,
+  ),
+  'fields' => array(
+    'field_bio' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_bio' => array(
+                'value' => 'field_bio_value',
+                'format' => 'field_bio_format',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_bio' => array(
+                'value' => 'field_bio_value',
+                'format' => 'field_bio_format',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(
+        'format' => array(
+          'table' => 'filter_format',
+          'columns' => array(
+            'format' => 'format',
+          ),
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'field_name' => 'field_bio',
+      'type' => 'text_long',
+      'module' => 'text',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'text',
+          'size' => 'big',
+          'not null' => FALSE,
+        ),
+        'format' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'user' => array(
+          0 => 'user',
+        ),
+      ),
+    ),
+    'field_full_name' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_full_name' => array(
+                'value' => 'field_full_name_value',
+                'format' => 'field_full_name_format',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_full_name' => array(
+                'value' => 'field_full_name_value',
+                'format' => 'field_full_name_format',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(
+        'format' => array(
+          'table' => 'filter_format',
+          'columns' => array(
+            'format' => 'format',
+          ),
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'field_name' => 'field_full_name',
+      'type' => 'text',
+      'module' => 'text',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+        ),
+        'format' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'user' => array(
+          0 => 'user',
+        ),
+      ),
+    ),
+    'field_google_url' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(
+        'attributes' => array(
+          'target' => 'default',
+          'class' => '',
+          'rel' => '',
+        ),
+        'url' => 0,
+        'title' => 'optional',
+        'title_value' => '',
+        'title_maxlength' => 128,
+        'enable_tokens' => 1,
+        'display' => array(
+          'url_cutoff' => 80,
+        ),
+      ),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_google_url' => array(
+                'url' => 'field_google_url_url',
+                'title' => 'field_google_url_title',
+                'attributes' => 'field_google_url_attributes',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_google_url' => array(
+                'url' => 'field_google_url_url',
+                'title' => 'field_google_url_title',
+                'attributes' => 'field_google_url_attributes',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'field_name' => 'field_google_url',
+      'type' => 'link_field',
+      'module' => 'link',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'url' => array(
+          'type' => 'varchar',
+          'length' => 2048,
+          'not null' => FALSE,
+          'sortable' => TRUE,
+        ),
+        'title' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+          'sortable' => TRUE,
+        ),
+        'attributes' => array(
+          'type' => 'text',
+          'size' => 'medium',
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'contact',
+        ),
+        'user' => array(
+          0 => 'user',
+        ),
+      ),
+    ),
+    'field_linkedin_url' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(
+        'attributes' => array(
+          'target' => 'default',
+          'class' => '',
+          'rel' => '',
+        ),
+        'url' => 0,
+        'title' => 'optional',
+        'title_value' => '',
+        'title_maxlength' => 128,
+        'enable_tokens' => 1,
+        'display' => array(
+          'url_cutoff' => 80,
+        ),
+      ),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_linkedin_url' => array(
+                'url' => 'field_linkedin_url_url',
+                'title' => 'field_linkedin_url_title',
+                'attributes' => 'field_linkedin_url_attributes',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_linkedin_url' => array(
+                'url' => 'field_linkedin_url_url',
+                'title' => 'field_linkedin_url_title',
+                'attributes' => 'field_linkedin_url_attributes',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'field_name' => 'field_linkedin_url',
+      'type' => 'link_field',
+      'module' => 'link',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'url' => array(
+          'type' => 'varchar',
+          'length' => 2048,
+          'not null' => FALSE,
+          'sortable' => TRUE,
+        ),
+        'title' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+          'sortable' => TRUE,
+        ),
+        'attributes' => array(
+          'type' => 'text',
+          'size' => 'medium',
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'contact',
+        ),
+        'user' => array(
+          0 => 'user',
+        ),
+      ),
+    ),
+    'field_phone' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_phone' => array(
+                'value' => 'field_phone_value',
+                'format' => 'field_phone_format',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_phone' => array(
+                'value' => 'field_phone_value',
+                'format' => 'field_phone_format',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(
+        'format' => array(
+          'table' => 'filter_format',
+          'columns' => array(
+            'format' => 'format',
+          ),
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'field_name' => 'field_phone',
+      'type' => 'text',
+      'module' => 'text',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+        ),
+        'format' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'contact',
+        ),
+        'user' => array(
+          0 => 'user',
+        ),
+      ),
+    ),
+    'field_place' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_place' => array(
+                'value' => 'field_place_value',
+                'format' => 'field_place_format',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_place' => array(
+                'value' => 'field_place_value',
+                'format' => 'field_place_format',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(
+        'format' => array(
+          'table' => 'filter_format',
+          'columns' => array(
+            'format' => 'format',
+          ),
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'field_name' => 'field_place',
+      'type' => 'text',
+      'module' => 'text',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+        ),
+        'format' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'user' => array(
+          0 => 'user',
+        ),
+      ),
+    ),
+    'field_position_function' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(
+        'max_length' => '255',
+      ),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_position_function' => array(
+                'value' => 'field_position_function_value',
+                'format' => 'field_position_function_format',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_position_function' => array(
+                'value' => 'field_position_function_value',
+                'format' => 'field_position_function_format',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(
+        'format' => array(
+          'table' => 'filter_format',
+          'columns' => array(
+            'format' => 'format',
+          ),
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'field_name' => 'field_position_function',
+      'type' => 'text',
+      'module' => 'text',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => FALSE,
+        ),
+        'format' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'user' => array(
+          0 => 'user',
+        ),
+        'node' => array(
+          0 => 'testimonial',
+        ),
+      ),
+    ),
+    'field_segments' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(
+        'allowed_values' => array(
+          0 => array(
+            'vocabulary' => 'segments',
+            'parent' => '0',
+          ),
+        ),
+      ),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_segments' => array(
+                'tid' => 'field_segments_tid',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_segments' => array(
+                'tid' => 'field_segments_tid',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(
+        'tid' => array(
+          'table' => 'taxonomy_term_data',
+          'columns' => array(
+            'tid' => 'tid',
+          ),
+        ),
+      ),
+      'indexes' => array(
+        'tid' => array(
+          0 => 'tid',
+        ),
+      ),
+      'field_name' => 'field_segments',
+      'type' => 'taxonomy_term_reference',
+      'module' => 'taxonomy',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '-1',
+      'deleted' => '0',
+      'columns' => array(
+        'tid' => array(
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'user' => array(
+          0 => 'user',
+        ),
+        'node' => array(
+          0 => 'news',
+        ),
+      ),
+    ),
+    'field_twitter_url' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(
+        'attributes' => array(
+          'target' => 'default',
+          'class' => '',
+          'rel' => '',
+        ),
+        'url' => 0,
+        'title' => 'optional',
+        'title_value' => '',
+        'title_maxlength' => 128,
+        'enable_tokens' => 1,
+        'display' => array(
+          'url_cutoff' => 80,
+        ),
+      ),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_twitter_url' => array(
+                'url' => 'field_twitter_url_url',
+                'title' => 'field_twitter_url_title',
+                'attributes' => 'field_twitter_url_attributes',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_twitter_url' => array(
+                'url' => 'field_twitter_url_url',
+                'title' => 'field_twitter_url_title',
+                'attributes' => 'field_twitter_url_attributes',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'field_name' => 'field_twitter_url',
+      'type' => 'link_field',
+      'module' => 'link',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'url' => array(
+          'type' => 'varchar',
+          'length' => 2048,
+          'not null' => FALSE,
+          'sortable' => TRUE,
+        ),
+        'title' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+          'sortable' => TRUE,
+        ),
+        'attributes' => array(
+          'type' => 'text',
+          'size' => 'medium',
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'contact',
+        ),
+        'user' => array(
+          0 => 'user',
+        ),
+      ),
+    ),
+    'field_xing_url' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(
+        'attributes' => array(
+          'target' => 'default',
+          'class' => '',
+          'rel' => '',
+        ),
+        'url' => 0,
+        'title' => 'optional',
+        'title_value' => '',
+        'title_maxlength' => 128,
+        'enable_tokens' => 1,
+        'display' => array(
+          'url_cutoff' => 80,
+        ),
+      ),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_xing_url' => array(
+                'url' => 'field_xing_url_url',
+                'title' => 'field_xing_url_title',
+                'attributes' => 'field_xing_url_attributes',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_xing_url' => array(
+                'url' => 'field_xing_url_url',
+                'title' => 'field_xing_url_title',
+                'attributes' => 'field_xing_url_attributes',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'field_name' => 'field_xing_url',
+      'type' => 'link_field',
+      'module' => 'link',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'url' => array(
+          'type' => 'varchar',
+          'length' => 2048,
+          'not null' => FALSE,
+          'sortable' => TRUE,
+        ),
+        'title' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+          'sortable' => TRUE,
+        ),
+        'attributes' => array(
+          'type' => 'text',
+          'size' => 'medium',
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'node' => array(
+          0 => 'contact',
+        ),
+        'user' => array(
+          0 => 'user',
+        ),
+      ),
+    ),
+  ),
+  'instances' => array(
+    'field_bio' => array(
+      0 => array(
+        'label' => 'Bio',
+        'widget' => array(
+          'weight' => '4',
+          'type' => 'text_textarea',
+          'module' => 'text',
+          'active' => 1,
+          'settings' => array(
+            'rows' => '5',
+          ),
+        ),
+        'settings' => array(
+          'text_processing' => '0',
+          'user_register_form' => 1,
+          'better_formats' => array(
+            'allowed_formats_toggle' => 0,
+            'allowed_formats' => array(
+              'html' => 'html',
+              'plain_text' => 'plain_text',
+            ),
+            'default_order_toggle' => 0,
+            'default_order_wrapper' => array(
+              'formats' => array(
+                'html' => array(
+                  'weight' => '0',
+                ),
+                'plain_text' => array(
+                  'weight' => '10',
+                ),
+              ),
+            ),
+          ),
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'text_default',
+            'weight' => '2',
+            'settings' => array(),
+            'module' => 'text',
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_bio',
+        'entity_type' => 'user',
+        'bundle' => 'user',
+        'deleted' => '0',
+      ),
+    ),
+    'field_full_name' => array(
+      0 => array(
+        'label' => 'Full Name',
+        'widget' => array(
+          'weight' => '2',
+          'type' => 'text_textfield',
+          'module' => 'text',
+          'active' => 1,
+          'settings' => array(
+            'size' => '60',
+          ),
+        ),
+        'settings' => array(
+          'text_processing' => '0',
+          'user_register_form' => 1,
+          'better_formats' => array(
+            'allowed_formats_toggle' => 0,
+            'allowed_formats' => array(
+              'html' => 'html',
+              'plain_text' => 'plain_text',
+            ),
+            'default_order_toggle' => 0,
+            'default_order_wrapper' => array(
+              'formats' => array(
+                'html' => array(
+                  'weight' => '0',
+                ),
+                'plain_text' => array(
+                  'weight' => '10',
+                ),
+              ),
+            ),
+          ),
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'text_default',
+            'weight' => '0',
+            'settings' => array(),
+            'module' => 'text',
+          ),
+        ),
+        'required' => 1,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_full_name',
+        'entity_type' => 'user',
+        'bundle' => 'user',
+        'deleted' => '0',
+      ),
+    ),
+    'field_google_url' => array(
+      0 => array(
+        'label' => 'Google+ URL',
+        'widget' => array(
+          'weight' => '7',
+          'type' => 'advanced_link',
+          'module' => 'advanced_link',
+          'active' => 1,
+          'settings' => array(
+            'urls_allowed' => 'external',
+            'urls_filter' => 'plus.google.com/*',
+            'default_titles' => '',
+            'urls_search' => 'start',
+          ),
+        ),
+        'settings' => array(
+          'validate_url' => 1,
+          'url' => 0,
+          'title' => 'value',
+          'title_value' => 'Google+',
+          'title_maxlength' => '128',
+          'enable_tokens' => 0,
+          'display' => array(
+            'url_cutoff' => '80',
+          ),
+          'attributes' => array(
+            'target' => '_blank',
+            'rel' => 'nofollow',
+            'class' => 'social google',
+            'configurable_title' => 0,
+            'title' => 'Google+',
+          ),
+          'rel_remove' => 'default',
+          'user_register_form' => 1,
+          'title_label_use_field_label' => FALSE,
+          'absolute_url' => 1,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'link_default',
+            'weight' => '6',
+            'settings' => array(),
+            'module' => 'link',
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_google_url',
+        'entity_type' => 'user',
+        'bundle' => 'user',
+        'deleted' => '0',
+      ),
+    ),
+    'field_linkedin_url' => array(
+      0 => array(
+        'label' => 'Linkedin URL',
+        'widget' => array(
+          'weight' => '9',
+          'type' => 'advanced_link',
+          'module' => 'advanced_link',
+          'active' => 1,
+          'settings' => array(
+            'urls_allowed' => 'external',
+            'urls_filter' => '*.linkedin.com/*',
+            'default_titles' => '',
+            'urls_search' => 'start',
+          ),
+        ),
+        'settings' => array(
+          'validate_url' => 1,
+          'url' => 0,
+          'title' => 'value',
+          'title_value' => 'Linkedin',
+          'title_maxlength' => '128',
+          'enable_tokens' => 0,
+          'display' => array(
+            'url_cutoff' => '80',
+          ),
+          'attributes' => array(
+            'target' => '_blank',
+            'rel' => 'nofollow',
+            'class' => 'social linkedin',
+            'configurable_title' => 0,
+            'title' => 'Linkedin',
+          ),
+          'rel_remove' => 'default',
+          'user_register_form' => 1,
+          'title_label_use_field_label' => FALSE,
+          'absolute_url' => 1,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'link_default',
+            'weight' => '9',
+            'settings' => array(),
+            'module' => 'link',
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_linkedin_url',
+        'entity_type' => 'user',
+        'bundle' => 'user',
+        'deleted' => '0',
+      ),
+    ),
+    'field_phone' => array(
+      0 => array(
+        'label' => 'Phone',
+        'widget' => array(
+          'weight' => '5',
+          'type' => 'text_textfield',
+          'module' => 'text',
+          'active' => 1,
+          'settings' => array(
+            'size' => '60',
+          ),
+        ),
+        'settings' => array(
+          'text_processing' => '0',
+          'user_register_form' => 1,
+          'better_formats' => array(
+            'allowed_formats_toggle' => 0,
+            'allowed_formats' => array(
+              'html' => 'html',
+              'plain_text' => 'plain_text',
+            ),
+            'default_order_toggle' => 0,
+            'default_order_wrapper' => array(
+              'formats' => array(
+                'html' => array(
+                  'weight' => '0',
+                ),
+                'plain_text' => array(
+                  'weight' => '10',
+                ),
+              ),
+            ),
+          ),
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'text_default',
+            'weight' => '3',
+            'settings' => array(),
+            'module' => 'text',
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_phone',
+        'entity_type' => 'user',
+        'bundle' => 'user',
+        'deleted' => '0',
+      ),
+    ),
+    'field_place' => array(
+      0 => array(
+        'label' => 'Place',
+        'widget' => array(
+          'weight' => '6',
+          'type' => 'text_textfield',
+          'module' => 'text',
+          'active' => 1,
+          'settings' => array(
+            'size' => '60',
+          ),
+        ),
+        'settings' => array(
+          'text_processing' => '0',
+          'user_register_form' => 1,
+          'better_formats' => array(
+            'allowed_formats_toggle' => 0,
+            'allowed_formats' => array(
+              'html' => 'html',
+              'plain_text' => 'plain_text',
+            ),
+            'default_order_toggle' => 0,
+            'default_order_wrapper' => array(
+              'formats' => array(
+                'html' => array(
+                  'weight' => '0',
+                ),
+                'plain_text' => array(
+                  'weight' => '10',
+                ),
+              ),
+            ),
+          ),
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'text_default',
+            'weight' => '5',
+            'settings' => array(),
+            'module' => 'text',
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_place',
+        'entity_type' => 'user',
+        'bundle' => 'user',
+        'deleted' => '0',
+      ),
+    ),
+    'field_position_function' => array(
+      0 => array(
+        'label' => 'Position/Function',
+        'widget' => array(
+          'weight' => '3',
+          'type' => 'text_textfield',
+          'module' => 'text',
+          'active' => 1,
+          'settings' => array(
+            'size' => '60',
+          ),
+        ),
+        'settings' => array(
+          'text_processing' => '0',
+          'user_register_form' => 1,
+          'better_formats' => array(
+            'allowed_formats_toggle' => 0,
+            'allowed_formats' => array(
+              'html' => 'html',
+              'plain_text' => 'plain_text',
+            ),
+            'default_order_toggle' => 0,
+            'default_order_wrapper' => array(
+              'formats' => array(
+                'html' => array(
+                  'weight' => '0',
+                ),
+                'plain_text' => array(
+                  'weight' => '10',
+                ),
+              ),
+            ),
+          ),
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'text_default',
+            'weight' => '1',
+            'settings' => array(),
+            'module' => 'text',
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_position_function',
+        'entity_type' => 'user',
+        'bundle' => 'user',
+        'deleted' => '0',
+      ),
+    ),
+    'field_segments' => array(
+      0 => array(
+        'label' => 'Segments',
+        'widget' => array(
+          'weight' => '11',
+          'type' => 'options_buttons',
+          'module' => 'options',
+          'active' => 1,
+          'settings' => array(),
+        ),
+        'settings' => array(
+          'user_register_form' => 1,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'hidden',
+            'weight' => '11',
+            'settings' => array(),
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_segments',
+        'entity_type' => 'user',
+        'bundle' => 'user',
+        'deleted' => '0',
+      ),
+    ),
+    'field_twitter_url' => array(
+      0 => array(
+        'label' => 'Twitter URL',
+        'widget' => array(
+          'weight' => '8',
+          'type' => 'advanced_link',
+          'module' => 'advanced_link',
+          'active' => 1,
+          'settings' => array(
+            'urls_allowed' => 'external',
+            'urls_filter' => 'twitter.com/*',
+            'default_titles' => '',
+            'urls_search' => 'start',
+          ),
+        ),
+        'settings' => array(
+          'validate_url' => 1,
+          'url' => 0,
+          'title' => 'value',
+          'title_value' => 'Twitter',
+          'title_maxlength' => '128',
+          'enable_tokens' => 0,
+          'display' => array(
+            'url_cutoff' => '80',
+          ),
+          'attributes' => array(
+            'target' => '_blank',
+            'rel' => 'nofollow',
+            'class' => 'social twitter',
+            'configurable_title' => 0,
+            'title' => 'Twitter',
+          ),
+          'rel_remove' => 'default',
+          'user_register_form' => 1,
+          'title_label_use_field_label' => FALSE,
+          'absolute_url' => 1,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'link_default',
+            'weight' => '8',
+            'settings' => array(),
+            'module' => 'link',
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_twitter_url',
+        'entity_type' => 'user',
+        'bundle' => 'user',
+        'deleted' => '0',
+      ),
+    ),
+    'field_xing_url' => array(
+      0 => array(
+        'label' => 'Xing URL',
+        'widget' => array(
+          'weight' => '10',
+          'type' => 'advanced_link',
+          'module' => 'advanced_link',
+          'active' => 1,
+          'settings' => array(
+            'urls_allowed' => 'external',
+            'urls_filter' => 'xing.com/*',
+            'default_titles' => '',
+            'urls_search' => 'start',
+          ),
+        ),
+        'settings' => array(
+          'validate_url' => 1,
+          'url' => 0,
+          'title' => 'value',
+          'title_value' => 'Xing',
+          'title_maxlength' => '128',
+          'enable_tokens' => 0,
+          'display' => array(
+            'url_cutoff' => '80',
+          ),
+          'attributes' => array(
+            'target' => '_blank',
+            'rel' => 'nofollow',
+            'class' => 'social xing',
+            'configurable_title' => 0,
+            'title' => 'Xing',
+          ),
+          'rel_remove' => 'default',
+          'user_register_form' => 1,
+          'title_label_use_field_label' => FALSE,
+          'absolute_url' => 1,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'hidden',
+            'type' => 'link_default',
+            'weight' => '10',
+            'settings' => array(),
+            'module' => 'link',
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_xing_url',
+        'entity_type' => 'user',
+        'bundle' => 'user',
+        'deleted' => '0',
+      ),
+    ),
+  ),
+);

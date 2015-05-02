@@ -1,0 +1,333 @@
+<?php
+$export_time = 1430513789;
+$data = array(
+  'bundles' => array(
+    'segments' => (object) array(
+      'vid' => '3',
+      'name' => 'Segments',
+      'machine_name' => 'segments',
+      'description' => '',
+      'hierarchy' => '0',
+      'module' => 'taxonomy',
+      'weight' => '0',
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          0 => 'skos:ConceptScheme',
+        ),
+        'name' => array(
+          'predicates' => array(
+            0 => 'dc:title',
+          ),
+        ),
+        'description' => array(
+          'predicates' => array(
+            0 => 'rdfs:comment',
+          ),
+        ),
+      ),
+      'bc_entity_type' => 'taxonomy_term',
+    ),
+  ),
+  'fields' => array(
+    'field_agb_nid' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_agb_nid' => array(
+                'value' => 'field_agb_nid_value',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_agb_nid' => array(
+                'value' => 'field_agb_nid_value',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'field_name' => 'field_agb_nid',
+      'type' => 'number_integer',
+      'module' => 'number',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'int',
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'taxonomy_term' => array(
+          0 => 'segments',
+        ),
+      ),
+    ),
+    'field_internal_id' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_internal_id' => array(
+                'value' => 'field_internal_id_value',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_internal_id' => array(
+                'value' => 'field_internal_id_value',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(),
+      'indexes' => array(),
+      'field_name' => 'field_internal_id',
+      'type' => 'number_integer',
+      'module' => 'number',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'int',
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'taxonomy_term' => array(
+          0 => 'brands',
+          1 => 'segments',
+        ),
+        'node' => array(
+          0 => 'contact',
+          1 => 'course',
+          2 => 'course_times',
+          3 => 'location',
+        ),
+      ),
+    ),
+    'field_seo_keywords' => array(
+      'translatable' => '0',
+      'entity_types' => array(),
+      'settings' => array(),
+      'storage' => array(
+        'type' => 'field_sql_storage',
+        'settings' => array(),
+        'module' => 'field_sql_storage',
+        'active' => '1',
+        'details' => array(
+          'sql' => array(
+            'FIELD_LOAD_CURRENT' => array(
+              'field_data_field_seo_keywords' => array(
+                'value' => 'field_seo_keywords_value',
+                'format' => 'field_seo_keywords_format',
+              ),
+            ),
+            'FIELD_LOAD_REVISION' => array(
+              'field_revision_field_seo_keywords' => array(
+                'value' => 'field_seo_keywords_value',
+                'format' => 'field_seo_keywords_format',
+              ),
+            ),
+          ),
+        ),
+      ),
+      'foreign keys' => array(
+        'format' => array(
+          'table' => 'filter_format',
+          'columns' => array(
+            'format' => 'format',
+          ),
+        ),
+      ),
+      'indexes' => array(
+        'format' => array(
+          0 => 'format',
+        ),
+      ),
+      'field_name' => 'field_seo_keywords',
+      'type' => 'text_long',
+      'module' => 'text',
+      'active' => '1',
+      'locked' => '0',
+      'cardinality' => '1',
+      'deleted' => '0',
+      'columns' => array(
+        'value' => array(
+          'type' => 'text',
+          'size' => 'big',
+          'not null' => FALSE,
+        ),
+        'format' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ),
+      ),
+      'bundles' => array(
+        'taxonomy_term' => array(
+          0 => 'segments',
+        ),
+      ),
+    ),
+  ),
+  'instances' => array(
+    'field_agb_nid' => array(
+      0 => array(
+        'label' => 'AGB Nid',
+        'widget' => array(
+          'weight' => '2',
+          'type' => 'number',
+          'module' => 'number',
+          'active' => 0,
+          'settings' => array(),
+        ),
+        'settings' => array(
+          'min' => '1',
+          'max' => '',
+          'prefix' => '',
+          'suffix' => '',
+          'user_register_form' => FALSE,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'above',
+            'type' => 'hidden',
+            'weight' => '0',
+            'settings' => array(),
+          ),
+          'token' => array(
+            'type' => 'hidden',
+            'label' => 'above',
+            'settings' => array(),
+            'weight' => 0,
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_agb_nid',
+        'entity_type' => 'taxonomy_term',
+        'bundle' => 'segments',
+        'deleted' => '0',
+      ),
+    ),
+    'field_internal_id' => array(
+      0 => array(
+        'label' => 'Internal ID',
+        'widget' => array(
+          'weight' => '2',
+          'type' => 'number',
+          'module' => 'number',
+          'active' => 0,
+          'settings' => array(),
+        ),
+        'settings' => array(
+          'min' => '',
+          'max' => '',
+          'prefix' => '',
+          'suffix' => '',
+          'user_register_form' => FALSE,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'above',
+            'type' => 'number_integer',
+            'settings' => array(
+              'thousand_separator' => ' ',
+              'decimal_separator' => '.',
+              'scale' => 0,
+              'prefix_suffix' => TRUE,
+            ),
+            'module' => 'number',
+            'weight' => 2,
+          ),
+        ),
+        'required' => 0,
+        'description' => '',
+        'default_value' => NULL,
+        'field_name' => 'field_internal_id',
+        'entity_type' => 'taxonomy_term',
+        'bundle' => 'segments',
+        'deleted' => '0',
+      ),
+    ),
+    'field_seo_keywords' => array(
+      0 => array(
+        'label' => 'SEO Keywords',
+        'widget' => array(
+          'weight' => '3',
+          'type' => 'text_textarea',
+          'module' => 'text',
+          'active' => 1,
+          'settings' => array(
+            'rows' => '5',
+          ),
+        ),
+        'settings' => array(
+          'text_processing' => '0',
+          'better_formats' => array(
+            'allowed_formats_toggle' => 0,
+            'allowed_formats' => array(
+              'html' => 'html',
+              'plain_text' => 'plain_text',
+            ),
+            'default_order_toggle' => 0,
+            'default_order_wrapper' => array(
+              'formats' => array(
+                'html' => array(
+                  'weight' => '0',
+                ),
+                'plain_text' => array(
+                  'weight' => '10',
+                ),
+              ),
+            ),
+          ),
+          'user_register_form' => FALSE,
+        ),
+        'display' => array(
+          'default' => array(
+            'label' => 'above',
+            'type' => 'hidden',
+            'weight' => '1',
+            'settings' => array(),
+          ),
+          'token' => array(
+            'type' => 'hidden',
+            'label' => 'above',
+            'settings' => array(),
+            'weight' => 0,
+          ),
+        ),
+        'required' => 0,
+        'description' => 'Specify the related keywords to redirect in case that the user is coming from a web search.',
+        'default_value' => NULL,
+        'field_name' => 'field_seo_keywords',
+        'entity_type' => 'taxonomy_term',
+        'bundle' => 'segments',
+        'deleted' => '0',
+      ),
+    ),
+  ),
+);

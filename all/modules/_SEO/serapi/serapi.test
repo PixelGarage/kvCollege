@@ -1,0 +1,96 @@
+<?php
+/**
+ * @file
+ * Test for serapi module.
+ */
+
+class SerapiTestCase extends DrupalWebTestCase {
+  /**
+   * Implementation of getInfo().
+   */
+  function getInfo() {
+    return array(
+      'name' => t('Search Engine Referer API functionality'),
+      'description' => t('Test whether the sample SERP URLs produce the desired results.'),
+      'group' => t('Search Engine Referer API'),
+    );
+  }
+
+  /**
+   * Test Valid search engine result page URLs
+   */
+  function testValidReferersUrls() {
+    $urls = $this->serapiGetValidTestUrls();
+    $engines = serapi_search_engine_list();
+    foreach ($urls as $url) {
+      $result = serapi_get_search_data($url, $engines);
+      $se_url = $result['url'];
+      $this->assertEqual($url, $se_url, t('Valid URL: @url', array('@url' => $url)));
+    }
+  }
+
+  /**
+   * Test URLs that must return false
+   */
+  function testInvalidReferersUrls() {
+    $urls = $this->serapiGetInvalidTestUrls();
+    $engines = serapi_search_engine_list();
+    foreach ($urls as $url) {
+      $result = serapi_get_search_data($url, $engines);
+      $this->assertFalse($result, t('Invalid URL: @url', array('@url' => $url)));
+    }
+  }
+
+  /**
+   * Returns an array of possible referer URLs for testing purposes
+   *
+   * @return Array
+   * An array of search engine result page URLs
+   */
+  function serapiGetValidTestUrls() {
+    return array(
+      // google
+      'http://www.google.de/search?hl=de&q=drupal&btnG=Google-Suche&meta=',
+      'http://www.google.com/search?q=drupal',
+      'http://www.google.com/search?q=drupal+cms&ie=utf-8&oe=utf-8',
+      // yahoo
+      'http://search.yahoo.com/search?p=drupal&vc=&fr=yfp-t-501&toggle=1&cop=mss&ei=UTF-8',
+      'http://de.search.yahoo.com/search?p=drupal&fr=yfp-t-501&ei=UTF-8&rd=r1',
+      'http://de.search.yahoo.com/search?p=drupal+cms&ei=UTF-8&fr=moz2',
+      // ask
+      'http://de.ask.com/web?q=drupal&qsrc=0&o=0&l=dir&s=&part=&dm=lang',
+      'http://www.ask.com/web?q=drupal&search=search&qsrc=0&o=312&l=dir',
+      'http://de.ask.com/web?q=is+drupal+a+framework&qsrc=1&o=312&l=dir&s=&part=&dm=all',
+      // live
+      'http://www.bing.com/search?q=drupal&go=&form=QBRE&qs=n',
+      'http://www.bing.com/search?q=drupal+cms&go=&form=QBRE&qs=n',
+      'http://www.bing.com/search?q=live+search+sucks&go=&form=QBRE&qs=n',
+      // aol - better use google in the first place
+      'http://search.aol.com/aol/search?s_it=searchbox.webhome&query=drupal+cms',
+      'http://suche.aol.de/aol/search?q=drupal+cms&langRestrict=2',
+      'http://busqueda.aol.es/aol/search?invocationType=topsearchbox&query=drupal&rp=',
+      // altavista
+      'http://www.altavista.com/web/results?itag=ody&q=drupal&kgs=1&kls=0',
+      'http://de.altavista.com/web/results?itag=ody&q=drupal&kgs=1&kls=0',
+      'http://es.altavista.com/web/results?itag=ody&q=drupal+content+management+framework&kgs=1&kls=0',
+      // alltheweb
+      'http://www.alltheweb.com/search?q=drupal+framework',
+      'http://www.alltheweb.com/search?cat=web&cs=iso88591&q=drupal+cms&rys=0&itag=crv&_sb_lang=pref',
+      'http://www.alltheweb.com/search?cat=web&cs=iso88591&q=drupal&rys=0&itag=crv&_sb_lang=pref'
+    );
+  }
+
+  /**
+   * Returns an array of referer URLs that should not be processed
+   *
+   * @return Array
+   * An array of search engine result page URLs
+   */
+  function serapiGetInvalidTestUrls() {
+    return array(
+      'http://drupal.org/',
+      'http://ramiro.org/',
+      'unkownscheme://foo.bar/',
+    );
+  }
+}

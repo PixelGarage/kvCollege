@@ -1,0 +1,9 @@
+name = "HSO Importer"
+description = "HSO Importer"
+package = "HSO"
+core = "7.x"
+version = "1.0"
+
+files[] = HsoImporter.inc
+
+configure = admin/config/system/hso

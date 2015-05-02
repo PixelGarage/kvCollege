@@ -1,0 +1,710 @@
+<?php
+
+/* --------------------------------------------------
+ * HSO Settings / cron job
+ * --------------------------------------------------*/
+/**
+ * Runs import when more than four hours has past since last import
+ *
+ * Implements hook_cron().
+ */
+function hso_importer_cron() {
+  $last_time = variable_get('hso_importer_cron_last_run', 0);
+  $cron_from_outside = $_GET['kickFromHsoCronJob'];
+
+  if ($cron_from_outside == 'RunItBaby' || REQUEST_TIME - $last_time >= 48*3600) {
+  	_hso_importer_run_import();
+    variable_set('hso_importer_cron_last_run', REQUEST_TIME);
+  }
+}
+/**
+ * Defines the configuration menu for HSO specific settings.
+ *
+ * Implements hook_menu().
+ */
+function hso_importer_menu() {
+	$items = array();
+	$items['admin/config/system/hso'] = array(
+  'title' => 'HSO',
+  'type' => MENU_NORMAL_ITEM,
+  'description' => t('Configure the brand specific import of data. Perform a brand specific data import.'),
+	'access callback' => 'user_access',
+	'access arguments' => array('administer site configuration'),
+  'page callback' => 'drupal_get_form',
+  'page arguments' => array('hso_importer_settings_form'),
+  'weight' => -10,
+	);
+  return $items;
+}
+
+function hso_importer_settings_form($form, &$form_state) {
+  $form = array();
+
+  // get brand list
+  $options = array(
+    -1 => t('- Select -')
+  );
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'taxonomy_term')
+    ->entityCondition('bundle', 'brands');
+  $result = $query->execute();
+  if ($result && $result['taxonomy_term']) {
+    foreach ($result['taxonomy_term'] as $key => $value) {
+      if ($term = taxonomy_term_load($key)) {
+        $int_id = $term->field_internal_id[LANGUAGE_NONE][0]['value'];
+        $options[$int_id] = $term->name;
+      }
+    }
+  }
+
+  // configure school (brand)
+  $form['hso_importer_branch_set'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('School settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  $form['hso_importer_branch_set']['hso_importer_brand_select'] = array(
+    '#type' => 'select',
+    '#title' => t('Choose school/brand'),
+    '#options' => $options,
+    '#default_value' => variable_get('hso_importer_brand_select', -1),
+    '#description' => t('Set the school/brand represented by this website.'),
+    '#required' => TRUE,
+  );
+
+  // live/debug mode
+  $form['hso_importer_mode_set'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Choose import system'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['hso_importer_mode_set']['hso_importer_live_flag'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use live import system'),
+    '#description' => t('Set the flag to use the live import system. Only uncheck for debugging purposes (test import)!'),
+    '#return_value' => 1,
+    '#default_value' => variable_get('hso_importer_live_flag', 0),
+  );
+
+  // run import
+  $form['hso_importer_action_set'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Run an import'),
+    '#collapsible' => FALSE,
+    '#collapsed' => FALSE,
+  );
+  $form['hso_importer_action_set']['hso_importer_last_run'] = array(
+    '#markup' => t('Last import: @date', array('@date' => date('d.m.y G:i:s', variable_get('hso_importer_cron_last_run', 0)))),
+    '#prefix' => '<div>',
+    '#suffix' => '</br></br></div>',
+  );
+  $form['hso_importer_action_set']['hso_importer_run'] = array(
+    '#type' => 'submit',
+    '#value' => t('Run import'),
+    '#description' => t('Last import: @date', array('@date' => date('d.m.y G:i:s', variable_get('hso_importer_cron_last_run', 0)))),
+    '#submit' => array('_hso_importer_run_import'),
+  );
+  return system_settings_form($form);
+}
+
+
+/* --------------------------------------------------
+ * HSO Import
+ * --------------------------------------------------*/
+/**
+ * Runs the brand specific data import.
+ */
+function _hso_importer_run_import() {
+  // initialize importer object
+	$hso_importer = new HsoImporter();
+  $hso_importer->init();
+  $brand_id = variable_get('hso_importer_brand_select', -1);
+  $departments_mapping = _hso_departments_mapping();
+
+  // brand specifc data import
+  $result = NULL;
+  try {
+
+    if ($brand_id > 0) {
+      $result = _hso_importer_brand_import($hso_importer, $departments_mapping, $brand_id);
+
+    } else {
+      // no brand set, return with error
+      drupal_set_message(t('No brand set in the HSO import settings. To import data for a specific brand, select brand above.'), 'error');
+    }
+
+  } catch (Exception $ex) {
+    drupal_set_message($ex->getMessage(), 'error');
+  }
+
+  // display feedback about import, if any
+  if ($result) {
+    $importMessage = 'Items imported: ';
+    if ($hso_importer->webServiceUsed()) {
+      $importMessage = 'Items imported (via web service): ';
+    }
+    if ($hso_importer->liveImportConnected() ) {
+      $importMessage = 'LIVE data import - ' . $importMessage;
+    } else {
+      $importMessage = 'TEST data import - ' . $importMessage;
+    }
+    $importMessage .= ' @nLocations branches, @nContacts contacts, @nCourses courses, @nCourseTimes course times.';
+    drupal_set_message(t($importMessage, $result));
+  }
+
+  // set time of import
+  variable_set('hso_importer_cron_last_run', REQUEST_TIME);
+}
+
+/**
+ * The import for the brand.
+ *
+ * @param $hso_importer object The importer object.
+ * @param $departments_mapping array The segments (department) map.
+ * @param $brand_id int The ID of the subsidiary
+ *
+ * @return array  An array with the numbers of processed items: {@nContacts => nContacts, @nCourse => nCourses, @nCourseTimes => nCourseTimes}
+ */
+function _hso_importer_brand_import($hso_importer, $departments_mapping, $brand_id) {
+  $contacts_processed = 0;
+  $courses_processed = 0;
+  $course_times_processed = 0;
+
+  // import all locations (branches)
+  $locations_processed = _hso_all_locations($hso_importer->getLocations());
+
+  // update all course ids
+  _hso_update_course_ids($hso_importer);
+
+  // unpublish all contacts
+  _hso_unpublish_contacts();
+
+  // loop through segments
+  foreach ($departments_mapping as $department_internal_id => $segment_taxonomy_id) {
+    // Start with courses
+    $courses = $hso_importer->getCoursesBySegment($department_internal_id);
+    if (count($courses) > 0) {
+      $imported_courses = array();
+
+      foreach ($courses as $course) {
+        $course->segment_tid = $segment_taxonomy_id;
+
+        // get course times for course
+        $course_times = $hso_importer->getTimesOfCourseForBrand($brand_id, $course->id);
+        if (count($course_times) > 0) {
+          // only import course when course times are available for it
+          $course_nid = _hso_process_course($course);
+          $imported_courses[] = $course->id;
+          $courses_processed++;
+
+          // process course times
+          $imported_course_times = array();
+          foreach ($course_times as $course_time) {
+            // don't import course times starting in the past
+            //if (strtotime($course_time->start_date) + 86400 < time()) continue;
+
+            // process course time
+            $course_time->course_nid = $course_nid;
+            $course_time->course_title = $course->title;
+            $location_nid = _hso_process_location($course_time->location);
+            $course_time->location_nid = $location_nid;
+            _hso_process_course_time($course_time);
+            if (!array_key_exists($location_nid, $imported_course_times)) {
+              $imported_course_times[$location_nid] = array();
+            }
+            $imported_course_times[$location_nid][] = $course_time->id;
+            $course_times_processed++;
+          }
+
+          // cleanup course times of a specific course, that are not used anymore or outdated
+          _hso_cleanup_course_times($imported_course_times, $course_nid);
+
+          //
+          // get the contacts of the course (only if with course times) for the brand
+          $contacts = $hso_importer->getContactsOfCourseForBrand($brand_id, $course->id);
+          if (count($contacts) > 0) {
+            $imported_contacts = array();
+            foreach ($contacts as $contact) {
+              // location (branch) is mandatory on contact
+              $location_nid = _hso_process_location($contact->location);
+              $contact->location_nid = $location_nid;
+              $contact->segment_tid = $segment_taxonomy_id;
+              $contact->course_nid = $course_nid;
+              _hso_process_contact($contact);
+              if (!array_key_exists($location_nid, $imported_contacts)) {
+                $imported_contacts[$location_nid] = array();
+              }
+              $imported_contacts[$location_nid][] = $contact->id;
+              $contacts_processed++;
+            }
+
+            // cleanup all unused contacts
+            _hso_cleanup_contacts($imported_contacts, $course_nid);
+          } // end contacts
+
+        } // end course times
+      }
+
+      // unpublish all unused courses of the segment
+      _hso_unpublish_courses($imported_courses, $segment_taxonomy_id);
+
+    } // end courses
+
+  } // end segment loop
+
+  return array('@nLocations' => $locations_processed, '@nContacts' => $contacts_processed, '@nCourses' => $courses_processed, '@nCourseTimes' => $course_times_processed);
+}
+
+
+/* --------------------------------------------------
+ * HSO DB cleanup functions
+ * --------------------------------------------------*/
+/**
+ * Creates the segment mappings array.
+ */
+function _hso_departments_mapping() {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'taxonomy_term')
+    ->entityCondition('bundle', 'segments');
+  $result = $query->execute();
+  if ($result && $result['taxonomy_term']) {
+    $mapping = array();
+    foreach ($result['taxonomy_term'] as $key => $value) {
+      $term = taxonomy_term_load($key);
+      $dep_id = $term->field_internal_id[LANGUAGE_NONE][0]['value'];
+      $mapping[$dep_id] = $key;
+    }
+  }
+  // return mapping
+  return $mapping;
+}
+
+/**
+ * Converts the brands internal id to the term id.
+ */
+function _hso_brands_id_converter($brand_id) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'taxonomy_term')
+    ->entityCondition('bundle', 'brands')
+    ->fieldCondition('field_internal_id', 'value', $brand_id);
+  $result = $query->execute();
+  if ($result && $result['taxonomy_term']) {
+    foreach ($result['taxonomy_term'] as $key => $value) {
+      return $key;
+    }
+  }
+  // return undefined
+  return 0;
+}
+
+/**
+ * Update all courses with the new id's in the db.
+ */
+function _hso_update_course_ids($hso_importer) {
+  // check if update has been done already (keys > 1000000 available)
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'course')
+    ->fieldCondition('field_internal_id', 'value', 1000000, '>');
+  $result = $query->execute();
+  if ($result && !empty($result['node'])) return;
+
+  // perform the internal ID update
+  $course_ids = $hso_importer->getCoursesIDUpdates();
+  foreach ($course_ids as $old_id => $new_id) {
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'course')
+      ->fieldCondition('field_internal_id', 'value', $old_id)
+      ->range(0, 1);
+    $result = $query->execute();
+    if (isset($result['node'])) {
+      // Update course id
+      $node = node_load(key($result['node']));
+      $node->field_internal_id[LANGUAGE_NONE][0]['value'] = $new_id;
+      node_save($node);
+    }
+  }
+  drupal_set_message(t('All course internal-IDs have been updated to the new import system IDs!'));
+}
+
+/**
+ * Get all locations (branches) in the db (disable old locations).
+ */
+function _hso_all_locations($locations) {
+  // disable all locations first
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'location');
+  $result = $query->execute();
+  if ($result && !empty($result['node'])) {
+    foreach ($result['node'] as $key => $location) {
+      $node = node_load($key);
+      $node->status = 0;
+      node_save($node);
+    }
+  }
+
+  // process all imported locations
+  $imported_locations = array();
+  $locations_processed = 0;
+  foreach ($locations as $location) {
+    _hso_process_location($location);
+    $imported_locations[] = $location->id;
+    $locations_processed++;
+  }
+  return $locations_processed;
+}
+
+/**
+ * Unpublish all courses in the db, which are not imported anymore.
+ *
+ * @param $imported_courses     array   All imported courses
+ * @param $segment_taxonomy_id  int     The taxonomy id of the segment
+ */
+function _hso_unpublish_courses($imported_courses, $segment_taxonomy_id) {
+  $imported_courses = count($imported_courses) > 0 ? $imported_courses : array(0 => 0);
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'course')
+    ->fieldCondition('field_internal_id', 'value', $imported_courses, 'NOT IN')
+    ->fieldCondition('field_segment', 'tid', $segment_taxonomy_id);
+  $result = $query->execute();
+  if ($result && !empty($result['node'])) {
+    foreach ($result['node'] as $key => $course) {
+      $node = node_load($key);
+      $node->status = 0;
+      node_save($node);
+    }
+  }
+}
+
+/**
+ * Cleans up all course times in the db which are not used anymore or outdated.
+ *
+ * @param $imported_course_times  array   All imported course times
+ * @param $course_nid             int     Node id of course
+ */
+function _hso_cleanup_course_times($imported_course_times, $course_nid) {
+  $imported_course_times = count($imported_course_times) > 0 ? $imported_course_times : array(0 => 0);
+  foreach ($imported_course_times as $location_nid => $course_times) {
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'course_times')
+      ->fieldCondition('field_location', 'target_id', $location_nid)
+      ->fieldCondition('field_course', 'target_id', $course_nid)
+      ->fieldCondition('field_internal_id', 'value', $course_times, 'NOT IN');
+    $result = $query->execute();
+    if (isset($result['node'])) {
+      node_delete_multiple(array_keys($result['node']));
+    }
+  }
+}
+
+/**
+ * Cleanup all contacts in the db, which are not valid anymore.
+ *
+ * @param $imported_contacts array  All imported contacts
+ * @param $course_nid        int    Course node id.
+ *
+ * @throws \Exception
+ */
+function _hso_cleanup_contacts($imported_contacts, $course_nid) {
+  $imported_contacts = count($imported_contacts) > 0 ? $imported_contacts : array(0 => 0);
+  foreach ($imported_contacts as $location_nid => $contacts) {
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'contact')
+      ->fieldCondition('field_location', 'target_id', $location_nid)
+      ->fieldCondition('field_course', 'target_id', $course_nid)
+      ->fieldCondition('field_internal_id', 'value', $contacts, 'NOT IN');
+    $result = $query->execute();
+    if (isset($result['node'])) {
+      node_delete_multiple(array_keys($result['node']));
+    }
+  }
+}
+
+function _hso_unpublish_contacts() {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'contact');
+  $result = $query->execute();
+  if ($result && !empty($result['node'])) {
+    foreach ($result['node'] as $key => $contact) {
+      $node = node_load($key);
+      $node->status = 0;
+      node_save($node);
+    }
+  }
+}
+
+
+
+/* --------------------------------------------------
+ * HSO DB import functions
+ * --------------------------------------------------*/
+/**
+ * Saves imported location in DB, if not processed already.
+ *
+ * @param $contact object Imported location object.
+ *
+ * @return mixed  int Node ID
+ * @throws \Exception
+ */
+function _hso_process_location($location) {
+  // update an imported location (branch) only once
+	static $already_processed = array();
+	if (array_key_exists($location->id, $already_processed)) {
+		return $already_processed[$location->id];
+	}
+
+  // load/create location (branch)
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'location')
+		->fieldCondition('field_internal_id', 'value', $location->id)
+		->range(0, 1);
+	$result = $query->execute();
+	if (isset($result['node'])) {
+	  // Update existing
+		$node = node_load(key($result['node']));
+    $node->status = 1;
+	} else {
+		$node = new stdClass();
+		$node->type = 'location';
+		$node->language = LANGUAGE_NONE;
+		$node->uid = 1;
+		$node->status = 1;
+		node_object_prepare($node);
+	}
+
+  // update all imported fields of node
+	$node->title = $location->brand_short == 'HSO' ? $location->name : $location->name . ' (' . $location->brand_short . ')';
+  $node->field_tab_text[LANGUAGE_NONE][0]['value'] = $location->name;
+  $node->field_internal_id[LANGUAGE_NONE][0]['value'] = $location->id;
+	$node->field_address[LANGUAGE_NONE][0]['country'] = 'CH';
+	$node->field_address[LANGUAGE_NONE][0]['thoroughfare'] = $location->address;
+  $node->field_address[LANGUAGE_NONE][0]['postal_code'] = $location->plz;
+  $node->field_address[LANGUAGE_NONE][0]['locality'] = $location->name;
+	$node->field_address[LANGUAGE_NONE][0]['phone_number'] = $location->phone;
+	$node->field_address[LANGUAGE_NONE][0]['fax_number'] = $location->fax;
+	$node->field_email[LANGUAGE_NONE][0]['email'] = $location->email;
+  $node->field_brand[LANGUAGE_NONE][0]['tid'] = _hso_brands_id_converter($location->brand_id);
+  $node->field_standorte[LANGUAGE_NONE][0]['value'] = true;
+	$node = node_submit($node);
+	node_save($node);
+	$already_processed[$location->id] = $node->nid;
+	return $node->nid;
+}
+
+/**
+ * Saves imported contact in DB, if not processed already.
+ *
+ * @param $contact object Imported contact object.
+ *
+ * @return mixed  int Node ID
+ * @throws \Exception
+ */
+function _hso_process_contact($contact) {
+  // update an imported contact only once
+	static $already_processed = array();
+	if (array_key_exists($contact->id, $already_processed)) {
+		return $already_processed[$contact->id];
+	}
+
+  // load/create contact
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'contact')
+		->fieldCondition('field_internal_id', 'value', $contact->id)
+		->range(0, 1);
+	$result = $query->execute();
+	if (isset($result['node'])) {
+	  // Update existing
+		$node = node_load(key($result['node']));
+    $node->status = 1;
+	} else {
+		$node = new stdClass();
+		$node->type = 'contact';
+		$node->language = LANGUAGE_NONE;
+		$node->uid = 1;
+		$node->status = 1;
+		node_object_prepare($node);
+	}
+
+  // update all imported fields of node
+	$node->title = $contact->name;
+  $node->field_internal_id[LANGUAGE_NONE][0]['value'] = $contact->id;
+	$node->field_phone[LANGUAGE_NONE][0]['value'] = $contact->phone;
+	$node->field_email[LANGUAGE_NONE][0]['email'] = $contact->email;
+	$node->field_location[LANGUAGE_NONE][0]['target_id'] = $contact->location_nid;
+	$node->field_segment[LANGUAGE_NONE][] = array('tid' => $contact->segment_tid);
+  $node->field_course[LANGUAGE_NONE][0]['target_id'] = $contact->course_nid;
+  // contact picture
+  if ($file = _hso_get_contact_picture($contact)) {
+    $node->field_picture[LANGUAGE_NONE][0] = (array)$file;
+    $node = node_submit($node);
+    node_save($node);
+  } else {
+    $node = node_submit($node);
+    node_save($node);
+  }
+	$already_processed[$contact->id] = $node->nid;
+	return $node->nid;
+}
+
+function _hso_get_contact_picture($contact) {
+  $path = $contact->picture;
+  if (!file_exists($path)) {
+    $path = 'public://user_pictures/default.jpg';
+  }
+  // get/ create user picture object
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'file')
+    ->propertyCondition('uri', $path)
+    ->range(0, 1);
+  $result = $query->execute();
+  if (isset($result['file'])) {
+    // get existing
+    $file = file_load(key($result['file']));
+
+  } else {
+    $file           = new stdClass;
+    $file->uid      = 1;
+    $file->filename = $contact->id . '.jpg';
+    $file->uri      = $path;
+    $file->filemime = file_get_mimetype($path);
+    $file->filesize = filesize($path);
+    $file->status   = 1;
+    $file           = file_save($file);
+
+  }
+  return $file;
+}
+
+/**
+ * Saves imported course in DB, if not processed already.
+ *
+ * @param $course object Imported course object.
+ *
+ * @return mixed  Node ID
+ * @throws \Exception
+ */
+function _hso_process_course($course) {
+  // update an imported course only once
+	static $already_processed = array();
+	if (array_key_exists($course->id, $already_processed)) {
+		return $already_processed[$course->id];
+	}
+
+  // load/create course
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'course')
+		->fieldCondition('field_internal_id', 'value', $course->id)
+		->range(0, 1);
+	$result = $query->execute();
+	if (isset($result['node'])) {
+	  // Update existing
+		$node = node_load(key($result['node']));
+    $node->status = 1;
+	} else {
+		$node = new stdClass();
+		$node->type = 'course';
+		$node->language = LANGUAGE_NONE;
+		$node->uid = 1;
+		$node->status = 1;
+		node_object_prepare($node);
+	}
+
+  // update all imported fields of node
+	$node->title = $course->title;
+  $node->field_internal_id[LANGUAGE_NONE][0]['value'] = $course->id;
+  $node->field_segment[LANGUAGE_NONE][] = array('tid' => $course->segment_tid);
+	$node->field_is_module[LANGUAGE_NONE][0]['value'] = !empty($course->is_module) ? 1 : 0;
+	if (!empty($course->meta->title)) {
+		$node->metatags['title']['value'] = $course->meta->title;
+	}
+	if (!empty($course->meta->keywords)) {
+		$node->metatags['keywords']['value'] = $course->meta->keywords;
+	}
+	if (!empty($course->meta->description)) {
+		$node->metatags['description']['value'] = $course->meta->description;
+	}
+	$node = node_submit($node);
+	node_save($node);
+	$already_processed[$course->id] = $node->nid;
+	return $node->nid;
+}
+
+/**
+ * Saves imported course time in DB. All course times are relevant.
+ * Unique course time is defined by course time, course and location.
+ *
+ * @param $time object Imported course time object.
+ *
+ * @return mixed  int Node ID
+ * @throws \Exception
+ */
+function _hso_process_course_time($time) {
+  // load/create course time
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'node')
+		->entityCondition('bundle', 'course_times')
+		->fieldCondition('field_internal_id', 'value', $time->id)
+    ->fieldCondition('field_course', 'target_id', $time->course_nid)
+    ->fieldCondition('field_location', 'target_id', $time->location_nid)
+		->range(0, 1);
+	$result = $query->execute();
+	if (isset($result['node'])) {
+	  // Update existing
+		$node = node_load(key($result['node']));
+    $node->status = 1;
+	} else {
+		$node = new stdClass();
+		$node->type = 'course_times';
+		$node->language = LANGUAGE_NONE;
+		$node->uid = 1;
+		$node->status = 1;
+		node_object_prepare($node);
+	}
+
+  // update all imported fields of node
+	$start_date = empty($time->start_time) ? strtotime($time->start_date . ' 00:00:00') : strtotime($time->start_date . ' ' . $time->start_time);
+	$start_date_f = empty($time->start_time) ? date('d.m.Y', $start_date) : date('d.m.Y H:i', $start_date);
+	$node->title = $time->course_title . ' @' . $time->location->name . ' - ' . $start_date_f;
+  $node->field_internal_id[LANGUAGE_NONE][0]['value'] = $time->id;
+	$node->body[LANGUAGE_NONE][0]['value'] = $time->description;
+	$node->body[LANGUAGE_NONE][0]['format']  = 'html';
+	$node->field_course_date['und'][0]['value'] = date('Y-m-d H:i:s', $start_date);
+	if (!empty($time->end_date)) {
+		$end_date = strtotime($time->end_date . ' 00:00:00');
+		$node->field_course_date['und'][0]['value2'] = date('Y-m-d H:i:s', $end_date);
+	}
+	if (!empty($time->has_subsidy)) {
+		$node->field_has_fsv[LANGUAGE_NONE][0]['value'] = 1;
+	}
+	if (!empty($time->no_vacancy)) {
+		$node->field_no_vacancy[LANGUAGE_NONE][0]['value'] = 1;
+	}
+  $node->field_brutto_price[LANGUAGE_NONE][0]['value'] = $time->price_brutto;
+  $node->field_netto_price[LANGUAGE_NONE][0]['value'] = $time->price_netto;
+  $node->field_detailed_price[LANGUAGE_NONE][0]['value'] = $time->price_detailed;
+  $node->field_detailed_price[LANGUAGE_NONE][0]['format']  = 'html';
+  $node->field_additional_info_price[LANGUAGE_NONE][0]['value'] = $time->price_additional;
+  $node->field_additional_info_price[LANGUAGE_NONE][0]['format']  = 'html';
+	$node->field_taken_places[LANGUAGE_NONE][0]['value'] = !empty($time->taken_places) ? $time->taken_places : 0;
+  $node->field_minimum[LANGUAGE_NONE][0]['value'] = !empty($time->min_places) ? $time->min_places : 0;
+  $node->field_maximum[LANGUAGE_NONE][0]['value'] = !empty($time->max_places) ? $time->max_places : NULL;
+  $node->field_template[LANGUAGE_NONE][0]['value'] = !empty($time->template) && in_array($time->template, array('ecdl', 'european', 'salesfunnel')) ? $time->template : 'default';
+	$node->field_course[LANGUAGE_NONE][0]['target_id'] = $time->course_nid;
+  $node->field_location[LANGUAGE_NONE][0]['target_id'] = $time->location_nid;
+  $node->field_brand[LANGUAGE_NONE][0]['tid'] = _hso_brands_id_converter($time->brand_id);
+	$node = node_submit($node);
+	node_save($node);
+	return $node->nid;
+}
+

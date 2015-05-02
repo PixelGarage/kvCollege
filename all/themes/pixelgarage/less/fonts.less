@@ -1,0 +1,79 @@
+/* --------------------------------------------------
+ * Pixelgarage fonts
+ * --------------------------------------------------*/
+
+// Define customer specific fonts
+@pxl-font-path: '../fonts';
+@pxl-bs-path: '../bootstrap';
+
+// icon font
+@pxl-icon-font: 'SSSteedicons';
+
+// title font
+@pxl-title-font: 'CallunaSansBold';
+
+// text fonts
+@pxl-text-font: 'CallunaRegular';
+@pxl-text-font-bold: 'CallunaBold';
+@pxl-text-font-italics: 'CallunaIt';
+@pxl-text-font-bold-italics: 'CallunaBold';
+@font-family-base: @pxl-text-font;
+
+// form font
+@pxl-form-font: 'CallunaSansRegular';
+
+// Awesome icon font
+@import '../fonts/font-awesome/less/font-awesome';
+@fa-font-path: '@{pxl-font-path}/font-awesome/fonts'; // override fa font path (lazy loading)
+
+// title font
+@font-face {
+  font-family: 'CallunaSansBold';
+  src: url('@{pxl-font-path}/CallunaSansBold/CallunaSansBold.eot');
+  src: url('@{pxl-font-path}/CallunaSansBold/CallunaSansBold.eot') format('embedded-opentype'),
+  url('@{pxl-font-path}/CallunaSansBold/CallunaSansBold.woff2') format('woff2'),
+  url('@{pxl-font-path}/CallunaSansBold/CallunaSansBold.woff') format('woff'),
+  url('@{pxl-font-path}/CallunaSansBold/CallunaSansBold.ttf') format('truetype'),
+  url('@{pxl-font-path}/CallunaSansBold/CallunaSansBold.svg#CallunaSansBold') format('svg');
+}
+
+// text fonts
+@font-face {
+  font-family: 'CallunaRegular';
+  src: url('@{pxl-font-path}/CallunaRegular/CallunaRegular.eot');
+  src: url('@{pxl-font-path}/CallunaRegular/CallunaRegular.eot') format('embedded-opentype'),
+  url('@{pxl-font-path}/CallunaRegular/CallunaRegular.woff2') format('woff2'),
+  url('@{pxl-font-path}/CallunaRegular/CallunaRegular.woff') format('woff'),
+  url('@{pxl-font-path}/CallunaRegular/CallunaRegular.ttf') format('truetype'),
+  url('@{pxl-font-path}/CallunaRegular/CallunaRegular.svg#CallunaRegular') format('svg');
+}
+@font-face {
+  font-family: 'CallunaIt';
+  src: url('@{pxl-font-path}/CallunaIt/CallunaIt.eot');
+  src: url('@{pxl-font-path}/CallunaIt/CallunaIt.eot') format('embedded-opentype'),
+  url('@{pxl-font-path}/CallunaIt/CallunaIt.woff2') format('woff2'),
+  url('@{pxl-font-path}/CallunaIt/CallunaIt.woff') format('woff'),
+  url('@{pxl-font-path}/CallunaIt/CallunaIt.ttf') format('truetype'),
+  url('@{pxl-font-path}/CallunaIt/CallunaIt.svg#CallunaIt') format('svg');
+}
+@font-face {
+  font-family: 'CallunaBold';
+  src: url('@{pxl-font-path}/CallunaBold/CallunaBold.eot');
+  src: url('@{pxl-font-path}/CallunaBold/CallunaBold.eot') format('embedded-opentype'),
+  url('@{pxl-font-path}/CallunaBold/CallunaBold.woff2') format('woff2'),
+  url('@{pxl-font-path}/CallunaBold/CallunaBold.woff') format('woff'),
+  url('@{pxl-font-path}/CallunaBold/CallunaBold.ttf') format('truetype'),
+  url('@{pxl-font-path}/CallunaBold/CallunaBold.svg#CallunaBold') format('svg');
+}
+
+
+// form font
+@font-face {
+  font-family: 'CallunaSansRegular';
+  src: url('@{pxl-font-path}/CallunaSansRegular/CallunaSansRegular.eot');
+  src: url('@{pxl-font-path}/CallunaSansRegular/CallunaSansRegular.eot') format('embedded-opentype'),
+  url('@{pxl-font-path}/CallunaSansRegular/CallunaSansRegular.woff2') format('woff2'),
+  url('@{pxl-font-path}/CallunaSansRegular/CallunaSansRegular.woff') format('woff'),
+  url('@{pxl-font-path}/CallunaSansRegular/CallunaSansRegular.ttf') format('truetype'),
+  url('@{pxl-font-path}/CallunaSansRegular/CallunaSansRegular.svg#CallunaSansRegular') format('svg');
+}

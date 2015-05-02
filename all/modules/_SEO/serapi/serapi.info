@@ -1,0 +1,12 @@
+; $Id: serapi.info,v 1.1 2008/11/05 00:03:40 yaph Exp $
+name = Search Engine Referer API
+description = Provides a function to retrieve information on the search performed by a user who comes from one of the supported search engines.
+core = 7.x
+; Information added by drupal.org packaging script on 2010-10-13
+version = "7.x-2.0-beta1"
+core = 7.x
+project = "serapi"
+datestamp = "1286999463"
+
+
+files[] = serapi.test

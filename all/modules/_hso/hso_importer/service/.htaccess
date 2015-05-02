@@ -1,0 +1,10 @@
+AuthUserFile /var/www/vhosts/stage.hso.ch/httpdocs/.htpasswd_shared
+AuthType Basic
+AuthName "Website Access"
+Require valid-user
+
+DirectoryIndex index.php
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteRule ^.*$ index.php [QSA,L]
+</IfModule>
