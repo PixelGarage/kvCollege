@@ -135,6 +135,16 @@ function pixel_structure_views_api() {
   return array('api' => 3);
 }
 
+/**
+ * Implementation of hook_ctools_plugin_api().
+ */
+function pixel_structure_ctools_plugin_api($module, $api) {
+  if ($module == 'page_manager' && $api == 'pages_default') {
+    return array('version' => 1);
+  }
+}
+
+
 
 /* =============================================================================
  *   Export / import entity types
