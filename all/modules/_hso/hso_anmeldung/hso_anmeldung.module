@@ -1,4 +1,30 @@
 <?php
+
+
+/* --------------------------------------------------
+ * Constants
+ * --------------------------------------------------*/
+/**
+ * Default Anmeldungs form.
+ */
+define('ANMELDUNG_DEFAULT', 172); // HSO: 264
+
+/**
+ * ECDL Anmeldungs form.
+ */
+define('ANMELDUNG_ECDL', 173); // HSO: 476
+
+/**
+ * European Anmeldungs form.
+ */
+define('ANMELDUNG_EURO', 475); // HSO: 475
+
+/**
+ * AGB nid.
+ */
+define('AGB_NID', 1036); // HSO: 1036
+
+
 /**
  * Implements hook_menu
  */
@@ -409,7 +435,7 @@ function _hso_add_pdf_footer(&$pdf_document, $context) {
 */
 function hso_anmeldung_form_alter(&$form, &$form_state, $form_id) {
   // extend all anmeldungs forms (default, european, ecdl)
-  if ($form_id == 'webform_client_form_264' || $form_id == 'webform_client_form_475' || $form_id == 'webform_client_form_476') {
+  if ($form_id == 'webform_client_form_' . ANMELDUNG_DEFAULT || $form_id == 'webform_client_form_' . ANMELDUNG_ECDL || $form_id == 'webform_client_form_' . ANMELDUNG_EURO) {
   	$prevent_access = TRUE;
     // leave when in admin mode
     if (arg(0) == 'admin') return;
@@ -428,7 +454,7 @@ function hso_anmeldung_form_alter(&$form, &$form_state, $form_id) {
   	$course = node_load($course_time_node->field_course[LANGUAGE_NONE][0]['target_id']);
   	$form['submitted']['course_times_nid']['#value'] = $course_time_node->nid;
   	$segment = !empty($course->field_segment) ? taxonomy_term_load($course->field_segment[LANGUAGE_NONE][0]['tid']) : FALSE;
-  	$agb_nid = 1036;
+  	$agb_nid = AGB_NID;
     $text = '';
 
     // get AGB nid
@@ -437,7 +463,7 @@ function hso_anmeldung_form_alter(&$form, &$form_state, $form_id) {
   	}
 
     // add Anmeldungs conditions
-    if ($form_id == 'webform_client_form_476') {
+    if ($form_id == 'webform_client_form_' . ANMELDUNG_ECDL) {
       // ecdl form
   		$text = 'Ich habe die ' . l('Allgemeinen Geschäftsbedingungen (AGB)', 'node/' . $agb_nid) . ' gelesen und bin mir &#252;ber die Kosten von ' .
         '<strong id="agb_costs">CHF 0.--</strong> bewusst, welche mir auch bei Nicht-Erscheinen zum Pr&#252;fungstermin verrechnet werden.';
@@ -497,7 +523,7 @@ function hso_anmeldung_webform_submission_render_alter(&$renderable) {
   $submission = $renderable['#submission'];
 
   // only anmeldungs forms (default, european, ecdl)
-  if (in_array($submission->nid, array(264, 475, 476))) {
+  if (in_array($submission->nid, array(ANMELDUNG_DEFAULT, ANMELDUNG_ECDL, ANMELDUNG_EURO))) {
     // get course time nid from form, if any
     $course_time_nid = FALSE;
     $webform_components = $renderable['#node']->webform['components'];
@@ -546,14 +572,18 @@ function hso_anmeldung_webform_submission_render_alter(&$renderable) {
 function hso_anmeldung_form_webform_email_edit_form_alter(&$form, &$form_state) {
   $form['template']['template_option']['#options']['client'] = 'Client Email (w/PDF)';
   $form['template']['template_option']['#options']['admin'] = 'Admin Email (w/PDF and h4i)';
-  $form['template']['template_option']['#default_value'] = variable_get('webform_template_' . $form['node']['#value']->nid . '_' . $form['eid']['#value'], 'default');
+  // webform v3 -> v4 difference
+  $webform_nid =  (isset($form['node'])) ? $form['node']['#value']->nid : $form['#node']->nid;
+  $form['template']['template_option']['#default_value'] = variable_get('webform_template_' . $webform_nid . '_' . $form['eid']['#value'], 'default');
   $form['#submit'][] = 'hso_anmeldung_form_webform_email_edit_form_submit';
 }
 /**
  * Saves the chosen webform email template.
  */
 function hso_anmeldung_form_webform_email_edit_form_submit($form, $form_state) {
-  variable_set('webform_template_' . $form_state['values']['node']->nid . '_' . $form_state['values']['eid'], $form_state['values']['template_option']);
+  // webform v3 -> v4 difference
+  $webform_nid =  (isset($form['node'])) ? $form['node']['#value']->nid : $form['#node']->nid;
+  variable_set('webform_template_' . $webform_nid . '_' . $form_state['values']['eid'], $form_state['values']['template_option']);
 }
 
 /**
@@ -561,7 +591,7 @@ function hso_anmeldung_form_webform_email_edit_form_submit($form, $form_state) {
  * Extends the webform component form with HSO extra fields.
  */
 function hso_anmeldung_form_webform_component_edit_form_alter(&$form, &$form_state) {
-  if ($form['nid']['#value'] == 264 || $form['nid']['#value'] == 475 || $form['nid']['#value'] == 476) {
+  if ($form['nid']['#value'] == ANMELDUNG_DEFAULT || $form['nid']['#value'] == ANMELDUNG_ECDL || $form['nid']['#value'] == ANMELDUNG_EURO) {
     array_unshift($form['#submit'], 'hso_anmeldung_component_edit_submit');
     $form['hso'] = array(
       '#type' => 'fieldset',
