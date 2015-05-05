@@ -194,7 +194,7 @@ function hso_anmeldung_mail_alter(&$message) {
 
             // replace tokens with values in mail and complete mail with attachment and address
 						$message['subject'] = str_replace(array_keys($to_search), array_values($to_search), $message['subject']);
-						$message['params']['message'] = str_replace(array_keys($to_search), array_values($to_search), $message['params']['message']);
+						$message['body'][0] = str_replace(array_keys($to_search), array_values($to_search), $message['body'][0]);
 						if ($template == 'admin') {
               // add admin mail address and attach pdfs
 							if ($location) {
@@ -382,7 +382,8 @@ function _hso_make_anmeldung_pdf($location, $segment, $contact, $grussformel, $c
 			$file->filename = $to_client ? 'ausbildungsvertrag.pdf' : 'anmeldung.pdf';
 		}
 		$file->filepath = $filepath;
-		return $file;
+    $file->filemime = 'application/pdf';
+    return $file;
 
   } else {
     watchdog('Create Anmeldung PDF', 'The template file @file does not exist.', array('@file' => $html_file), WATCHDOG_ERROR);
