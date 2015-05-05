@@ -1,0 +1,5 @@
+name = "HSO extensions"
+description = "HSO KV College hook implementations"
+package = "HSO"
+core = "7.x"
+version = "1.0"

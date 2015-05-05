@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * Adds special date-time formatters.
+ *
+ * Implements hook_field_formatter_info().
+ */
+function hso_kv_ext_field_formatter_info() {
+  return array(
+    // the key must be unique, so it's best to prefix with your module's name.
+    'hso_kv_ext_date_from_to' => array(
+      // the label is is what is displayed in the select box in the UI.
+      'label' => t('Date from to'),
+      // field types is the important bit!! List the field types your formatter is for.
+      'field types' => array('datetime'),
+      // You can usually leave 'multiple values' as follows:
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+    ),
+    'hso_kv_ext_date_start_end' => array(
+      // the label is is what is displayed in the select box in the UI.
+      'label' => t('Date start end'),
+      // field types is the important bit!! List the field types your formatter is for.
+      'field types' => array('datetime'),
+      // You can usually leave 'multiple values' as follows:
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+    ),
+  );
+}
+/**
+ * Implements hook_field_formatter_view().
+ */
+function hso_kv_ext_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $elements = array();
+  foreach ($items as $delta => $item) {
+    $elements[$delta] = array(
+      '#markup' => theme('datetime_'. $display['type'], array('element' => $item, 'field' => $instance)),
+    );
+  }
+  return $elements;
+}
+/**
+ * Implements hook_theme().
+ */
+function hso_kv_ext_theme() {
+  return array(
+    // The theme function that our formatter uses:
+    'datetime_hso_kv_ext_date_from_to' => array(
+      'variables' => array('element' => NULL),
+    ),
+    'datetime_hso_kv_ext_date_start_end' => array(
+      'variables' => array('element' => NULL),
+    ),
+  );
+}
+
+/**
+ * Themes a date time field with a from-to pattern.
+ * @param $element
+ * @return string
+ */
+function theme_datetime_hso_kv_ext_date_from_to($element) {
+	$from_date = strtotime($element['element']['value']);
+	$string = '<strong>' . t('Vom') . '</strong> ';
+	if (date('H:i', $from_date) == '00:00') {
+		$string .= date('d.m.Y', $from_date);
+	} else {
+		$string .= date('d.m.Y H:i', $from_date);
+	}
+	if ($element['element']['value2']) {
+		$string .= ' <strong>' . t('bis') . '</strong> ' . date('d.m.Y', strtotime($element['element']['value2']));
+	}
+  return $string;
+}
+
+/**
+ * Themes a date time field with a Start-End pattern
+ * @param $element
+ * @return string
+ */
+function theme_datetime_hso_kv_ext_date_start_end($element) {
+	$from_date = strtotime($element['element']['value']);
+	$string = t('Start') . ': ';
+	if (date('H:i', $from_date) == '00:00') {
+		$string .= date('d.m.Y', $from_date);
+	} else {
+		$string .= date('d.m.Y, H:i', $from_date);
+	}
+	if ($element['element']['value2']) {
+		$string .= '<br />' . t('Ende') . ': ' . date('d.m.Y', strtotime($element['element']['value2']));
+	}
+  return $string;
+}
+

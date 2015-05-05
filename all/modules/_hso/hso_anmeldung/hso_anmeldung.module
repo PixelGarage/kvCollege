@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * CAUTION!
+ *
+ * This implementation needs Webform 4.0 and higher to work correctly.
+ */
 
 /* --------------------------------------------------
  * Constants
@@ -18,6 +22,21 @@ define('ANMELDUNG_ECDL', 173); // HSO: 476
  * European Anmeldungs form.
  */
 define('ANMELDUNG_EURO', 475); // HSO: 475
+
+/**
+ * Kontakt form.
+ */
+define('KONTAKT_FORM', 1052); // HSO: 1052
+
+/**
+ * Bildungsberatung form.
+ */
+define('BILDUNGSBERATUNG_FORM', 174); // HSO: 1335
+
+/**
+ * Broschüre bestellen form.
+ */
+define('BROSCHUERE_BESTELLEN_FORM', 175); // HSO: 1336
 
 /**
  * AGB nid.
@@ -109,16 +128,16 @@ function _hso_redirect_salesfunnel_call($times_int_id) {
  */
 function hso_anmeldung_mail_alter(&$message) {
 	if ($message['module'] == 'webform') {
-		$standorte_emails = array(
-      1052 => 4,  // Kontakt
-      1335 => 10, // Bildungsberatung
-      1336 => 9   // Broschüre bestellen
+		$recepient_fields = array(
+      KONTAKT_FORM => 4,  // Kontakt
+      BILDUNGSBERATUNG_FORM => 10, // Bildungsberatung
+      BROSCHUERE_BESTELLEN_FORM => 9   // Broschüre bestellen
     );
-		if (array_key_exists($message['params']['email']['nid'], $standorte_emails)) {
-		  // Kontakt forms
-			$field = $standorte_emails[$message['params']['email']['nid']];
-			if (array_key_exists($field, $message['params']['submission']->data) && !empty($message['params']['submission']->data[$field]['value'][0])) {
-				$message['to'] = array('name' => $message['params']['submission']->data[$field]['value'][0], 'mail' => $message['params']['submission']->data[$field]['value'][0] . '@hso.ch');
+		if (array_key_exists($message['params']['email']['nid'], $recepient_fields)) {
+		  // get recipient address for simple forms, e.g. Kontakt, Bildungsberatung or Broschüre bestellen
+			$field = $recepient_fields[$message['params']['email']['nid']];
+			if (array_key_exists($field, $message['params']['submission']->data) && !empty($message['params']['submission']->data[$field][0])) {
+				$message['to'] = array('name' => $message['params']['submission']->data[$field][0], 'mail' => $message['params']['submission']->data[$field][0] . '@hso.ch');
 			}
 
 		} else {
@@ -132,15 +151,15 @@ function hso_anmeldung_mail_alter(&$message) {
 				foreach ($webform_components as $key => $data) {
 					if ($data['form_key'] == 'course_times_nid') {
             // get course time nid from form submission
-						$course_time_nid = $message['params']['submission']->data[$key]['value'][0];
+						$course_time_nid = $message['params']['submission']->data[$key][0];
 
 					} else if ($data['form_key'] == 'anrede') {
             // get anrede
-						$anrede = $message['params']['submission']->data[$key]['value'][0];
+						$anrede = $message['params']['submission']->data[$key][0];
 
 					} else if ($data['form_key'] == 'name') {
             // get name
-						$client_name = ucwords(strtolower($message['params']['submission']->data[$key]['value'][0]));
+						$client_name = ucwords(strtolower($message['params']['submission']->data[$key][0]));
 					}
 				}
 				$grussformel = ($anrede == 'Herr' ? 'Sehr geehrter Herr ' : ($anrede == 'Frau' ? 'Sehr geehrte Frau ' : 'Sehr geehrte/r Herr/Frau ')) . $client_name;
@@ -175,7 +194,7 @@ function hso_anmeldung_mail_alter(&$message) {
 
             // replace tokens with values in mail and complete mail with attachment and address
 						$message['subject'] = str_replace(array_keys($to_search), array_values($to_search), $message['subject']);
-						$message['params']['plaintext'] = str_replace(array_keys($to_search), array_values($to_search), $message['params']['plaintext']);
+						$message['params']['message'] = str_replace(array_keys($to_search), array_values($to_search), $message['params']['message']);
 						if ($template == 'admin') {
               // add admin mail address and attach pdfs
 							if ($location) {
@@ -259,11 +278,11 @@ function _hso_make_anmeldung_pdf($location, $segment, $contact, $grussformel, $c
 		}
 		if (array_key_exists($key, $submission)) {
 			if (!empty($data['extra']['hso_anmeldung_is_additional'])) {
-				$additional_fields[] = sprintf('%-26s', $data['name'] . ':') . $submission[$key]['value'][0] . '\par';
+				$additional_fields[] = sprintf('%-26s', $data['name'] . ':') . $submission[$key][0] . '\par';
 			} else {
-				$to_search['%' . strtoupper($data['form_key']) . '%'] = $submission[$key]['value'][0];
+				$to_search['%' . strtoupper($data['form_key']) . '%'] = $submission[$key][0];
 			}
-			if ($template == 'ecdl' && preg_match('/^m(\d+)$/', $data['form_key']) && $submission[$key]['value'][0]) {
+			if ($template == 'ecdl' && preg_match('/^m(\d+)$/', $data['form_key']) && $submission[$key][0]) {
         // count number of selected modules
 				$mod_count++;
 			}
@@ -287,9 +306,12 @@ function _hso_make_anmeldung_pdf($location, $segment, $contact, $grussformel, $c
   $to_search['%LOCATION%'] = $location ? $location->title : '';
 	$to_search['%HSO_ADRESSE%'] = $location ? $location->field_address[LANGUAGE_NONE][0]['thoroughfare'] : '';
   $to_search['%HSO_PLZORT%'] = $location ? $location->field_address[LANGUAGE_NONE][0]['postal_code'] . ' ' . $location->field_address[LANGUAGE_NONE][0]['locality'] : '';
-  $to_search['%HSO_FAX%'] = $location ? $location->field_address[LANGUAGE_NONE][0]['fax_number'] : '';
-  $to_search['%HSO_TEL%'] = $location ? $location->field_address[LANGUAGE_NONE][0]['phone_number'] : '';
-  $to_search['%HSO_EMAIL%'] = $location ? $location->field_email[LANGUAGE_NONE][0]['email'] : '';
+  $to_search['%HSO_FAX%'] = $location && isset($location->field_address[LANGUAGE_NONE][0]['fax_number']) ?
+    $location->field_address[LANGUAGE_NONE][0]['fax_number'] : '';
+  $to_search['%HSO_TEL%'] = $location && isset($location->field_address[LANGUAGE_NONE][0]['phone_number']) ?
+    $location->field_address[LANGUAGE_NONE][0]['phone_number'] : '';
+  $to_search['%HSO_EMAIL%'] = $location && isset($location->field_email[LANGUAGE_NONE][0]['email']) ?
+    $location->field_email[LANGUAGE_NONE][0]['email'] : '';
 	
 	$start_time = date('H:i', strtotime($course_time_node->field_course_date[LANGUAGE_NONE][0]['value']));
 	$start_date = date('d.m.Y', strtotime($course_time_node->field_course_date[LANGUAGE_NONE][0]['value']));
@@ -386,9 +408,9 @@ function _hso_make_h4i($course, $course_time_node, $webform_components, $submiss
 		}
 		if (array_key_exists($key, $submission) && !in_array($data['form_key'], array('course_times_nid', 'agbcheck'))) {
 			if (!empty($data['extra']['hso_anmeldung_custom_key'])) {
-				$values_4hi[$data['extra']['hso_anmeldung_custom_key']] = $submission[$key]['value'][0];
+				$values_4hi[$data['extra']['hso_anmeldung_custom_key']] = $submission[$key][0];
 			} else {
-				$values_4hi[$data['form_key']] = $submission[$key]['value'][0];
+				$values_4hi[$data['form_key']] = $submission[$key][0];
 			}
 		}
 	}
@@ -479,7 +501,7 @@ function hso_anmeldung_form_alter(&$form, &$form_state, $form_id) {
           $text .= $course_time_node->field_additional_info_price[LANGUAGE_NONE][0]['value'];
         }
         $form['submitted']['markup']['#markup'] = $text;
-        $text = '<strong>Ich habe die ' . l('Allgemeinen Geschäftsbedingungen (AGB)', 'node/' . $agb_nid) . ' gelesen und bin damit einverstanden.</strong><br />';
+        $text = '* <strong>Ich habe die ' . l('Allgemeinen Geschäftsbedingungen (AGB)', 'node/' . $agb_nid) . ' gelesen und bin damit einverstanden.</strong><br />';
 			}
 
 		}
@@ -487,6 +509,10 @@ function hso_anmeldung_form_alter(&$form, &$form_state, $form_id) {
 		_hso_anmeldung_check_form_fields($form['submitted'], $course);
   }
 }
+
+/**
+ * Check recursively (fieldset), if field should be displayed or not according to the extra hso settings.
+ */
 function _hso_anmeldung_check_form_fields(&$fields, $course) {
 	$to_return = 0;
 	foreach ($fields as $key => $element) {
@@ -529,7 +555,7 @@ function hso_anmeldung_webform_submission_render_alter(&$renderable) {
     $webform_components = $renderable['#node']->webform['components'];
     foreach ($webform_components as $key => $data) {
       if ($data['form_key'] == 'course_times_nid') {
-        $course_time_nid = $submission->data[$key]['value'][0];
+        $course_time_nid = $submission->data[$key][0];
         break;
       }
     }
