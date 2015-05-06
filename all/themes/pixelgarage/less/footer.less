@@ -8,7 +8,73 @@
 
 // Mixins
 // -------------------------
+.fb-address-field() {
+  display: block;
+  font-family: @pxl-text-font;
+  font-size: @font-size-small;
+  color: #fff;
+}
+
+.footer-block-left() {
+  .view-locations {
+    margin: 15px 15px;
+
+    a {
+      text-decoration: none;
+      color: #fff;
+    }
+
+    ul.header-links{
+      #pxl-mixins.list-header-link-buttons();
+    }
+
+    .view-content {
+      .item-list ul {
+        #pxl-mixins.no-list-style();
+
+        div.views-field-field-address {
+          .fb-address-field();
+        }
+        div.views-field-field-email {
+          .fb-address-field();
+        }
+      }
+    }
+
+
+  }
+}
+
+.footer-block-right() {
+
+}
 
 
 // General settings
 // -------------------------
+.footer.container {
+  padding: 0 @grid-gutter-width / 2;
+  background: @kv-college-green-dark none;
+  height: auto;
+  margin: 0 auto 50px;
+
+  .block {
+    display: inline-block;
+    margin: 0 -2px;  // inline block correction
+    width: 50%;
+    height: auto;
+
+    h2.block-title {
+      display: block;
+      margin: 15px 0;
+      font-family: @pxl-text-font-medium;
+      font-size: @font-size-small;
+      color: #fff;
+    }
+
+    .footer-block-left();
+
+    .footer-block-right();
+
+  }
+}

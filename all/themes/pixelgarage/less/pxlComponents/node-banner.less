@@ -1,0 +1,66 @@
+/*
+ *  Banner component
+ * --------------------------------------------------*/
+// Variables
+// -------------------------
+
+
+// Mixins
+// -------------------------
+
+
+
+// Main settings
+// -------------------------
+.node-banner {
+  width: 100%;
+  padding: 0 @carousel-control-width;
+  background: @kv-college-green-light none;
+
+  .row {
+    .field-name-title {
+      font-family: @pxl-text-font;
+      font-size: @font-size-large;
+      color: @kv-college-green-dark;
+    }
+
+    .field-name-body {
+      #pxl-mixins.wysiwyg-body;
+
+    }
+
+    .field-name-field-picture {
+      margin: 0 auto;
+      width: auto;
+      height: 200px;
+    }
+
+    .field-name-field-banner-links {
+      margin: 20px 0;
+
+      .field-items {
+        float: right;
+
+        .field-item {
+          display: inline-block;
+          margin: 0 10px;
+
+          a {
+            #pxl-mixins.three-part-element(@link-hlr-left, @link-hlr-middle, @link-hlr-right, transparent, 40px);
+            font-family: @pxl-text-font;
+            font-size: @font-size-base;
+            color: @kv-college-red;
+            line-height: 35px;
+
+            &:hover,
+            &.active {
+              #pxl-mixins.three-part-element(@link-dklr-left, @link-dklr-middle, @link-dklr-right, transparent, 40px);
+              padding: 0;
+              color: @kv-college-red-dark;
+            }
+          }
+        }
+      }
+    }
+  }
+}

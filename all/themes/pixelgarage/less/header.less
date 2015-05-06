@@ -4,16 +4,180 @@
 
 // Variables
 // -------------------------
+@navbar-collapse-height: 200px;
 
 
 // Mixins
 // -------------------------
+.ph-courses() {
+  .view-courses {
+    margin: 0 auto 20px;
 
+    .views-row {
+      display: inline-block;
+      margin: 0 -2px;  // inline block correction
+      width: 50%;
 
-// General settings
-// -------------------------
-// correct navbar toggle
-.navbar-toggle {
-  padding: 5px 10px;
+      a {
+        #pxl-mixins.three-part-element(@link-hlg-left, @link-hlg-middle, @link-hlg-right, transparent, 34px);
+        font-family: @pxl-text-font;
+        font-size: @font-size-small;
+        color: @kv-college-green-dark;
+        line-height: 30px;
+        text-decoration: none;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        &:hover,
+        &.active {
+          #pxl-mixins.three-part-element(none, none, none, @kv-college-hover, 30px);
+          padding: 0;
+          color: #ffffff;
+          border-left: 5px solid #fff;
+          border-right: 5px solid #fff;
+        }
+      }
+    }
+    .views-row-odd {
+      padding: 2px 0.5em 2px 0;
+    }
+    .views-row-even {
+      padding: 2px 0 2px 0.5em;
+    }
+  }
 }
 
+.ph-in-depth () {
+  margin: 20px auto;
+
+}
+
+.ph-slider () {
+  .view-banners {
+    margin: 20px auto;
+
+    .carousel {
+      .carousel-control {
+        background: none;
+
+        .icon-prev {
+          background: transparent url(../images/slider_left.png) top left / contain no-repeat;
+        }
+        .icon-next {
+          background: transparent url(../images/slider_right.png) top left / contain no-repeat;
+        }
+        .icon-prev::before,
+        .icon-next::before {
+          content: '';
+        }
+      }
+    }
+  }
+}
+
+
+// Main settings
+// -------------------------
+body.navbar-is-fixed-top {
+  padding-top: 90px !important;
+  background: @kv-college-bg url(../images/bg_image.png) top left / 100% auto no-repeat fixed;
+
+  &.admin-menu {
+    padding-top: 90px !important;
+  }
+}
+
+
+header#navbar {
+  border-bottom: none;
+  background: transparent none;
+
+  .container {
+    padding: @grid-gutter-width @grid-gutter-width / 2 10px;
+
+    .navbar-header {
+      // header (branding)
+      a.logo {
+        img {
+          display: none;
+          max-height: 50px;
+          width: auto;
+        }
+      }
+
+      a.navbar-brand {
+        padding: 0;
+        font-family: @pxl-text-font-medium;
+        font-size: @font-size-h1;
+        color: @kv-college-green-dark;
+        line-height: 1;
+      }
+
+      .navbar-toggle {
+        // navbar toggle with burger
+        padding: 5px 10px;
+      }
+    }
+
+    // collapse part
+    .navbar-collapse {
+      height: @navbar-collapse-height;
+      // main menu
+      nav.main-navigation {
+        ul.navbar-nav {
+          float: right;
+
+          li {
+            a {
+              #pxl-mixins.three-part-element(@menu-img-left, @menu-img-middle, @menu-img-right, transparent, 40px);
+              padding: 10px 15px;
+              font-family: @pxl-text-font;
+              font-size: @font-size-base;
+              color: @kv-college-green-dark;
+              line-height: 1;
+
+              &:hover,
+              &.active {
+                #pxl-mixins.three-part-element(none, none, none, @kv-college-hover, 40px);
+                padding: 10px 10px;
+                color: #ffffff;
+                border-left: 5px solid #fff;
+                border-right: 5px solid #fff;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.container {
+  background-color: #fff;
+}
+
+.main-container {
+  #page-header {
+    // block title
+    h2.block-title {
+      margin: 20px 0 10px;
+      font-family: @pxl-text-font;
+      font-size: @font-size-larger;
+    }
+
+    // course navigation
+    body.node-type-course & {
+      .ph-courses();
+    }
+
+    // in-depth course navigation
+    body.node-type-in-depth-course & {
+      .ph-in-depth();
+    }
+
+    // slider (main page)
+    body.front & {
+      .ph-slider();
+    }
+  }
+}

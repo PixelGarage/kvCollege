@@ -68,16 +68,17 @@
   }
 
   // three part elements
-  .three-part (@left-img; @middle-img; @right-img; @width: 100px; @height: 30px; @ends-width: 15px) {
+  .three-part-element (@left-img; @middle-img; @right-img; @bg-color: transparent; @height: 30px; @ends-width: 15px) {
     position: relative;
+    display: block;
     height: @height;
-    width: @width;
+    width: auto;
 
     /* give the pseudo-elements space due to absolute positioning */
     margin: 0 @ends-width;
     border: 0;
     outline: 0;
-    background: transparent @middle-img top left / auto 100% repeat-x;
+    background: @bg-color @middle-img top left / auto 100% repeat-x;
 
     &::before,
     &::after {
@@ -89,17 +90,17 @@
     }
     &::before {
       left: -@ends-width;
-      background: transparent @left-img top right / contain no-repeat;
+      background: @bg-color @left-img top right / auto 100%  no-repeat;
     }
     &::after {
       right: -@ends-width;
-      background: transparent @right-img top left / contain no-repeat;
+      background: @bg-color @right-img top left / auto 100%  no-repeat;
     }
   }
 
 
   // wysiwyg body
-  .wysiwyg-body(@link-color) {
+  .wysiwyg-body() {
     h1, h2, h3, h4, h5, h6 {
       font-family: @pxl-text-font-bold;
       font-size: @font-size-base;
@@ -149,15 +150,15 @@
         margin-bottom: 5px;
         padding: 0px 15px;
         font-size: @font-size-small;
-        color: #000;
+        color: #fff;
         text-decoration: none;
         line-height: 23px;
-        background: #dfdfdf;
+        border: 1px solid #fff;
 
         &:hover,
         &.active {
-          color: #fff;
-          background: #6e6e6e;
+          color: @kv-college-green-dark;
+          background: #fff;
         }
 
       }
