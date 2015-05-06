@@ -1,17 +1,16 @@
 // Bootstrap variables.
 @import 'variables';
 
-// Media query variables.
+// Media queries
+@narrow:  ~"screen and (max-width: @{screen-xs-max})";
 @tablet:  ~"screen and (min-width: @{screen-sm-min})";
 @normal:  ~"screen and (min-width: @{screen-md-min})";
 @wide:    ~"screen and (min-width: @{screen-lg-min})";
 
-// Drop shadows.
-.box-shadow(@shadow) {
-  -webkit-box-shadow: @shadow;
-     -moz-box-shadow: @shadow;
-          box-shadow: @shadow;
-}
+// Media queries stacked
+@tablet-only:  ~"screen and (min-width: @{screen-sm-min}) and (max-width: @{screen-sm-max})";
+@normal-only:  ~"screen and (min-width: @{screen-md-min}) and (max-width: @{screen-md-max})";
+
 
 html {
   &.overlay-open .navbar-fixed-top {

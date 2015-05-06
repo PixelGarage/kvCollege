@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'RelayLight';
+    src: url('fonts/RelayLight.eot');
+    src: url('fonts/RelayLight.eot') format('embedded-opentype'),
+         url('fonts/RelayLight.woff2') format('woff2'),
+         url('fonts/RelayLight.woff') format('woff'),
+         url('fonts/RelayLight.ttf') format('truetype'),
+         url('fonts/RelayLight.svg#RelayLight') format('svg');
+}

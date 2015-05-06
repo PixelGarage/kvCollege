@@ -1,0 +1,114 @@
+/*
+ *  Location content type
+ * --------------------------------------------------*/
+
+// Variables
+// -------------------------
+
+
+// Mixins
+// -------------------------
+
+
+
+// General settings
+// -------------------------
+.node.node-location {
+  padding: 20px;
+  background: #f9f9f9;
+  margin-bottom: 30px;
+
+  .picture_address {
+    padding-left: 260px;
+    float: left;
+    width: 245px;
+
+    h2.node-title {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .field-name-field-picture {
+      margin-left: -260px;
+      float: left;
+    }
+
+    .field-name-field-address {
+      float: left;
+
+      .organisation-name {
+        font-family: @font-family-medium;
+        font-size: @font-size-base + 1;
+      }
+    }
+  }
+
+  .map_details,
+  .map_details_mobile {
+    display: none;
+    float: right;
+    width: 275px;
+    font-size: 13px;
+    color: #666;
+  }
+  .map_details_mobile {
+    display: block;
+    width: 69px;
+
+    a {
+      display: block;
+      overflow: hidden;
+      width: 69px;
+      height: 69px;
+      text-indent: -1000px;
+      background: url(../images/map_pin.png) no-repeat;
+    }
+  }
+  .map_details img {
+    margin-bottom: 20px;
+  }
+
+  .content {
+    float: left;
+    clear: left;
+    margin-top: 20px;
+    width: 600px;
+    font-size: @font-size-small;
+    color: #666;
+
+    table {
+      caption {
+        padding-bottom: 5px;
+        color: @kv-college-bg;
+        font-family: @font-family-medium;
+        font-size: 14px;
+        border-bottom: 2px solid @kv-college-bg;
+      }
+
+      td {
+        border-bottom: 1px solid #aeaeae;
+        padding: 5px 0;
+
+        p {
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+// TODO: where to place
+.node.node-location .phone-block div {
+  display: block;
+  margin-top: 5px;
+  padding-left: 22px;
+  line-height: 20px;
+  background: url(../images/contact_icons.png) no-repeat 0 0;
+
+  &.phone-number {
+    background: url(../images/contact_icons_2.png) no-repeat 0 -20px;
+  }
+}

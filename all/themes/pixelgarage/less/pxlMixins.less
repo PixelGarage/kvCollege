@@ -18,11 +18,23 @@
     padding: 0;
   }
 
+  // border radius
   .border-radius(@radius: 0) {
     -moz-border-radius: @radius;
     -webkit-border-radius: @radius;
     border-radius: @radius;
   }
+  .border-radius-top-left(@radius: 0) {
+    -moz-border-radius-topleft: @radius;
+    -webkit-border-top-left-radius: @radius;
+    border-top-left-radius: @radius;
+  }
+  .border-radius-top-right(@radius: 0) {
+    -moz-border-radius-topright: @radius;
+    -webkit-border-top-right-radius: @radius;
+    border-top-right-radius: @radius;
+  }
+
 
   // centers an element vertically in its container (block with height)
   .center-vertically {
@@ -54,6 +66,104 @@
     -moz-box-sizing: @size;
     box-sizing: @size;
   }
+
+  // three part elements
+  .three-part (@left-img; @middle-img; @right-img; @width: 100px; @height: 30px; @ends-width: 15px) {
+    position: relative;
+    height: @height;
+    width: @width;
+
+    /* give the pseudo-elements space due to absolute positioning */
+    margin: 0 @ends-width;
+    border: 0;
+    outline: 0;
+    background: transparent @middle-img top left / auto 100% repeat-x;
+
+    &::before,
+    &::after {
+      content: ' ';
+      position: absolute;
+      top: 0;
+      width: @ends-width;
+      height: @height;
+    }
+    &::before {
+      left: -@ends-width;
+      background: transparent @left-img top right / contain no-repeat;
+    }
+    &::after {
+      right: -@ends-width;
+      background: transparent @right-img top left / contain no-repeat;
+    }
+  }
+
+
+  // wysiwyg body
+  .wysiwyg-body(@link-color) {
+    h1, h2, h3, h4, h5, h6 {
+      font-family: @pxl-text-font-bold;
+      font-size: @font-size-base;
+    }
+    h1, h2 {
+      font-size: @font-size-large;
+    }
+
+    p, tbody td {
+      font-family: @pxl-text-font;
+      font-size: @font-size-base;
+    }
+
+    pre, address {
+      font-family: @pxl-text-font-italics;
+      font-size: @font-size-base;
+    }
+
+    hr {
+      border: 0;
+      border-bottom: 2px solid @text-color;
+      background: none;
+    }
+
+    img, embed, video, audio, iframe {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  //
+  // KV College mixins
+  //
+  // HSO list header link buttons
+  .list-header-link-buttons() {
+    margin-bottom: 15px;
+    .no-list-style();
+
+    li {
+      display: inline;
+      .no-list-style();
+
+      a {
+        display: inline-block;
+        margin-right: 4px;
+        margin-bottom: 5px;
+        padding: 0px 15px;
+        font-size: @font-size-small;
+        color: #000;
+        text-decoration: none;
+        line-height: 23px;
+        background: #dfdfdf;
+
+        &:hover,
+        &.active {
+          color: #fff;
+          background: #6e6e6e;
+        }
+
+      }
+    }
+  }
+
 
 }
 

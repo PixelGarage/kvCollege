@@ -21,6 +21,17 @@
 @brand-danger:          #d9534f;
 
 
+// KV College colors
+@kv-college-green: #97E56E;
+@kv-college-green-light: #E9FADF;
+@kv-college-green-dark: #094756;
+@kv-college-red: #FD4F4D;
+@kv-college-red-dark: #9A252A;
+@kv-college-bg: #497F8D;
+@kv-college-hover: @kv-college-green-dark;
+@kv-college-link: @kv-college-green;
+
+
 //== Scaffolding
 //
 //## Settings for some of the most global styles.
@@ -28,10 +39,10 @@
 //** Background color for `<body>`.
 @body-bg:               #fff;
 //** Global text color on `<body>`.
-@text-color:            @gray-dark;
+@text-color:            @kv-college-green-dark;
 
 //** Global textual link color.
-@link-color:            @brand-primary;
+@link-color:            @kv-college-link;
 //** Link hover color set via `darken()` function.
 @link-hover-color:      darken(@link-color, 15%);
 //** Link hover decoration.
@@ -47,8 +58,12 @@
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 @font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
 @font-family-base:        @font-family-sans-serif;
+@font-family-light:       'Soho Gothic W01 Light', sans-serif;
+@font-family-regular:     @font-family-sans-serif;
+@font-family-medium:      'Soho Gothic W01 Medium', sans-serif;
+@font-family-bold:        'Soho Gothic W01 Bold', sans-serif;
 
-@font-size-base:          14px;
+@font-size-base:          16px;
 @font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
 @font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
 

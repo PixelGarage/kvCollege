@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'RelayBold';
+    src: url('fonts/RelayBold.eot');
+    src: url('fonts/RelayBold.eot') format('embedded-opentype'),
+         url('fonts/RelayBold.woff2') format('woff2'),
+         url('fonts/RelayBold.woff') format('woff'),
+         url('fonts/RelayBold.ttf') format('truetype'),
+         url('fonts/RelayBold.svg#RelayBold') format('svg');
+}

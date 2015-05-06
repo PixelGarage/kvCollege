@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'RelayMedium';
+    src: url('fonts/RelayMedium.eot');
+    src: url('fonts/RelayMedium.eot') format('embedded-opentype'),
+         url('fonts/RelayMedium.woff2') format('woff2'),
+         url('fonts/RelayMedium.woff') format('woff'),
+         url('fonts/RelayMedium.ttf') format('truetype'),
+         url('fonts/RelayMedium.svg#RelayMedium') format('svg');
+}

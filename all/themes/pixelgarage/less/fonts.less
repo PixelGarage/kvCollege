@@ -10,17 +10,25 @@
 @pxl-icon-font: 'SSSteedicons';
 
 // title font
-@pxl-title-font: 'CallunaSansBold';
+@pxl-title-font: 'RelayBold';
 
 // text fonts
-@pxl-text-font: 'CallunaRegular';
-@pxl-text-font-bold: 'CallunaBold';
-@pxl-text-font-italics: 'CallunaIt';
-@pxl-text-font-bold-italics: 'CallunaBold';
+@pxl-text-font: 'RelayLight';
+@pxl-text-font-light: 'RelayLight';
+@pxl-text-font-medium: 'RelayMedium';
+@pxl-text-font-bold: 'RelayBold';
+@pxl-text-font-italics: 'RelayLight';
+@pxl-text-font-bold-italics: 'RelayBold';
+
+// overrides
 @font-family-base: @pxl-text-font;
+@font-family-light: @pxl-text-font-light;
+@font-family-regular: @pxl-text-font;
+@font-family-medium: @pxl-text-font-medium;
+@font-family-bold: @pxl-text-font-bold;
 
 // form font
-@pxl-form-font: 'CallunaSansRegular';
+@pxl-form-font: 'RelayMedium';
 
 // Awesome icon font
 @import '../fonts/font-awesome/less/font-awesome';
@@ -28,52 +36,31 @@
 
 // title font
 @font-face {
-  font-family: 'CallunaSansBold';
-  src: url('@{pxl-font-path}/CallunaSansBold/CallunaSansBold.eot');
-  src: url('@{pxl-font-path}/CallunaSansBold/CallunaSansBold.eot') format('embedded-opentype'),
-  url('@{pxl-font-path}/CallunaSansBold/CallunaSansBold.woff2') format('woff2'),
-  url('@{pxl-font-path}/CallunaSansBold/CallunaSansBold.woff') format('woff'),
-  url('@{pxl-font-path}/CallunaSansBold/CallunaSansBold.ttf') format('truetype'),
-  url('@{pxl-font-path}/CallunaSansBold/CallunaSansBold.svg#CallunaSansBold') format('svg');
+  font-family: 'RelayBold';
+  src: url('@{pxl-font-path}/RelayBold/RelayBold.eot');
+  src: url('@{pxl-font-path}/RelayBold/RelayBold.eot') format('embedded-opentype'),
+  url('@{pxl-font-path}/RelayBold/RelayBold.woff2') format('woff2'),
+  url('@{pxl-font-path}/RelayBold/RelayBold.woff') format('woff'),
+  url('@{pxl-font-path}/RelayBold/RelayBold.ttf') format('truetype'),
+  url('@{pxl-font-path}/RelayBold/RelayBold.svg#RelayBold') format('svg');
 }
 
 // text fonts
 @font-face {
-  font-family: 'CallunaRegular';
-  src: url('@{pxl-font-path}/CallunaRegular/CallunaRegular.eot');
-  src: url('@{pxl-font-path}/CallunaRegular/CallunaRegular.eot') format('embedded-opentype'),
-  url('@{pxl-font-path}/CallunaRegular/CallunaRegular.woff2') format('woff2'),
-  url('@{pxl-font-path}/CallunaRegular/CallunaRegular.woff') format('woff'),
-  url('@{pxl-font-path}/CallunaRegular/CallunaRegular.ttf') format('truetype'),
-  url('@{pxl-font-path}/CallunaRegular/CallunaRegular.svg#CallunaRegular') format('svg');
+  font-family: 'RelayLight';
+  src: url('@{pxl-font-path}/RelayLight/RelayLight.eot');
+  src: url('@{pxl-font-path}/RelayLight/RelayLight.eot') format('embedded-opentype'),
+  url('@{pxl-font-path}/RelayLight/RelayLight.woff2') format('woff2'),
+  url('@{pxl-font-path}/RelayLight/RelayLight.woff') format('woff'),
+  url('@{pxl-font-path}/RelayLight/RelayLight.ttf') format('truetype'),
+  url('@{pxl-font-path}/RelayLight/RelayLight.svg#RelayLight') format('svg');
 }
 @font-face {
-  font-family: 'CallunaIt';
-  src: url('@{pxl-font-path}/CallunaIt/CallunaIt.eot');
-  src: url('@{pxl-font-path}/CallunaIt/CallunaIt.eot') format('embedded-opentype'),
-  url('@{pxl-font-path}/CallunaIt/CallunaIt.woff2') format('woff2'),
-  url('@{pxl-font-path}/CallunaIt/CallunaIt.woff') format('woff'),
-  url('@{pxl-font-path}/CallunaIt/CallunaIt.ttf') format('truetype'),
-  url('@{pxl-font-path}/CallunaIt/CallunaIt.svg#CallunaIt') format('svg');
-}
-@font-face {
-  font-family: 'CallunaBold';
-  src: url('@{pxl-font-path}/CallunaBold/CallunaBold.eot');
-  src: url('@{pxl-font-path}/CallunaBold/CallunaBold.eot') format('embedded-opentype'),
-  url('@{pxl-font-path}/CallunaBold/CallunaBold.woff2') format('woff2'),
-  url('@{pxl-font-path}/CallunaBold/CallunaBold.woff') format('woff'),
-  url('@{pxl-font-path}/CallunaBold/CallunaBold.ttf') format('truetype'),
-  url('@{pxl-font-path}/CallunaBold/CallunaBold.svg#CallunaBold') format('svg');
-}
-
-
-// form font
-@font-face {
-  font-family: 'CallunaSansRegular';
-  src: url('@{pxl-font-path}/CallunaSansRegular/CallunaSansRegular.eot');
-  src: url('@{pxl-font-path}/CallunaSansRegular/CallunaSansRegular.eot') format('embedded-opentype'),
-  url('@{pxl-font-path}/CallunaSansRegular/CallunaSansRegular.woff2') format('woff2'),
-  url('@{pxl-font-path}/CallunaSansRegular/CallunaSansRegular.woff') format('woff'),
-  url('@{pxl-font-path}/CallunaSansRegular/CallunaSansRegular.ttf') format('truetype'),
-  url('@{pxl-font-path}/CallunaSansRegular/CallunaSansRegular.svg#CallunaSansRegular') format('svg');
+  font-family: 'RelayMedium';
+  src: url('@{pxl-font-path}/RelayMedium/RelayMedium.eot');
+  src: url('@{pxl-font-path}/RelayMedium/RelayMedium.eot') format('embedded-opentype'),
+  url('@{pxl-font-path}/RelayMedium/RelayMedium.woff2') format('woff2'),
+  url('@{pxl-font-path}/RelayMedium/RelayMedium.woff') format('woff'),
+  url('@{pxl-font-path}/RelayMedium/RelayMedium.ttf') format('truetype'),
+  url('@{pxl-font-path}/RelayMedium/RelayMedium.svg#RelayMedium') format('svg');
 }

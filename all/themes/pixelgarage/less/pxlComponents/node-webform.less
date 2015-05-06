@@ -1,0 +1,125 @@
+/*
+ *  Webform content type
+ * --------------------------------------------------*/
+
+// Variables
+// -------------------------
+
+
+// Mixins
+// -------------------------
+.specific-webform-client-form (@seg-color;) {
+  .form-item {
+    a {
+      color: @seg-color;
+    }
+  }
+
+  .form-actions {
+    .form-submit {
+      background-color: @seg-color;
+    }
+  }
+}
+
+
+// General settings
+// -------------------------
+.webform-confirmation ul {
+  margin-left: 20px;
+}
+
+.node-webform {
+  form.webform-client-form {
+    legend {
+      margin-bottom: 10px;
+      font-family: @font-family-medium;
+      font-size: 14px;
+      line-height: 30px;
+    }
+
+    fieldset {
+      margin: 20px 0 0;
+    }
+
+    .form-item {
+      ul {
+        margin-top: 10px;
+      }
+
+      a {
+        color: @kv-college-green;
+      }
+    }
+
+    textarea {
+      width: 560px;
+      padding: 10px;
+      height: 100px;
+      font-family: @font-family-light;
+      font-size: 14px;
+      margin-top: 10px;
+      background: #fff;
+      border: 1px solid #dbdbdb;
+    }
+
+    .webform-container-inline {
+      label {
+        display: inline-block;
+        width: 130px;
+      }
+
+      div {
+        display: inline;
+
+        &.form-item {
+          display: inline-block;
+        }
+      }
+
+      .form-radios {
+        label {
+          font-size: 13px;
+          display: inline-block;
+          vertical-align: top;
+          width: 190px;
+        }
+      }
+
+      #edit-submitted-zahlungskondition-zahlungsart-3,
+      #edit-submitted-zahlungskondition-zahlungsart-5 {
+        margin-left: 153px;
+        margin-bottom: 20px;
+      }
+
+      input.form-text,
+      select.form-select {
+        padding: 0 5px;
+        width: 400px;
+        height: 30px;
+        font-family: @font-family-light;
+        font-size: 14px;
+        background: #fff;
+        border: 1px solid #dbdbdb;
+      }
+      select.form-select {
+        width: 120px;
+      }
+    }
+
+    .form-actions {
+      .form-submit {
+        margin: 10px 0;
+        padding: 0 20px;
+        height: 35px;
+        font-family: @font-family-regular;
+        font-size: 14px;
+        color: #fff;
+        background: @kv-college-green;
+        border: none;
+      }
+    }
+  }
+}
+
+

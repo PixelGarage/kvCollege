@@ -1,0 +1,98 @@
+/*
+ *  Course content type
+ * --------------------------------------------------*/
+
+// Variables
+// -------------------------
+
+
+// Mixins
+// -------------------------
+
+
+// General settings
+// -------------------------
+.node.node-course {
+  // auf einen blick table
+  table.aufeinenblick{
+    margin-bottom: 2em;
+
+    caption {
+      font-family: @font-family-light;
+      font-size: @font-size-large;
+      color: @text-color;
+    }
+
+    tbody {
+      margin: 10px 0;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      padding: 0 20px;
+      display: block;
+      font-size: @font-size-base;
+
+      tr {
+        th {
+          padding: 10px 0;
+          font-family: @font-family-medium;
+          border-bottom: 1px solid transparent;
+        }
+
+        td {
+          font-family: @font-family-light;
+          padding: 10px 0;
+          border-bottom: 1px solid transparent;
+        }
+
+        &:last-child th,
+        &:last-child td {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+
+  // course tabs
+  .view-course-tabs {
+    margin-bottom: 2em;
+
+    // tabs
+    ul.nav-tabs {
+      li {
+        a {
+
+        }
+      }
+    }
+
+    // tab content
+    div.tab-content {
+      #tab-1-1 {  // Programm tab
+        table.lektionplan {
+          tr {
+            th,
+            strong {
+              font-family: @font-family-medium;
+              font-size: @font-size-base;
+            }
+
+            td {
+              font-family: @font-family-light;
+              font-size: @font-size-base;
+              padding: 5px 0;
+              border-bottom: 1px solid @text-color;
+            }
+
+            &:last-child{
+              td {
+                border-bottom: none;
+              }
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+}
