@@ -14,10 +14,14 @@
 // -------------------------
 .node-banner {
   width: 100%;
-  padding: 0 @carousel-control-width;
+  height: 200px;
+  padding: @pxl-node-padding @carousel-control-width;
   background: @kv-college-green-light none;
 
   .row {
+    display: inline-block;
+    vertical-align: middle;
+
     .field-name-title {
       font-family: @pxl-text-font;
       font-size: @font-size-large;
@@ -32,7 +36,6 @@
     .field-name-field-picture {
       margin: 0 auto;
       width: auto;
-      height: 200px;
     }
 
     .field-name-field-banner-links {

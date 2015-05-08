@@ -4,7 +4,6 @@
 
 // Variables
 // -------------------------
-@navbar-collapse-height: 200px;
 
 
 // Mixins
@@ -17,24 +16,44 @@
       display: inline-block;
       margin: 0 -2px;  // inline block correction
       width: 50%;
+      height: 35px;
 
-      a {
-        #pxl-mixins.three-part-element(@link-hlg-left, @link-hlg-middle, @link-hlg-right, transparent, 34px);
-        font-family: @pxl-text-font;
-        font-size: @font-size-small;
-        color: @kv-college-green-dark;
-        line-height: 30px;
-        text-decoration: none;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+      .field-content {
+        position: relative;
+        #pxl-mixins.three-part-element(@link-hlg-left, @link-hlg-middle, @link-hlg-right, transparent, 35px);
 
         &:hover,
         &.active {
-          #pxl-mixins.three-part-element(none, none, none, @kv-college-hover, 30px);
-          padding: 0;
-          color: #ffffff;
-          border-left: 5px solid #fff;
-          border-right: 5px solid #fff;
+          #pxl-mixins.three-part-element(none, none, none, @kv-college-hover, 27px, 0);
+          top: 5px;
+          left: -5px;
+          margin: 0 2px 0 6px;
+        }
+
+        a {
+          display: block;
+          overflow: hidden;
+          padding-left: 10px;
+          font-family: @pxl-text-font;
+          font-size: @font-size-small;
+          color: @kv-college-green-dark;
+          line-height: 30px;
+          text-decoration: none;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+
+          &:hover,
+          &.active {
+            padding-left: 15px;
+            color: #ffffff;
+          }
+
+          &::before {
+            content: '\f0da';
+            font-family: @pxl-icon-font;
+            padding-right: 5px;
+          }
+
         }
       }
     }
@@ -48,22 +67,66 @@
 }
 
 .ph-in-depth () {
-  margin: 20px auto;
+  .view-courses {
+    margin: 0 auto 20px;
 
+    .views-row {
+      display: inline-block;
+      margin: 0 -2px; // inline block correction
+      width: 20%;
+      height: 100%;
+      vertical-align: top;
+
+      .node-in-depth-course.node-teaser {
+        margin: 5px;
+        padding: 10px;
+        background: @gray-lighter none;
+
+        .field-name-field-icon {
+          img {
+            margin: 0 auto;
+          }
+        }
+
+        .field-name-title {
+          a {
+            display:block;
+            min-height: 2 * @font-size-small;
+            font-family: @pxl-text-font;
+            font-size: @font-size-small;
+            color: @kv-college-green-dark;
+            line-height: 1;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
 }
 
 .ph-slider () {
   .view-banners {
+    display: none;
     margin: 20px auto;
+
+    @media @tablet {
+      display: block;
+    }
 
     .carousel {
       .carousel-control {
         background: none;
 
         .icon-prev {
+          top: 33%;
+          margin-top: 0;
+          height: 33%;
           background: transparent url(../images/slider_left.png) top left / contain no-repeat;
         }
         .icon-next {
+          top: 33%;
+          margin-top: 0;
+          height: 33%;
           background: transparent url(../images/slider_right.png) top left / contain no-repeat;
         }
         .icon-prev::before,
@@ -79,11 +142,11 @@
 // Main settings
 // -------------------------
 body.navbar-is-fixed-top {
-  padding-top: 90px !important;
-  background: @kv-college-bg url(../images/bg_image.png) top left / 100% auto no-repeat fixed;
+  padding-top: 110px !important;
+  background: @kv-college-bg url(../images/bg_image.png) top left / cover no-repeat fixed;
 
   &.admin-menu {
-    padding-top: 90px !important;
+    padding-top: 110px !important;
   }
 }
 
@@ -121,7 +184,6 @@ header#navbar {
 
     // collapse part
     .navbar-collapse {
-      height: @navbar-collapse-height;
       // main menu
       nav.main-navigation {
         ul.navbar-nav {
@@ -129,6 +191,7 @@ header#navbar {
 
           li {
             a {
+              position: relative;
               #pxl-mixins.three-part-element(@menu-img-left, @menu-img-middle, @menu-img-right, transparent, 40px);
               padding: 10px 15px;
               font-family: @pxl-text-font;
@@ -138,11 +201,12 @@ header#navbar {
 
               &:hover,
               &.active {
-                #pxl-mixins.three-part-element(none, none, none, @kv-college-hover, 40px);
+                #pxl-mixins.three-part-element(none, none, none, @kv-college-hover, 35px);
+                top: 5px;
+                left: -5px;
+                margin-left: 25px;
                 padding: 10px 10px;
                 color: #ffffff;
-                border-left: 5px solid #fff;
-                border-right: 5px solid #fff;
               }
             }
           }

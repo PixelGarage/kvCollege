@@ -6105,7 +6105,7 @@ button.close {
   top: 0;
   left: 0;
   bottom: 0;
-  width: 5%;
+  width: 7%;
   opacity: 0.5;
   filter: alpha(opacity=50);
   font-size: 20px;
@@ -8575,11 +8575,11 @@ div.features-export-list .form-type-checkbox input[type=checkbox] {
  *  Header section (navigation)
  * --------------------------------------------------*/
 body.navbar-is-fixed-top {
-  padding-top: 90px !important;
-  background: #497f8d url(../images/bg_image.png) top left / 100% auto no-repeat fixed;
+  padding-top: 110px !important;
+  background: #497f8d url(../images/bg_image.png) top left / cover no-repeat fixed;
 }
 body.navbar-is-fixed-top.admin-menu {
-  padding-top: 90px !important;
+  padding-top: 110px !important;
 }
 header#navbar {
   border-bottom: none;
@@ -8602,9 +8602,6 @@ header#navbar .container .navbar-header a.navbar-brand {
 }
 header#navbar .container .navbar-header .navbar-toggle {
   padding: 5px 10px;
-}
-header#navbar .container .navbar-collapse {
-  height: 200px;
 }
 header#navbar .container .navbar-collapse nav.main-navigation ul.navbar-nav {
   float: right;
@@ -8645,17 +8642,18 @@ header#navbar .container .navbar-collapse nav.main-navigation ul.navbar-nav li a
 header#navbar .container .navbar-collapse nav.main-navigation ul.navbar-nav li a.active {
   position: relative;
   display: block;
-  height: 40px;
+  height: 35px;
   width: auto;
   /* give the pseudo-elements space due to absolute positioning */
   margin: 0 15px;
   border: 0;
   outline: 0;
   background: #094756 none top left / auto 100% repeat-x;
+  top: 5px;
+  left: -5px;
+  margin-left: 25px;
   padding: 10px 10px;
   color: #ffffff;
-  border-left: 5px solid #fff;
-  border-right: 5px solid #fff;
 }
 header#navbar .container .navbar-collapse nav.main-navigation ul.navbar-nav li a:hover::before,
 header#navbar .container .navbar-collapse nav.main-navigation ul.navbar-nav li a.active::before,
@@ -8665,7 +8663,7 @@ header#navbar .container .navbar-collapse nav.main-navigation ul.navbar-nav li a
   position: absolute;
   top: 0;
   width: 15px;
-  height: 40px;
+  height: 35px;
 }
 header#navbar .container .navbar-collapse nav.main-navigation ul.navbar-nav li a:hover::before,
 header#navbar .container .navbar-collapse nav.main-navigation ul.navbar-nav li a.active::before {
@@ -8692,76 +8690,91 @@ body.node-type-course .main-container #page-header .view-courses .views-row {
   display: inline-block;
   margin: 0 -2px;
   width: 50%;
+  height: 35px;
 }
-body.node-type-course .main-container #page-header .view-courses .views-row a {
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content {
   position: relative;
   display: block;
-  height: 34px;
+  height: 35px;
   width: auto;
   /* give the pseudo-elements space due to absolute positioning */
   margin: 0 15px;
   border: 0;
   outline: 0;
   background: transparent url(../images/link_hlG_02.png) top left / auto 100% repeat-x;
+}
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content::before,
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content::after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  width: 15px;
+  height: 35px;
+}
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content::before {
+  left: -15px;
+  background: transparent url(../images/link_hlG_01.png) top right / auto 100% no-repeat;
+}
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content::after {
+  right: -15px;
+  background: transparent url(../images/link_hlG_03.png) top left / auto 100% no-repeat;
+}
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content:hover,
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content.active {
+  position: relative;
+  display: block;
+  height: 27px;
+  width: auto;
+  /* give the pseudo-elements space due to absolute positioning */
+  margin: 0 0;
+  border: 0;
+  outline: 0;
+  background: #094756 none top left / auto 100% repeat-x;
+  top: 5px;
+  left: -5px;
+  margin: 0 2px 0 6px;
+}
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content:hover::before,
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content.active::before,
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content:hover::after,
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content.active::after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 27px;
+}
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content:hover::before,
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content.active::before {
+  left: 0;
+  background: #094756 none top right / auto 100% no-repeat;
+}
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content:hover::after,
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content.active::after {
+  right: 0;
+  background: #094756 none top left / auto 100% no-repeat;
+}
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content a {
+  display: block;
+  overflow: hidden;
+  padding-left: 10px;
   font-family: 'RelayLight';
   font-size: 14px;
   color: #094756;
   line-height: 30px;
   text-decoration: none;
-  white-space: nowrap;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
-body.node-type-course .main-container #page-header .view-courses .views-row a::before,
-body.node-type-course .main-container #page-header .view-courses .views-row a::after {
-  content: ' ';
-  position: absolute;
-  top: 0;
-  width: 15px;
-  height: 34px;
-}
-body.node-type-course .main-container #page-header .view-courses .views-row a::before {
-  left: -15px;
-  background: transparent url(../images/link_hlG_01.png) top right / auto 100% no-repeat;
-}
-body.node-type-course .main-container #page-header .view-courses .views-row a::after {
-  right: -15px;
-  background: transparent url(../images/link_hlG_03.png) top left / auto 100% no-repeat;
-}
-body.node-type-course .main-container #page-header .view-courses .views-row a:hover,
-body.node-type-course .main-container #page-header .view-courses .views-row a.active {
-  position: relative;
-  display: block;
-  height: 30px;
-  width: auto;
-  /* give the pseudo-elements space due to absolute positioning */
-  margin: 0 15px;
-  border: 0;
-  outline: 0;
-  background: #094756 none top left / auto 100% repeat-x;
-  padding: 0;
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content a:hover,
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content a.active {
+  padding-left: 15px;
   color: #ffffff;
-  border-left: 5px solid #fff;
-  border-right: 5px solid #fff;
 }
-body.node-type-course .main-container #page-header .view-courses .views-row a:hover::before,
-body.node-type-course .main-container #page-header .view-courses .views-row a.active::before,
-body.node-type-course .main-container #page-header .view-courses .views-row a:hover::after,
-body.node-type-course .main-container #page-header .view-courses .views-row a.active::after {
-  content: ' ';
-  position: absolute;
-  top: 0;
-  width: 15px;
-  height: 30px;
-}
-body.node-type-course .main-container #page-header .view-courses .views-row a:hover::before,
-body.node-type-course .main-container #page-header .view-courses .views-row a.active::before {
-  left: -15px;
-  background: #094756 none top right / auto 100% no-repeat;
-}
-body.node-type-course .main-container #page-header .view-courses .views-row a:hover::after,
-body.node-type-course .main-container #page-header .view-courses .views-row a.active::after {
-  right: -15px;
-  background: #094756 none top left / auto 100% no-repeat;
+body.node-type-course .main-container #page-header .view-courses .views-row .field-content a::before {
+  content: '\f0da';
+  font-family: 'fontawesome';
+  padding-right: 5px;
 }
 body.node-type-course .main-container #page-header .view-courses .views-row-odd {
   padding: 2px 0.5em 2px 0;
@@ -8769,19 +8782,55 @@ body.node-type-course .main-container #page-header .view-courses .views-row-odd 
 body.node-type-course .main-container #page-header .view-courses .views-row-even {
   padding: 2px 0 2px 0.5em;
 }
-body.node-type-in-depth-course .main-container #page-header {
-  margin: 20px auto;
+body.node-type-in-depth-course .main-container #page-header .view-courses {
+  margin: 0 auto 20px;
+}
+body.node-type-in-depth-course .main-container #page-header .view-courses .views-row {
+  display: inline-block;
+  margin: 0 -2px;
+  width: 20%;
+  height: 100%;
+  vertical-align: top;
+}
+body.node-type-in-depth-course .main-container #page-header .view-courses .views-row .node-in-depth-course.node-teaser {
+  margin: 5px;
+  padding: 10px;
+  background: #eeeeee none;
+}
+body.node-type-in-depth-course .main-container #page-header .view-courses .views-row .node-in-depth-course.node-teaser .field-name-field-icon img {
+  margin: 0 auto;
+}
+body.node-type-in-depth-course .main-container #page-header .view-courses .views-row .node-in-depth-course.node-teaser .field-name-title a {
+  display: block;
+  min-height: 28px;
+  font-family: 'RelayLight';
+  font-size: 14px;
+  color: #094756;
+  line-height: 1;
+  text-align: center;
 }
 body.front .main-container #page-header .view-banners {
+  display: none;
   margin: 20px auto;
+}
+@media screen and (min-width: 768px) {
+  body.front .main-container #page-header .view-banners {
+    display: block;
+  }
 }
 body.front .main-container #page-header .view-banners .carousel .carousel-control {
   background: none;
 }
 body.front .main-container #page-header .view-banners .carousel .carousel-control .icon-prev {
+  top: 33%;
+  margin-top: 0;
+  height: 33%;
   background: transparent url(../images/slider_left.png) top left / contain no-repeat;
 }
 body.front .main-container #page-header .view-banners .carousel .carousel-control .icon-next {
+  top: 33%;
+  margin-top: 0;
+  height: 33%;
   background: transparent url(../images/slider_right.png) top left / contain no-repeat;
 }
 body.front .main-container #page-header .view-banners .carousel .carousel-control .icon-prev::before,
@@ -9000,13 +9049,14 @@ form#user-login {
 }
 .sharethis-wrapper {
   margin: 0;
-  text-align: left;
+  text-align: right;
 }
 .sharethis-wrapper > span .stButton {
   margin: 0;
 }
-.sharethis-wrapper > span .stButton .stLarge {
-  font-family: "SSSocial-Regular";
+.sharethis-wrapper > span .stButton .stLarge,
+.sharethis-wrapper > span .stButton .chicklets {
+  font-family: "SSSocial-Circle";
   font-style: normal;
   font-weight: normal;
   text-decoration: none;
@@ -9020,14 +9070,15 @@ form#user-login {
   font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
   background-image: none !important;
-  font-size: 2em;
-  color: #888;
-  height: 1.2em;
+  font-size: 20px;
+  color: #fff;
 }
-.sharethis-wrapper > span .stButton .stLarge:hover {
-  color: #333;
+.sharethis-wrapper > span .stButton .stLarge:hover,
+.sharethis-wrapper > span .stButton .chicklets:hover {
+  color: #f2f2f2;
 }
-.sharethis-wrapper > span .stButton .stLarge:before {
+.sharethis-wrapper > span .stButton .stLarge:before,
+.sharethis-wrapper > span .stButton .chicklets:before {
   display: inline-block;
   padding: 0.25em 0 0;
 }
@@ -9052,8 +9103,13 @@ form#user-login {
  * --------------------------------------------------*/
 .node-banner {
   width: 100%;
-  padding: 0 5%;
+  height: 200px;
+  padding: 15px 7%;
   background: #e9fadf none;
+}
+.node-banner .row {
+  display: inline-block;
+  vertical-align: middle;
 }
 .node-banner .row .field-name-title {
   font-family: 'RelayLight';
@@ -9100,7 +9156,6 @@ form#user-login {
 .node-banner .row .field-name-field-picture {
   margin: 0 auto;
   width: auto;
-  height: 200px;
 }
 .node-banner .row .field-name-field-banner-links {
   margin: 20px 0;
@@ -9180,15 +9235,60 @@ form#user-login {
 /*
  *  Course content type
  * --------------------------------------------------*/
-.node.node-course table.aufeinenblick {
+.node.node-course .field-name-title {
+  display: block;
+}
+@media screen and (min-width: 768px) {
+  .node.node-course .field-name-title {
+    display: none;
+  }
+}
+.node.node-course .field-name-body h1,
+.node.node-course .field-name-body h2,
+.node.node-course .field-name-body h3,
+.node.node-course .field-name-body h4,
+.node.node-course .field-name-body h5,
+.node.node-course .field-name-body h6 {
+  font-family: 'RelayBold';
+  font-size: 16px;
+}
+.node.node-course .field-name-body h1,
+.node.node-course .field-name-body h2 {
+  font-size: 20px;
+}
+.node.node-course .field-name-body p,
+.node.node-course .field-name-body tbody td {
+  font-family: 'RelayLight';
+  font-size: 16px;
+}
+.node.node-course .field-name-body pre,
+.node.node-course .field-name-body address {
+  font-family: 'RelayLight';
+  font-size: 16px;
+}
+.node.node-course .field-name-body hr {
+  border: 0;
+  border-bottom: 2px solid #094756;
+  background: none;
+}
+.node.node-course .field-name-body img,
+.node.node-course .field-name-body embed,
+.node.node-course .field-name-body video,
+.node.node-course .field-name-body audio,
+.node.node-course .field-name-body iframe {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.node.node-course .field-name-body table.aufeinenblick {
   margin-bottom: 2em;
 }
-.node.node-course table.aufeinenblick caption {
+.node.node-course .field-name-body table.aufeinenblick caption {
   font-family: 'RelayLight';
   font-size: 20px;
   color: #094756;
 }
-.node.node-course table.aufeinenblick tbody {
+.node.node-course .field-name-body table.aufeinenblick tbody {
   margin: 10px 0;
   border-top: 4px solid transparent;
   border-bottom: 4px solid transparent;
@@ -9196,22 +9296,103 @@ form#user-login {
   display: block;
   font-size: 16px;
 }
-.node.node-course table.aufeinenblick tbody tr th {
+.node.node-course .field-name-body table.aufeinenblick tbody tr th {
   padding: 10px 0;
   font-family: 'RelayMedium';
   border-bottom: 1px solid transparent;
 }
-.node.node-course table.aufeinenblick tbody tr td {
+.node.node-course .field-name-body table.aufeinenblick tbody tr td {
   font-family: 'RelayLight';
   padding: 10px 0;
   border-bottom: 1px solid transparent;
 }
-.node.node-course table.aufeinenblick tbody tr:last-child th,
-.node.node-course table.aufeinenblick tbody tr:last-child td {
+.node.node-course .field-name-body table.aufeinenblick tbody tr:last-child th,
+.node.node-course .field-name-body table.aufeinenblick tbody tr:last-child td {
   border-bottom: none;
 }
 .node.node-course .view-course-tabs {
   margin-bottom: 2em;
+}
+.node.node-course .view-course-tabs ul.nav-tabs {
+  border-bottom: none;
+}
+.node.node-course .view-course-tabs ul.nav-tabs li {
+  margin: 0;
+  height: 30px;
+}
+.node.node-course .view-course-tabs ul.nav-tabs li a {
+  position: relative;
+  display: block;
+  height: 30px;
+  width: auto;
+  /* give the pseudo-elements space due to absolute positioning */
+  margin: 0 15px;
+  border: 0;
+  outline: 0;
+  background: transparent url(../images/menu_inact_02.png) top left / auto 100% repeat-x;
+  padding: 5px 10px;
+  font-family: 'RelayLight';
+  font-size: 16px;
+  color: #094756;
+  line-height: 1;
+  border-radius: 0;
+}
+.node.node-course .view-course-tabs ul.nav-tabs li a::before,
+.node.node-course .view-course-tabs ul.nav-tabs li a::after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  width: 15px;
+  height: 30px;
+}
+.node.node-course .view-course-tabs ul.nav-tabs li a::before {
+  left: -15px;
+  background: transparent url(../images/menu_inact_01.png) top right / auto 100% no-repeat;
+}
+.node.node-course .view-course-tabs ul.nav-tabs li a::after {
+  right: -15px;
+  background: transparent url(../images/menu_inact_03.png) top left / auto 100% no-repeat;
+}
+.node.node-course .view-course-tabs ul.nav-tabs li:hover a,
+.node.node-course .view-course-tabs ul.nav-tabs li.active a {
+  position: relative;
+  display: block;
+  height: 25px;
+  width: auto;
+  /* give the pseudo-elements space due to absolute positioning */
+  margin: 0 0;
+  border: 0;
+  outline: 0;
+  background: #094756 none top left / auto 100% repeat-x;
+  top: 5px;
+  left: -5px;
+  margin: 0 5px 0 10px;
+  padding: 5px 15px 5px 20px;
+  color: #ffffff;
+}
+.node.node-course .view-course-tabs ul.nav-tabs li:hover a::before,
+.node.node-course .view-course-tabs ul.nav-tabs li.active a::before,
+.node.node-course .view-course-tabs ul.nav-tabs li:hover a::after,
+.node.node-course .view-course-tabs ul.nav-tabs li.active a::after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 25px;
+}
+.node.node-course .view-course-tabs ul.nav-tabs li:hover a::before,
+.node.node-course .view-course-tabs ul.nav-tabs li.active a::before {
+  left: 0;
+  background: #094756 none top right / auto 100% no-repeat;
+}
+.node.node-course .view-course-tabs ul.nav-tabs li:hover a::after,
+.node.node-course .view-course-tabs ul.nav-tabs li.active a::after {
+  right: 0;
+  background: #094756 none top left / auto 100% no-repeat;
+}
+.node.node-course .view-course-tabs div.tab-content {
+  padding: 15px;
+  background: #e9fadf none;
 }
 .node.node-course .view-course-tabs div.tab-content #tab-1-1 table.lektionplan tr th,
 .node.node-course .view-course-tabs div.tab-content #tab-1-1 table.lektionplan tr strong {
@@ -9386,6 +9567,99 @@ form#user-login {
   border: none;
 }
 /*
+ *  Page-intro component
+ * --------------------------------------------------*/
+.view-intro-page {
+  position: relative;
+  margin-bottom: 20px;
+}
+.view-intro-page .view-content .views-row .node-introstep {
+  position: relative;
+  z-index: 10;
+  padding: 15px;
+}
+.view-intro-page .view-content .views-row .node-introstep .field-name-title {
+  border-bottom: 5px solid #094756;
+}
+.view-intro-page .view-content .views-row .node-introstep .field-name-title h2 {
+  margin-top: 40px;
+  font-family: 'RelayLight';
+  font-size: 24px;
+  color: #094756;
+}
+.view-intro-page .view-content .views-row .node-introstep .field-name-body {
+  margin-top: 20px;
+}
+.view-intro-page .view-content .views-row .node-introstep .field-name-body h1,
+.view-intro-page .view-content .views-row .node-introstep .field-name-body h2,
+.view-intro-page .view-content .views-row .node-introstep .field-name-body h3,
+.view-intro-page .view-content .views-row .node-introstep .field-name-body h4,
+.view-intro-page .view-content .views-row .node-introstep .field-name-body h5,
+.view-intro-page .view-content .views-row .node-introstep .field-name-body h6 {
+  font-family: 'RelayBold';
+  font-size: 16px;
+}
+.view-intro-page .view-content .views-row .node-introstep .field-name-body h1,
+.view-intro-page .view-content .views-row .node-introstep .field-name-body h2 {
+  font-size: 20px;
+}
+.view-intro-page .view-content .views-row .node-introstep .field-name-body p,
+.view-intro-page .view-content .views-row .node-introstep .field-name-body tbody td {
+  font-family: 'RelayLight';
+  font-size: 16px;
+}
+.view-intro-page .view-content .views-row .node-introstep .field-name-body pre,
+.view-intro-page .view-content .views-row .node-introstep .field-name-body address {
+  font-family: 'RelayLight';
+  font-size: 16px;
+}
+.view-intro-page .view-content .views-row .node-introstep .field-name-body hr {
+  border: 0;
+  border-bottom: 2px solid #094756;
+  background: none;
+}
+.view-intro-page .view-content .views-row .node-introstep .field-name-body img,
+.view-intro-page .view-content .views-row .node-introstep .field-name-body embed,
+.view-intro-page .view-content .views-row .node-introstep .field-name-body video,
+.view-intro-page .view-content .views-row .node-introstep .field-name-body audio,
+.view-intro-page .view-content .views-row .node-introstep .field-name-body iframe {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+@media (min-width: 768px) {
+  .view-intro-page .view-content .views-row:nth-child(odd) .node-introstep .row .col-sm-6:first-child {
+    left: 50%;
+  }
+}
+.view-intro-page .view-content .views-row:nth-child(odd) .node-introstep .row .col-sm-6:last-child {
+  padding-right: 50px;
+}
+@media (min-width: 768px) {
+  .view-intro-page .view-content .views-row:nth-child(odd) .node-introstep .row .col-sm-6:last-child {
+    right: 50%;
+  }
+}
+.view-intro-page .view-content .views-row:nth-child(even) {
+  background: transparent url(../images/bg_zaun.png) top left / auto 100% repeat-x;
+}
+.view-intro-page .view-content .views-row:nth-child(even) .node-introstep .row .col-sm-6:last-child {
+  padding-right: 50px;
+}
+.view-intro-page .view-content .views-row:first-child .node-introstep,
+.view-intro-page .view-content .views-row:last-child .node-introstep {
+  z-index: 0;
+}
+.view-intro-page .view-footer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 5;
+  background: transparent url(../images/spur_flieger.png) 70% 45% / auto 85% no-repeat;
+}
+/*
  *  Footer section
  * --------------------------------------------------*/
 .footer.container {
@@ -9399,6 +9673,7 @@ form#user-login {
   margin: 0 -2px;
   width: 50%;
   height: auto;
+  vertical-align: top;
 }
 .footer.container .block h2.block-title {
   display: block;
@@ -9458,4 +9733,47 @@ form#user-login {
   font-family: 'RelayLight';
   font-size: 14px;
   color: #fff;
+}
+.footer.container .block .sharethis-buttons {
+  margin: 10px 0 30px;
+}
+.footer.container .block .field-name-body h1,
+.footer.container .block .field-name-body h2,
+.footer.container .block .field-name-body h3,
+.footer.container .block .field-name-body h4,
+.footer.container .block .field-name-body h5,
+.footer.container .block .field-name-body h6 {
+  font-family: 'RelayBold';
+  font-size: 16px;
+}
+.footer.container .block .field-name-body h1,
+.footer.container .block .field-name-body h2 {
+  font-size: 20px;
+}
+.footer.container .block .field-name-body p,
+.footer.container .block .field-name-body tbody td {
+  font-family: 'RelayLight';
+  font-size: 16px;
+}
+.footer.container .block .field-name-body pre,
+.footer.container .block .field-name-body address {
+  font-family: 'RelayLight';
+  font-size: 16px;
+}
+.footer.container .block .field-name-body hr {
+  border: 0;
+  border-bottom: 2px solid #094756;
+  background: none;
+}
+.footer.container .block .field-name-body img,
+.footer.container .block .field-name-body embed,
+.footer.container .block .field-name-body video,
+.footer.container .block .field-name-body audio,
+.footer.container .block .field-name-body iframe {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.footer.container .block .field-name-body img {
+  float: right;
 }

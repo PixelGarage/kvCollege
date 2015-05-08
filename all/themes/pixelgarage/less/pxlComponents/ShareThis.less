@@ -50,6 +50,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
+
 // General settings
 // -------------------------
 .block-sharethis .block-inner {
@@ -57,20 +58,20 @@
 }
 .sharethis-wrapper {
   margin: 0;
-  text-align: left;
+  text-align: right;
 
   > span .stButton {
     margin: 0;
 
-    .stLarge {
-      .ss-social("Regular");
+    .stLarge,
+    .chicklets {
+      .ss-social("Circle");
       background-image: none !important;
-      font-size: 2em;
-      color: #888;
-      height: 1.2em;
+      font-size: @font-size-large;
+      color: #fff;
 
       &:hover {
-        color: #333;
+        color: darken(#fff, 5%);
       }
 
       &:before {

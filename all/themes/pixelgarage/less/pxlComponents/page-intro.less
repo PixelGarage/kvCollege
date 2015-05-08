@@ -1,0 +1,90 @@
+/*
+ *  Page-intro component
+ * --------------------------------------------------*/
+
+// Variables
+// -------------------------
+
+
+// Mixins
+// -------------------------
+
+
+
+// General settings
+// -------------------------
+.view-intro-page {
+  position: relative;
+  margin-bottom: 20px;
+
+  .view-content {
+    .views-row {
+      .node-introstep {
+        position: relative;
+        z-index: 10;
+        padding: @pxl-node-padding;
+
+        .field-name-title {
+          border-bottom: 5px solid @kv-college-green-dark;
+
+          h2 {
+            margin-top: 40px;
+            font-family: @font-family-light;
+            font-size: @font-size-larger;
+            color: @text-color;
+          }
+        }
+
+        .field-name-body {
+          margin-top: 20px;
+          #pxl-mixins.wysiwyg-body;
+        }
+
+      }
+    }
+    .views-row:nth-child(odd) {
+      .node-introstep {
+        .row {
+          .col-sm-6:first-child {
+            // image
+            .make-sm-column-push(6);
+          }
+          .col-sm-6:last-child {
+            // title / body
+            .make-sm-column-pull(6);
+            padding-right: @grid-gutter-width;
+          }
+        }
+      }
+    }
+    .views-row:nth-child(even) {
+      background: transparent url(../images/bg_zaun.png) top left / auto 100% repeat-x;
+      .node-introstep {
+        .row {
+          .col-sm-6:last-child {
+            // title / body
+            padding-right: @grid-gutter-width;
+          }
+        }
+      }
+    }
+
+    .views-row:first-child,
+    .views-row:last-child {
+      .node-introstep {
+        z-index: 0;
+      }
+    }
+  }
+
+  .view-footer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 5;
+    background: transparent url(../images/spur_flieger.png) 70% 45% / auto 85% no-repeat;
+
+  }
+}

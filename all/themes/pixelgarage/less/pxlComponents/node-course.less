@@ -13,40 +13,53 @@
 // General settings
 // -------------------------
 .node.node-course {
-  // auf einen blick table
-  table.aufeinenblick{
-    margin-bottom: 2em;
 
-    caption {
-      font-family: @font-family-light;
-      font-size: @font-size-large;
-      color: @text-color;
+  .field-name-title {
+    display: block;
+
+    @media @tablet {
+      display: none;
     }
+  }
 
-    tbody {
-      margin: 10px 0;
-      border-top: 4px solid transparent;
-      border-bottom: 4px solid transparent;
-      padding: 0 20px;
-      display: block;
-      font-size: @font-size-base;
+  .field-name-body {
+    #pxl-mixins.wysiwyg-body();
 
-      tr {
-        th {
-          padding: 10px 0;
-          font-family: @font-family-medium;
-          border-bottom: 1px solid transparent;
-        }
+    // auf einen blick table
+    table.aufeinenblick{
+      margin-bottom: 2em;
 
-        td {
-          font-family: @font-family-light;
-          padding: 10px 0;
-          border-bottom: 1px solid transparent;
-        }
+      caption {
+        font-family: @font-family-light;
+        font-size: @font-size-large;
+        color: @text-color;
+      }
 
-        &:last-child th,
-        &:last-child td {
-          border-bottom: none;
+      tbody {
+        margin: 10px 0;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        padding: 0 20px;
+        display: block;
+        font-size: @font-size-base;
+
+        tr {
+          th {
+            padding: 10px 0;
+            font-family: @font-family-medium;
+            border-bottom: 1px solid transparent;
+          }
+
+          td {
+            font-family: @font-family-light;
+            padding: 10px 0;
+            border-bottom: 1px solid transparent;
+          }
+
+          &:last-child th,
+          &:last-child td {
+            border-bottom: none;
+          }
         }
       }
     }
@@ -58,15 +71,40 @@
 
     // tabs
     ul.nav-tabs {
+      border-bottom: none;
       li {
+        margin: 0;
+        height: 30px;
+
         a {
+          position: relative;
+          #pxl-mixins.three-part-element(@menu-img-left, @menu-img-middle, @menu-img-right, transparent, 30px);
+          padding: 5px 10px;
+          font-family: @pxl-text-font;
+          font-size: @font-size-base;
+          color: @kv-college-green-dark;
+          line-height: 1;
+          border-radius: 0;
+        }
+        &:hover a,
+        &.active a {
+          #pxl-mixins.three-part-element(none, none, none, @kv-college-hover, 25px, 0);
+          top: 5px;
+          left: -5px;
+          margin: 0 5px 0 10px;
+          padding: 5px 15px 5px 20px;
+          color: #ffffff;
 
         }
+
       }
     }
 
     // tab content
     div.tab-content {
+      padding: @pxl-node-padding;
+      background: @kv-college-green-light none;
+
       #tab-1-1 {  // Programm tab
         table.lektionplan {
           tr {

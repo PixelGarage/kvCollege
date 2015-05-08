@@ -7,6 +7,43 @@
 (function ($) {
 
     /**
+     * Allows full size clickable items.
+     */
+    Drupal.behaviors.fullSizeClickableItems = {
+        attach: function () {
+            var $block = $('#block-views-courses-block-in-depth-menu'),
+                $clickableItems = $block.find('.views-row');
+
+            $block.once('click', function () {
+                $clickableItems.on('click', function () {
+                    window.location = $(this).find(".field-item a:first").attr("href");
+                    return false;
+                });
+            });
+        }
+    };
+
+    /**
+     * This behavior adds active state to link wrappers to support image links.
+     *
+     */
+    Drupal.behaviors.imageLinks = {
+        attach: function (context) {
+            var $block = $('#block-views-courses-block-course-menu'),
+                $linkWrappers = $block.find('.views-row .field-content'),
+                $activeWrapper = $block.find('.views-row a.active').parent().addClass('active');
+
+            $block.once('click', function() {
+                $linkWrappers.on('click', function() {
+                    $activeWrapper.removeClass("active");
+                    $(this).addClass("active");
+                    $activeWrapper = $(this);
+                });
+            });
+        }
+    };
+
+    /**
      * Generates tabs for header links.
      */
     Drupal.behaviors.block_with_header_links = {
