@@ -7,11 +7,30 @@
 (function ($) {
 
     /**
+     * Place and color the links in the intro page correctly.
+     */
+    Drupal.behaviors.placeIntroLinks = {
+        attach: function () {
+            var $links = $('.node-introstep .field-name-field-course-links a');
+
+            $links.each(function(i, e) {
+                var $this = $(this);
+                if ($this.hasClass('button-red')) {
+                    $this.parent().addClass('button-red');
+                } else if ($this.hasClass('link-special')){
+                    var classes = $this.attr('class');
+                    $this.parent().attr('class', 'field-item ' + classes);
+                }
+            });
+        }
+    };
+
+    /**
      * Allows full size clickable items.
      */
     Drupal.behaviors.fullSizeClickableItems = {
         attach: function () {
-            var $block = $('#block-views-courses-block-in-depth-menu'),
+            var $block = $('#block-views-courses-block-in-depth-menu').add('#block-multiblock-2'),
                 $clickableItems = $block.find('.views-row');
 
             $block.once('click', function () {
@@ -25,11 +44,10 @@
 
     /**
      * This behavior adds active state to link wrappers to support image links.
-     *
      */
-    Drupal.behaviors.imageLinks = {
-        attach: function (context) {
-            var $block = $('#block-views-courses-block-course-menu'),
+    Drupal.behaviors.subMenuLinks = {
+        attach: function () {
+            var $block = $('#block-views-courses-block-course-menu').add('#block-multiblock-1'),
                 $linkWrappers = $block.find('.views-row .field-content'),
                 $activeWrapper = $block.find('.views-row a.active').parent().addClass('active');
 
@@ -64,7 +82,7 @@
                 }).filter(':first').click();
             });
         }
-    }
+    };
 
     /**
      * This behavior adds shadow to header on scroll.

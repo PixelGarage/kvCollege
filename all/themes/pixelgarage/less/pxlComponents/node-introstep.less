@@ -1,0 +1,155 @@
+/*
+ *  Intro-step content type
+ * --------------------------------------------------*/
+
+// Variables
+// -------------------------
+
+
+// Mixins
+// -------------------------
+
+
+
+// Main settings
+// -------------------------
+.node-introstep {
+  padding: 50px @pxl-node-padding;
+
+  @media @tablet {
+    padding: 30px @pxl-node-padding;
+  }
+
+  .field-name-title {
+    border-bottom: 5px solid @kv-college-green-dark;
+
+    h2 {
+      margin-top: 40px;
+      font-family: @font-family-light;
+      font-size: @font-size-larger;
+      color: @text-color;
+    }
+  }
+
+  .field-name-body {
+    margin-top: 30px;
+    #pxl-mixins.wysiwyg-body;
+  }
+
+  .field-name-field-course-links {
+    position: absolute;
+    right: 10%;
+    bottom: 10%;
+    width: 70%;
+    z-index: 10;
+
+    .field-item {
+      #pxl-mixins.three-part-element(@link-hlg-left, @link-hlg-middle, @link-hlg-right, transparent, 35px);
+
+      &:hover,
+      &.active {
+        #pxl-mixins.three-part-element(@link-dklg-left, @link-dklg-middle, @link-dklg-right, transparent, 35px);
+      }
+
+      a {
+        display: block;
+        overflow: hidden;
+        padding-left: 10px;
+        font-family: @pxl-text-font;
+        font-size: @font-size-small;
+        color: @kv-college-green-dark;
+        line-height: 30px;
+        text-decoration: none;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &:hover,
+        &.active {
+          padding-left: 15px;
+        }
+
+        &::before {
+          content: '\f0da';
+          font-family: @pxl-icon-font;
+          padding-right: 5px;
+        }
+      }
+    }
+
+      // special link fields
+    .field-items {
+      position: relative;
+
+      .field-item {
+        &.button-red {
+          #pxl-mixins.three-part-element(@link-hlr-left, @link-hlr-middle, @link-hlr-right, transparent, 35px);
+
+          &:hover,
+          &.active {
+            #pxl-mixins.three-part-element(@link-dklr-left, @link-dklr-middle, @link-dklr-right, transparent, 35px);
+          }
+        }
+
+        &.link-special {
+          position: absolute;
+          max-width: 130px;
+
+          #pxl-mixins.three-part-element(@link-big-hlg-left, @link-big-hlg-middle, @link-big-hlg-right, transparent, 60px);
+
+          &:hover,
+          &.active {
+            #pxl-mixins.three-part-element(@link-big-dklg-left, @link-big-dklg-middle, @link-big-dklg-right, transparent, 60px);
+          }
+
+          a {
+            display: block;
+            overflow: hidden;
+            padding: 15px 0;
+            font-family: @pxl-text-font;
+            font-size: @font-size-small;
+            color: @kv-college-green-dark;
+            line-height: 1;
+            text-align: center;
+            text-decoration: none;
+            text-overflow: clip;
+            white-space: normal;
+
+            &:hover,
+            &.active {
+              padding: 15px 0;
+            }
+
+            &::before {
+              content: '';
+            }
+          }
+        }
+
+        &.marketing {
+          top: 45px;
+          left: -60px;
+        }
+        &.lifestyle {
+          top: 20px;
+          left: 110px;
+        }
+        &.tourismus {
+          top: -50px;
+          left: 280px;
+          max-width: 70px
+        }
+        &.international {
+          top: -20px;
+          left: 280px;
+          max-width: 90px
+        }
+        &.treuhand {
+          top: 65px;
+          left: 100px;
+        }
+
+      }
+    }
+  }
+
+}

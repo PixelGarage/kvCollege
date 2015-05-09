@@ -1,0 +1,86 @@
+/*
+ *  Course times view
+ * --------------------------------------------------*/
+
+// Variables
+// -------------------------
+
+
+// Mixins
+// -------------------------
+
+
+
+// General settings
+// -------------------------
+.view-course-times {
+  .view-header,
+  .view-empty {
+    margin-bottom: 20px;
+  }
+
+  .view-content {
+    table {
+      margin-bottom: 2em;
+
+      thead {
+        font-family: @font-family-medium;
+        font-size: @font-size-small;
+        color: @text-color;
+        border: none;
+
+        th {
+          padding: 10px 0 10px 10px;
+          border-bottom: none;
+        }
+      }
+
+      tbody {
+        padding: 0;
+        font-size: @font-size-base;
+        border: none;
+
+        tr {
+          border-bottom: 5px solid #fff;
+          background: none;
+
+          th {
+            padding: 10px 0 10px 10px;
+            font-family: @font-family-base;
+            border: none;
+          }
+
+          td {
+            padding: 10px 0 10px 10px;
+            font-family: @font-family-base;
+            border: none;
+            background-color: @gray-lighter;
+          }
+
+          td.views-field-nothing {
+            padding: 0 0 0 10px;
+            width: 120px;
+            background: none;
+            vertical-align: middle;
+
+            a {
+              #pxl-mixins.three-part-element(@link-big-hlr-left, @link-big-hlr-middle, @link-big-hlr-right, transparent, 60px);
+              padding: 15px 10px;
+              font-family: @pxl-text-font;
+              font-size: @font-size-base;
+              color: @kv-college-red;
+              line-height: 1;
+
+              &:hover,
+              &.active {
+                #pxl-mixins.three-part-element(@link-big-dklr-left, @link-big-dklr-middle, @link-big-dklr-right, transparent, 60px);
+                color: @kv-college-red-dark;
+                text-decoration: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

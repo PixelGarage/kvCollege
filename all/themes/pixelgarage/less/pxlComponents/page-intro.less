@@ -1,5 +1,5 @@
 /*
- *  Page-intro component
+ *  Intro page component
  * --------------------------------------------------*/
 
 // Variables
@@ -22,24 +22,6 @@
       .node-introstep {
         position: relative;
         z-index: 10;
-        padding: @pxl-node-padding;
-
-        .field-name-title {
-          border-bottom: 5px solid @kv-college-green-dark;
-
-          h2 {
-            margin-top: 40px;
-            font-family: @font-family-light;
-            font-size: @font-size-larger;
-            color: @text-color;
-          }
-        }
-
-        .field-name-body {
-          margin-top: 20px;
-          #pxl-mixins.wysiwyg-body;
-        }
-
       }
     }
     .views-row:nth-child(odd) {
@@ -78,6 +60,7 @@
   }
 
   .view-footer {
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
@@ -86,5 +69,8 @@
     z-index: 5;
     background: transparent url(../images/spur_flieger.png) 70% 45% / auto 85% no-repeat;
 
+    @media @tablet {
+      display: block;
+    }
   }
 }

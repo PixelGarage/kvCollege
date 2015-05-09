@@ -42,16 +42,30 @@
 @link-hlg-left: url(../images/link_hlG_01.png);
 @link-hlg-middle: url(../images/link_hlG_02.png);
 @link-hlg-right: url(../images/link_hlG_03.png);
+@link-big-hlg-left: url(../images/LINK_Big_hlG_01.png);
+@link-big-hlg-middle: url(../images/LINK_Big_hlG_02.png);
+@link-big-hlg-right: url(../images/LINK_Big_hlG_03.png);
+
 @link-dklg-left: url(../images/link_dklG_01.png);
 @link-dklg-middle: url(../images/link_dklG_02.png);
 @link-dklg-right: url(../images/link_dklG_03.png);
+@link-big-dklg-left: url(../images/LINK_Big_dklG_01.png);
+@link-big-dklg-middle: url(../images/LINK_Big_dklG_02.png);
+@link-big-dklg-right: url(../images/LINK_Big_dklG_03.png);
 
 @link-hlr-left: url(../images/link_hlR_01.png);
 @link-hlr-middle: url(../images/link_hlR_02.png);
 @link-hlr-right: url(../images/link_hlR_03.png);
+@link-big-hlr-left: url(../images/LINK_Big_hlR_01.png);
+@link-big-hlr-middle: url(../images/LINK_Big_hlR_02.png);
+@link-big-hlr-right: url(../images/LINK_Big_hlR_03.png);
+
 @link-dklr-left: url(../images/link_dklR_01.png);
 @link-dklr-middle: url(../images/link_dklR_02.png);
 @link-dklr-right: url(../images/link_dklR_03.png);
+@link-big-dklr-left: url(../images/LINK_Big_dklR_01.png);
+@link-big-dklr-middle: url(../images/LINK_Big_dklR_02.png);
+@link-big-dklr-right: url(../images/LINK_Big_dklR_03.png);
 
 
 //== Scaffolding
@@ -86,16 +100,17 @@
 @font-family-bold:        'Soho Gothic W01 Bold', sans-serif;
 
 @font-size-base:          16px;
-@font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
-@font-size-larger:         ceil((@font-size-base * 1.5)); // ~18px
-@font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
+@font-size-large:         ceil((@font-size-base * 1.25));
+@font-size-larger:         ceil((@font-size-base * 1.5));
+@font-size-small:         ceil((@font-size-base * 0.85));
+@font-size-smaller:         ceil((@font-size-base * 0.7));
 
-@font-size-h1:            floor((@font-size-base * 2.6)); // ~36px
-@font-size-h2:            floor((@font-size-base * 2.15)); // ~30px
-@font-size-h3:            ceil((@font-size-base * 1.7)); // ~24px
-@font-size-h4:            ceil((@font-size-base * 1.25)); // ~18px
+@font-size-h1:            floor((@font-size-base * 2.6));
+@font-size-h2:            floor((@font-size-base * 2.15));
+@font-size-h3:            ceil((@font-size-base * 1.7));
+@font-size-h4:            ceil((@font-size-base * 1.25));
 @font-size-h5:            @font-size-base;
-@font-size-h6:            ceil((@font-size-base * 0.85)); // ~12px
+@font-size-h6:            ceil((@font-size-base * 0.85));
 
 //** Unit-less `line-height` for use in components like buttons.
 @line-height-base:        1.25; // 20/16
@@ -376,7 +391,7 @@
 @container-md:                 @container-desktop;
 
 // Large screen / wide desktop
-@container-large-desktop:      (900px + @grid-gutter-width);
+@container-large-desktop:      (1020px + @grid-gutter-width);
 //** For `@screen-lg-min` and up.
 @container-lg:                 @container-large-desktop;
 

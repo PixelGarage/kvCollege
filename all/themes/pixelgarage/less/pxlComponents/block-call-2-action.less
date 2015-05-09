@@ -1,0 +1,72 @@
+/*
+ *  Call-2-action block
+ * --------------------------------------------------*/
+
+// Variables
+// -------------------------
+
+
+// Mixins
+// -------------------------
+
+
+
+// General settings
+// -------------------------
+.call-2-action {
+  display: none;
+  position: absolute;
+  right: @grid-gutter-width/2;
+  top: -275px;
+  padding-bottom: 20px;
+  background: transparent url(../images/illu_anmelden_big.png) center top / auto 100% no-repeat;
+
+  @media @tablet {
+    display: block;
+  }
+
+  .button-anmelden {
+    margin-top: 100px;
+    margin-bottom: 5px;
+    max-width: 125px;
+
+    a {
+      #pxl-mixins.three-part-element(@link-big-hlg-left, @link-big-hlg-middle, @link-big-hlg-right, transparent, 60px);
+      padding: 15px 0 15px 15px;
+      font-family: @pxl-text-font-medium;
+      font-size: @font-size-base;
+      color: @kv-college-green;
+      line-height: 20px;
+
+      &:hover,
+      &.active {
+        #pxl-mixins.three-part-element(@link-big-dklg-left, @link-big-dklg-middle, @link-big-dklg-right, transparent, 60px);
+        color: @kv-college-green-dark;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .button-broschuere,
+  .button-beratung {
+    margin-bottom: 5px;
+    max-width: 125px;
+
+    a {
+      #pxl-mixins.three-part-element(@link-big-hlr-left, @link-big-hlr-middle, @link-big-hlr-right, transparent, 60px);
+      padding: 8px 0 15px 15px;
+      font-family: @pxl-text-font-medium;
+      font-size: @font-size-base;
+      color: @kv-college-red;
+      line-height: 20px;
+      white-space: normal;
+
+      &:hover,
+      &.active {
+        #pxl-mixins.three-part-element(@link-big-dklr-left, @link-big-dklr-middle, @link-big-dklr-right, transparent, 60px);
+        color: @kv-college-red-dark;
+        text-decoration: none;
+      }
+    }
+  }
+}

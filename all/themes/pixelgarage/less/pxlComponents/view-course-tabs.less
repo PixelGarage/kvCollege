@@ -1,0 +1,90 @@
+/*
+ *  Course tabs view
+ * --------------------------------------------------*/
+
+// Variables
+// -------------------------
+
+
+// Mixins
+// -------------------------
+
+
+
+// General settings
+// -------------------------
+// course tabs
+.view-course-tabs {
+  margin-bottom: 2em;
+
+  // tabs
+  ul.nav-tabs {
+    border-bottom: none;
+    li {
+      margin: 0;
+      height: 30px;
+
+      a {
+        position: relative;
+        #pxl-mixins.three-part-element(@menu-img-left, @menu-img-middle, @menu-img-right, transparent, 30px);
+        padding: 5px 10px;
+        font-family: @pxl-text-font;
+        font-size: @font-size-base;
+        color: @kv-college-green-dark;
+        line-height: 1;
+        border-radius: 0;
+      }
+      &:hover a,
+      &.active a {
+        #pxl-mixins.three-part-element(none, none, none, @kv-college-hover, 25px, 0);
+        top: 5px;
+        left: -5px;
+        margin: 0 5px 0 10px;
+        padding: 5px 15px 5px 20px;
+        color: #ffffff;
+
+      }
+
+    }
+  }
+
+  // tab content
+  div.tab-content {
+    padding: @pxl-node-padding;
+    background: @kv-college-green-light none;
+
+    #tab-1-0 {  // Allgemein tab
+      .field-name-body {
+        .content-columns(2);
+        #pxl-mixins.wysiwyg-body();
+
+      }
+    }
+
+    #tab-1-1 {  // Programm tab
+      table.lektionplan {
+        tr {
+          th,
+          strong {
+            font-family: @font-family-medium;
+            font-size: @font-size-base;
+          }
+
+          td {
+            font-family: @font-family-light;
+            font-size: @font-size-base;
+            padding: 5px 0;
+            border-bottom: 1px solid @text-color;
+          }
+
+          &:last-child{
+            td {
+              border-bottom: none;
+            }
+          }
+        }
+      }
+    }
+
+  }
+}

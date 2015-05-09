@@ -40,8 +40,6 @@
         }
       }
     }
-
-
   }
 }
 
@@ -53,7 +51,12 @@
     #pxl-mixins.wysiwyg-body;
 
     img {
-      float: right;
+      display: none;
+
+      @media @tablet {
+        display: block;
+        float: right;
+      }
     }
   }
 }
@@ -70,9 +73,13 @@
   .block {
     display: inline-block;
     margin: 0 -2px;  // inline block correction
-    width: 50%;
+    width: 100%;
     height: auto;
     vertical-align: top;
+
+    @media @tablet {
+      width: 50%;
+    }
 
     h2.block-title {
       display: block;
