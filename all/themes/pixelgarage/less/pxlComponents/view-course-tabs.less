@@ -55,8 +55,11 @@
 
     #tab-1-0 {  // Allgemein tab
       .field-name-body {
-        .content-columns(2);
         #pxl-mixins.wysiwyg-body();
+
+        @media @tablet {
+          .content-columns(2);
+        }
 
       }
     }

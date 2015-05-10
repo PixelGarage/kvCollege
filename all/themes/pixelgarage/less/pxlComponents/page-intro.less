@@ -44,7 +44,7 @@
       .node-introstep {
         .row {
           .col-sm-6:last-child {
-            // title / body
+            // title / body column
             padding-right: @grid-gutter-width;
           }
         }
@@ -60,6 +60,8 @@
   }
 
   .view-footer {
+    // make this element unaware for mouse events; elements below this image receive events
+    pointer-events: none;
     display: none;
     position: absolute;
     top: 0;

@@ -1563,7 +1563,7 @@ pre code {
 }
 @media (min-width: 1200px) {
   .container {
-    width: 1070px;
+    width: 990px;
   }
 }
 .container-fluid {
@@ -6630,7 +6630,7 @@ body #admin-menu .dropdown li {
 }
 @media screen and (min-width: 1200px) {
   .navbar.container {
-    max-width: 1020px;
+    max-width: 940px;
   }
 }
 .navbar.container > .container {
@@ -9348,6 +9348,7 @@ form#user-login {
   z-index: 0;
 }
 .view-intro-page .view-footer {
+  pointer-events: none;
   display: none;
   position: absolute;
   top: 0;
@@ -9796,14 +9797,30 @@ form#user-login {
   max-width: 100%;
   height: auto;
 }
+.intro-start .node-introstep .field-name-field-image {
+  margin: 0 0 0 -30px;
+}
+.intro-highlights .node-introstep .field-name-field-image {
+  margin: 0 -30px 0 -40px;
+}
+.intro-berufseinstieg .node-introstep .field-name-field-image {
+  margin: -40px -20px 0;
+}
 .node-introstep .field-name-field-course-links {
   position: absolute;
-  right: 10%;
-  bottom: 10%;
-  width: 70%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 10;
 }
-.node-introstep .field-name-field-course-links .field-item {
+.node-introstep .field-name-field-course-links .field-items {
+  position: absolute;
+  left: 20%;
+  bottom: 5%;
+  width: 70%;
+}
+.node-introstep .field-name-field-course-links .field-items .field-item {
   position: relative;
   display: block;
   height: 35px;
@@ -9814,24 +9831,24 @@ form#user-login {
   outline: 0;
   background: transparent url(../images/link_hlG_02.png) top left / auto 100% repeat-x;
 }
-.node-introstep .field-name-field-course-links .field-item::before,
-.node-introstep .field-name-field-course-links .field-item::after {
+.node-introstep .field-name-field-course-links .field-items .field-item::before,
+.node-introstep .field-name-field-course-links .field-items .field-item::after {
   content: ' ';
   position: absolute;
   top: 0;
   width: 15px;
   height: 35px;
 }
-.node-introstep .field-name-field-course-links .field-item::before {
+.node-introstep .field-name-field-course-links .field-items .field-item::before {
   left: -15px;
   background: transparent url(../images/link_hlG_01.png) top right / auto 100% no-repeat;
 }
-.node-introstep .field-name-field-course-links .field-item::after {
+.node-introstep .field-name-field-course-links .field-items .field-item::after {
   right: -15px;
   background: transparent url(../images/link_hlG_03.png) top left / auto 100% no-repeat;
 }
-.node-introstep .field-name-field-course-links .field-item:hover,
-.node-introstep .field-name-field-course-links .field-item.active {
+.node-introstep .field-name-field-course-links .field-items .field-item:hover,
+.node-introstep .field-name-field-course-links .field-items .field-item.active {
   position: relative;
   display: block;
   height: 35px;
@@ -9842,49 +9859,25 @@ form#user-login {
   outline: 0;
   background: transparent url(../images/link_dklG_02.png) top left / auto 100% repeat-x;
 }
-.node-introstep .field-name-field-course-links .field-item:hover::before,
-.node-introstep .field-name-field-course-links .field-item.active::before,
-.node-introstep .field-name-field-course-links .field-item:hover::after,
-.node-introstep .field-name-field-course-links .field-item.active::after {
+.node-introstep .field-name-field-course-links .field-items .field-item:hover::before,
+.node-introstep .field-name-field-course-links .field-items .field-item.active::before,
+.node-introstep .field-name-field-course-links .field-items .field-item:hover::after,
+.node-introstep .field-name-field-course-links .field-items .field-item.active::after {
   content: ' ';
   position: absolute;
   top: 0;
   width: 15px;
   height: 35px;
 }
-.node-introstep .field-name-field-course-links .field-item:hover::before,
-.node-introstep .field-name-field-course-links .field-item.active::before {
+.node-introstep .field-name-field-course-links .field-items .field-item:hover::before,
+.node-introstep .field-name-field-course-links .field-items .field-item.active::before {
   left: -15px;
   background: transparent url(../images/link_dklG_01.png) top right / auto 100% no-repeat;
 }
-.node-introstep .field-name-field-course-links .field-item:hover::after,
-.node-introstep .field-name-field-course-links .field-item.active::after {
+.node-introstep .field-name-field-course-links .field-items .field-item:hover::after,
+.node-introstep .field-name-field-course-links .field-items .field-item.active::after {
   right: -15px;
   background: transparent url(../images/link_dklG_03.png) top left / auto 100% no-repeat;
-}
-.node-introstep .field-name-field-course-links .field-item a {
-  display: block;
-  overflow: hidden;
-  padding-left: 10px;
-  font-family: 'RelayLight';
-  font-size: 14px;
-  color: #094756;
-  line-height: 30px;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.node-introstep .field-name-field-course-links .field-item a:hover,
-.node-introstep .field-name-field-course-links .field-item a.active {
-  padding-left: 15px;
-}
-.node-introstep .field-name-field-course-links .field-item a::before {
-  content: '\f0da';
-  font-family: 'fontawesome';
-  padding-right: 5px;
-}
-.node-introstep .field-name-field-course-links .field-items {
-  position: relative;
 }
 .node-introstep .field-name-field-course-links .field-items .field-item.button-red {
   position: relative;
@@ -9945,108 +9938,140 @@ form#user-login {
   right: -15px;
   background: transparent url(../images/link_dklR_03.png) top left / auto 100% no-repeat;
 }
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special {
-  position: absolute;
-  max-width: 130px;
-  position: relative;
-  display: block;
-  height: 60px;
-  width: auto;
-  /* give the pseudo-elements space due to absolute positioning */
-  margin: 0 15px;
-  border: 0;
-  outline: 0;
-  background: transparent url(../images/LINK_Big_hlG_02.png) top left / auto 100% repeat-x;
-}
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special::before,
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special::after {
-  content: ' ';
-  position: absolute;
-  top: 0;
-  width: 15px;
-  height: 60px;
-}
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special::before {
-  left: -15px;
-  background: transparent url(../images/LINK_Big_hlG_01.png) top right / auto 100% no-repeat;
-}
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special::after {
-  right: -15px;
-  background: transparent url(../images/LINK_Big_hlG_03.png) top left / auto 100% no-repeat;
-}
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special:hover,
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special.active {
-  position: relative;
-  display: block;
-  height: 60px;
-  width: auto;
-  /* give the pseudo-elements space due to absolute positioning */
-  margin: 0 15px;
-  border: 0;
-  outline: 0;
-  background: transparent url(../images/LINK_Big_dklG_02.png) top left / auto 100% repeat-x;
-}
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special:hover::before,
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special.active::before,
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special:hover::after,
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special.active::after {
-  content: ' ';
-  position: absolute;
-  top: 0;
-  width: 15px;
-  height: 60px;
-}
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special:hover::before,
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special.active::before {
-  left: -15px;
-  background: transparent url(../images/LINK_Big_dklG_01.png) top right / auto 100% no-repeat;
-}
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special:hover::after,
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special.active::after {
-  right: -15px;
-  background: transparent url(../images/LINK_Big_dklG_03.png) top left / auto 100% no-repeat;
-}
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special a {
+.node-introstep .field-name-field-course-links .field-items .field-item a {
   display: block;
   overflow: hidden;
-  padding: 15px 0;
+  padding-left: 10px;
   font-family: 'RelayLight';
   font-size: 14px;
   color: #094756;
-  line-height: 1;
-  text-align: center;
+  line-height: 30px;
   text-decoration: none;
-  text-overflow: clip;
-  white-space: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special a:hover,
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special a.active {
-  padding: 15px 0;
+.node-introstep .field-name-field-course-links .field-items .field-item a:hover,
+.node-introstep .field-name-field-course-links .field-items .field-item a.active {
+  padding-left: 15px;
 }
-.node-introstep .field-name-field-course-links .field-items .field-item.link-special a::before {
-  content: '';
+.node-introstep .field-name-field-course-links .field-items .field-item a::before {
+  content: '\f0da';
+  font-family: 'fontawesome';
+  padding-right: 5px;
 }
-.node-introstep .field-name-field-course-links .field-items .field-item.marketing {
-  top: 45px;
-  left: -60px;
-}
-.node-introstep .field-name-field-course-links .field-items .field-item.lifestyle {
-  top: 20px;
-  left: 110px;
-}
-.node-introstep .field-name-field-course-links .field-items .field-item.tourismus {
-  top: -50px;
-  left: 280px;
-  max-width: 70px;
-}
-.node-introstep .field-name-field-course-links .field-items .field-item.international {
-  top: -20px;
-  left: 280px;
-  max-width: 90px;
-}
-.node-introstep .field-name-field-course-links .field-items .field-item.treuhand {
-  top: 65px;
-  left: 100px;
+@media screen and (min-width: 992px) {
+  .node-introstep .field-name-field-course-links .field-items.link-special {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special {
+    position: absolute;
+    position: relative;
+    display: block;
+    height: 60px;
+    width: auto;
+    /* give the pseudo-elements space due to absolute positioning */
+    margin: 0 15px;
+    border: 0;
+    outline: 0;
+    background: transparent url(../images/LINK_Big_hlG_02.png) top left / auto 100% repeat-x;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special::before,
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special::after {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    width: 15px;
+    height: 60px;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special::before {
+    left: -15px;
+    background: transparent url(../images/LINK_Big_hlG_01.png) top right / auto 100% no-repeat;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special::after {
+    right: -15px;
+    background: transparent url(../images/LINK_Big_hlG_03.png) top left / auto 100% no-repeat;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special:hover,
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.active {
+    position: relative;
+    display: block;
+    height: 60px;
+    width: auto;
+    /* give the pseudo-elements space due to absolute positioning */
+    margin: 0 15px;
+    border: 0;
+    outline: 0;
+    background: transparent url(../images/LINK_Big_dklG_02.png) top left / auto 100% repeat-x;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special:hover::before,
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.active::before,
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special:hover::after,
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.active::after {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    width: 15px;
+    height: 60px;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special:hover::before,
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.active::before {
+    left: -15px;
+    background: transparent url(../images/LINK_Big_dklG_01.png) top right / auto 100% no-repeat;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special:hover::after,
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.active::after {
+    right: -15px;
+    background: transparent url(../images/LINK_Big_dklG_03.png) top left / auto 100% no-repeat;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special a {
+    display: block;
+    overflow: hidden;
+    padding: 15px 0;
+    font-family: 'RelayLight';
+    font-size: 14px;
+    color: #094756;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    text-overflow: clip;
+    white-space: normal;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special a:hover,
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special a.active {
+    padding: 15px 0;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special a::before {
+    content: '';
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.marketing {
+    top: 23%;
+    left: 5%;
+    max-width: 24%;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.lifestyle {
+    top: 15%;
+    left: 38%;
+    max-width: 28%;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.tourismus {
+    top: -3%;
+    left: 74%;
+    max-width: 16%;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.international {
+    top: 8%;
+    left: 75%;
+    max-width: 20%;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.treuhand {
+    top: 29%;
+    left: 36%;
+    max-width: 29%;
+  }
 }
 /*
  *  Page content type
@@ -10295,14 +10320,6 @@ form#user-login {
   padding: 15px;
   background: #e9fadf none;
 }
-.view-course-tabs div.tab-content #tab-1-0 .field-name-body {
-  -webkit-column-count: 2;
-  -moz-column-count: 2;
-  column-count: 2;
-  -webkit-column-gap: 50px;
-  -moz-column-gap: 50px;
-  column-gap: 50px;
-}
 .view-course-tabs div.tab-content #tab-1-0 .field-name-body h1,
 .view-course-tabs div.tab-content #tab-1-0 .field-name-body h2,
 .view-course-tabs div.tab-content #tab-1-0 .field-name-body h3,
@@ -10340,6 +10357,16 @@ form#user-login {
   display: block;
   max-width: 100%;
   height: auto;
+}
+@media screen and (min-width: 768px) {
+  .view-course-tabs div.tab-content #tab-1-0 .field-name-body {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
+    -webkit-column-gap: 50px;
+    -moz-column-gap: 50px;
+    column-gap: 50px;
+  }
 }
 .view-course-tabs div.tab-content #tab-1-1 table.lektionplan tr th,
 .view-course-tabs div.tab-content #tab-1-1 table.lektionplan tr strong {

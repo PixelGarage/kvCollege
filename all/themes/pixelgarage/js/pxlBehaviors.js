@@ -20,6 +20,7 @@
                 } else if ($this.hasClass('link-special')){
                     var classes = $this.attr('class');
                     $this.parent().attr('class', 'field-item ' + classes);
+                    $this.parent().parent().addClass('link-special');
                 }
             });
         }
