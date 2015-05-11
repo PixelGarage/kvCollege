@@ -1563,7 +1563,7 @@ pre code {
 }
 @media (min-width: 1200px) {
   .container {
-    width: 990px;
+    width: 910px;
   }
 }
 .container-fluid {
@@ -6630,7 +6630,7 @@ body #admin-menu .dropdown li {
 }
 @media screen and (min-width: 1200px) {
   .navbar.container {
-    max-width: 940px;
+    max-width: 860px;
   }
 }
 .navbar.container > .container {
@@ -10110,6 +10110,9 @@ form#user-login {
 /*
  *  Page content type
  * --------------------------------------------------*/
+.node.node-page {
+  margin-bottom: 40px;
+}
 .node.node-page .field-name-title h2 {
   margin: 20px auto;
   font-family: 'RelayLight';
@@ -10472,7 +10475,7 @@ form#user-login {
   border: 0;
   outline: 0;
   background: transparent url(../images/LINK_Big_hlR_02.png) top left / auto 100% repeat-x;
-  padding: 15px 10px;
+  padding: 20px 10px;
   font-family: 'RelayLight';
   font-size: 16px;
   color: #fd4f4d;
@@ -10558,11 +10561,11 @@ form#user-login {
   margin: 0 15px;
   border: 0;
   outline: 0;
-  background: transparent url(../images/LINK_Big_hlG_02.png) top left / auto 100% repeat-x;
+  background: transparent url(../images/LINK_Big_hlR_02.png) top left / auto 100% repeat-x;
   padding: 15px 0 15px 15px;
   font-family: 'RelayMedium';
   font-size: 16px;
-  color: #97e56e;
+  color: #fd4f4d;
   line-height: 20px;
 }
 .call-2-action .button-anmelden a::before,
@@ -10575,11 +10578,11 @@ form#user-login {
 }
 .call-2-action .button-anmelden a::before {
   left: -15px;
-  background: transparent url(../images/LINK_Big_hlG_01.png) top right / auto 100% no-repeat;
+  background: transparent url(../images/LINK_Big_hlR_01.png) top right / auto 100% no-repeat;
 }
 .call-2-action .button-anmelden a::after {
   right: -15px;
-  background: transparent url(../images/LINK_Big_hlG_03.png) top left / auto 100% no-repeat;
+  background: transparent url(../images/LINK_Big_hlR_03.png) top left / auto 100% no-repeat;
 }
 .call-2-action .button-anmelden a:hover,
 .call-2-action .button-anmelden a.active {
@@ -10591,8 +10594,8 @@ form#user-login {
   margin: 0 15px;
   border: 0;
   outline: 0;
-  background: transparent url(../images/LINK_Big_dklG_02.png) top left / auto 100% repeat-x;
-  color: #094756;
+  background: transparent url(../images/LINK_Big_dklR_02.png) top left / auto 100% repeat-x;
+  color: #9a252a;
   text-decoration: none;
 }
 .call-2-action .button-anmelden a:hover::before,
@@ -10608,12 +10611,12 @@ form#user-login {
 .call-2-action .button-anmelden a:hover::before,
 .call-2-action .button-anmelden a.active::before {
   left: -15px;
-  background: transparent url(../images/LINK_Big_dklG_01.png) top right / auto 100% no-repeat;
+  background: transparent url(../images/LINK_Big_dklR_01.png) top right / auto 100% no-repeat;
 }
 .call-2-action .button-anmelden a:hover::after,
 .call-2-action .button-anmelden a.active::after {
   right: -15px;
-  background: transparent url(../images/LINK_Big_dklG_03.png) top left / auto 100% no-repeat;
+  background: transparent url(../images/LINK_Big_dklR_03.png) top left / auto 100% no-repeat;
 }
 .call-2-action .button-broschuere,
 .call-2-action .button-beratung {
@@ -10630,11 +10633,11 @@ form#user-login {
   margin: 0 15px;
   border: 0;
   outline: 0;
-  background: transparent url(../images/LINK_Big_hlR_02.png) top left / auto 100% repeat-x;
+  background: transparent url(../images/LINK_Big_hlG_02.png) top left / auto 100% repeat-x;
   padding: 8px 0 15px 15px;
   font-family: 'RelayMedium';
   font-size: 16px;
-  color: #fd4f4d;
+  color: #97e56e;
   line-height: 20px;
   white-space: normal;
 }
@@ -10651,12 +10654,12 @@ form#user-login {
 .call-2-action .button-broschuere a::before,
 .call-2-action .button-beratung a::before {
   left: -15px;
-  background: transparent url(../images/LINK_Big_hlR_01.png) top right / auto 100% no-repeat;
+  background: transparent url(../images/LINK_Big_hlG_01.png) top right / auto 100% no-repeat;
 }
 .call-2-action .button-broschuere a::after,
 .call-2-action .button-beratung a::after {
   right: -15px;
-  background: transparent url(../images/LINK_Big_hlR_03.png) top left / auto 100% no-repeat;
+  background: transparent url(../images/LINK_Big_hlG_03.png) top left / auto 100% no-repeat;
 }
 .call-2-action .button-broschuere a:hover,
 .call-2-action .button-beratung a:hover,
@@ -10670,8 +10673,8 @@ form#user-login {
   margin: 0 15px;
   border: 0;
   outline: 0;
-  background: transparent url(../images/LINK_Big_dklR_02.png) top left / auto 100% repeat-x;
-  color: #9a252a;
+  background: transparent url(../images/LINK_Big_dklG_02.png) top left / auto 100% repeat-x;
+  color: #094756;
   text-decoration: none;
 }
 .call-2-action .button-broschuere a:hover::before,
@@ -10693,14 +10696,14 @@ form#user-login {
 .call-2-action .button-broschuere a.active::before,
 .call-2-action .button-beratung a.active::before {
   left: -15px;
-  background: transparent url(../images/LINK_Big_dklR_01.png) top right / auto 100% no-repeat;
+  background: transparent url(../images/LINK_Big_dklG_01.png) top right / auto 100% no-repeat;
 }
 .call-2-action .button-broschuere a:hover::after,
 .call-2-action .button-beratung a:hover::after,
 .call-2-action .button-broschuere a.active::after,
 .call-2-action .button-beratung a.active::after {
   right: -15px;
-  background: transparent url(../images/LINK_Big_dklR_03.png) top left / auto 100% no-repeat;
+  background: transparent url(../images/LINK_Big_dklG_03.png) top left / auto 100% no-repeat;
 }
 /*
  *  Footer section
