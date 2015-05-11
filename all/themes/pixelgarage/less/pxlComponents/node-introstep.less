@@ -108,7 +108,7 @@
     }
 
 
-    @media @normal {
+    @media @tablet {
       // special link fields
       .field-items.link-special {
         position: relative;
@@ -129,7 +129,7 @@
           a {
             display: block;
             overflow: hidden;
-            padding: 15px 0;
+            padding: 5px 0;
             font-family: @pxl-text-font;
             font-size: @font-size-small;
             color: @kv-college-green-dark;
@@ -160,19 +160,57 @@
             max-width:28%;
           }
           &.tourismus {
-            top: -3%;
-            left: 74%;
-            max-width: 16%;
+            top: -12%;
+            left: 75%;
+            max-width: 18%;
+          }
+          &.treuhand {
+            top: 17%;
+            left: 36%;
+            max-width: 29%;
+
+            @media @normal{
+              top: 29%;
+              left: 36%;
+              max-width: 29%;
+
+            }
           }
           &.international {
-            top: 8%;
+            top: -11%;
             left: 75%;
-            max-width: 20%;
+            max-width: 22%;
+
+            @media @normal{
+              top: 8%;
+              left: 75%;
+              max-width: 20%;
+            }
+          }
+        }
+      }
+    }
+
+    @media @normal {
+      .field-items.link-special {
+        .field-item.link-special {
+          a {
+            padding: 15px 0;
+          }
+          &.tourismus {
+            top: -4%;
+            left: 76%;
+            max-width: 16%;
           }
           &.treuhand {
             top: 29%;
             left: 36%;
             max-width: 29%;
+          }
+          &.international {
+            top: 4%;
+            left: 76%;
+            max-width: 20%;
           }
         }
       }

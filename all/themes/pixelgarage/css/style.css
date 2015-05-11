@@ -9959,7 +9959,7 @@ form#user-login {
   font-family: 'fontawesome';
   padding-right: 5px;
 }
-@media screen and (min-width: 992px) {
+@media screen and (min-width: 768px) {
   .node-introstep .field-name-field-course-links .field-items.link-special {
     position: relative;
     top: 0;
@@ -10030,7 +10030,7 @@ form#user-login {
   .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special a {
     display: block;
     overflow: hidden;
-    padding: 15px 0;
+    padding: 5px 0;
     font-family: 'RelayLight';
     font-size: 14px;
     color: #094756;
@@ -10058,19 +10058,53 @@ form#user-login {
     max-width: 28%;
   }
   .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.tourismus {
-    top: -3%;
-    left: 74%;
-    max-width: 16%;
+    top: -12%;
+    left: 75%;
+    max-width: 18%;
   }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.treuhand {
+    top: 17%;
+    left: 36%;
+    max-width: 29%;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.international {
+    top: -11%;
+    left: 75%;
+    max-width: 22%;
+  }
+}
+@media screen and (min-width: 768px) and screen and (min-width: 992px) {
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.treuhand {
+    top: 29%;
+    left: 36%;
+    max-width: 29%;
+  }
+}
+@media screen and (min-width: 768px) and screen and (min-width: 992px) {
   .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.international {
     top: 8%;
     left: 75%;
     max-width: 20%;
   }
+}
+@media screen and (min-width: 992px) {
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special a {
+    padding: 15px 0;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.tourismus {
+    top: -4%;
+    left: 76%;
+    max-width: 16%;
+  }
   .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.treuhand {
     top: 29%;
     left: 36%;
     max-width: 29%;
+  }
+  .node-introstep .field-name-field-course-links .field-items.link-special .field-item.link-special.international {
+    top: 4%;
+    left: 76%;
+    max-width: 20%;
   }
 }
 /*
