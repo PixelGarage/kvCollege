@@ -6,9 +6,13 @@ package = Fields
 dependencies[] = ctools
 dependencies[] = addressfield
 
-; Information added by drupal.org packaging script on 2013-04-13
-version = "7.x-1.1"
+files[] = views/handlers/addressfield_phone_handler_field_address_phone_nr.inc
+files[] = addressfield_phone.migrate.inc
+
+
+; Information added by Drupal.org packaging script on 2015-05-01
+version = "7.x-1.2"
 core = "7.x"
 project = "addressfield_phone"
-datestamp = "1365871511"
+datestamp = "1430484482"
 
