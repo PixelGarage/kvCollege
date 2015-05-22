@@ -31,8 +31,7 @@ if ($course_time_nid) {
   </ul>
 
   <h2>Weiteres Vorgehen</h2>
-  <p>Bitte retournieren Sie uns den unterschriebenen Ausbildungsvertrag in den nächsten Tagen per Fax oder per Post. 
-  	Damit wird Ihre Anmeldung rechtskräftig.</p>
+  <p>Bitte retournieren Sie uns der Form halber den unterschrieben Ausbildungsvertrag in den nächsten Tagen per Post.</p>
 
   <h2>Anmeldenummer</h2>
   <p>Dies ist Ihre Anmeldenummer: <b><?php echo str_pad($sid, 6, '0', STR_PAD_LEFT); ?></b><br />
