@@ -502,7 +502,7 @@ function hso_anmeldung_form_alter(&$form, &$form_state, $form_id) {
           $text .= $course_time_node->field_additional_info_price[LANGUAGE_NONE][0]['value'];
         }
         $form['submitted']['markup']['#markup'] = $text;
-        $text = '* <strong>Ich habe die ' . l('Allgemeinen Geschäftsbedingungen (AGB/Preisliste)', 'node/' . $agb_nid) . ' sowie die Preisliste gelesen und bin damit einverstanden.</strong><br />';
+        $text = '* <strong>Ich habe die ' . l('Allgemeinen Geschäftsbedingungen sowie die Preisliste (AGB / Preislisten)', 'node/' . $agb_nid) . ' gelesen und bin damit einverstanden.</strong><br />';
 			}
 
 		}
