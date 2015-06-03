@@ -8576,10 +8576,22 @@ div.features-export-list .form-type-checkbox input[type=checkbox] {
  * --------------------------------------------------*/
 body.navbar-is-fixed-top {
   padding-top: 110px !important;
-  background: #497f8d url(../images/bg_image.png) top left / cover no-repeat fixed;
+  background: #497f8d url(../images/HG_Tram.gif) top left / cover no-repeat fixed;
 }
 body.navbar-is-fixed-top.admin-menu {
   padding-top: 110px !important;
+}
+body.navbar-is-fixed-top.page-home {
+  background-image: url(../images/HG_Tram.gif);
+}
+body.navbar-is-fixed-top.node-type-course {
+  background-image: url(../images/HG_Peace.gif);
+}
+body.navbar-is-fixed-top.node-type-in-depth-course {
+  background-image: url(../images/HG_Outdoor.gif);
+}
+body.navbar-is-fixed-top.node-type-page {
+  background-image: url(../images/HG_Test.gif);
 }
 header#navbar {
   border-bottom: none;
