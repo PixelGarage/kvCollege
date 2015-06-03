@@ -1075,12 +1075,12 @@ textarea {
   line-height: inherit;
 }
 a {
-  color: #97e56e;
+  color: #94e869;
   text-decoration: none;
 }
 a:hover,
 a:focus {
-  color: #68d92d;
+  color: #65de27;
   text-decoration: underline;
 }
 a:focus {
@@ -3272,7 +3272,7 @@ fieldset[disabled] .btn-danger.active {
   background-color: #ffffff;
 }
 .btn-link {
-  color: #97e56e;
+  color: #94e869;
   font-weight: normal;
   border-radius: 0;
 }
@@ -3293,7 +3293,7 @@ fieldset[disabled] .btn-link {
 }
 .btn-link:hover,
 .btn-link:focus {
-  color: #68d92d;
+  color: #65de27;
   text-decoration: underline;
   background-color: transparent;
 }
@@ -3870,7 +3870,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav .open > a:hover,
 .nav .open > a:focus {
   background-color: #eeeeee;
-  border-color: #97e56e;
+  border-color: #94e869;
 }
 .nav .nav-divider {
   height: 1px;
@@ -4592,7 +4592,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   padding: 6px 12px;
   line-height: 1.25;
   text-decoration: none;
-  color: #97e56e;
+  color: #94e869;
   background-color: #ffffff;
   border: 1px solid #dddddd;
   margin-left: -1px;
@@ -4612,7 +4612,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > li > span:hover,
 .pagination > li > a:focus,
 .pagination > li > span:focus {
-  color: #68d92d;
+  color: #65de27;
   background-color: #eeeeee;
   border-color: #dddddd;
 }
@@ -4807,7 +4807,7 @@ a.badge:focus {
 }
 .list-group-item.active > .badge,
 .nav-pills > .active > a > .badge {
-  color: #97e56e;
+  color: #94e869;
   background-color: #ffffff;
 }
 .list-group-item > .badge {
@@ -4878,7 +4878,7 @@ a.badge:focus {
 a.thumbnail:hover,
 a.thumbnail:focus,
 a.thumbnail.active {
-  border-color: #97e56e;
+  border-color: #94e869;
 }
 .thumbnail .caption {
   padding: 9px;
@@ -8833,6 +8833,10 @@ body.node-type-in-depth-course header#navbar .container .navbar-collapse nav.sub
   padding: 10px;
   background: #eeeeee none;
 }
+body.node-type-in-depth-course header#navbar .container .navbar-collapse nav.sub-navigation .view-courses .views-row .node-in-depth-course.node-teaser:hover,
+body.node-type-in-depth-course header#navbar .container .navbar-collapse nav.sub-navigation .view-courses .views-row .node-in-depth-course.node-teaser.active {
+  background: #94e869 none;
+}
 body.node-type-in-depth-course header#navbar .container .navbar-collapse nav.sub-navigation .view-courses .views-row .node-in-depth-course.node-teaser .field-name-field-icon img {
   margin: 0 auto 5px;
 }
@@ -9018,6 +9022,10 @@ body.node-type-in-depth-course .main-container #page-header .region-header .view
   margin: 5px;
   padding: 10px;
   background: #eeeeee none;
+}
+body.node-type-in-depth-course .main-container #page-header .region-header .view-courses .views-row .node-in-depth-course.node-teaser:hover,
+body.node-type-in-depth-course .main-container #page-header .region-header .view-courses .views-row .node-in-depth-course.node-teaser.active {
+  background: #94e869 none;
 }
 body.node-type-in-depth-course .main-container #page-header .region-header .view-courses .views-row .node-in-depth-course.node-teaser .field-name-field-icon img {
   margin: 0 auto 5px;
@@ -10226,7 +10234,7 @@ form#user-login {
   margin-top: 10px;
 }
 .node-webform form.webform-client-form .form-item a {
-  color: #97e56e;
+  color: #94e869;
 }
 .node-webform form.webform-client-form textarea {
   width: 560px;
@@ -10279,7 +10287,7 @@ form#user-login {
   font-family: 'RelayLight';
   font-size: 14px;
   color: #fff;
-  background: #97e56e;
+  background: #94e869;
   border: none;
 }
 /*
@@ -10649,7 +10657,7 @@ form#user-login {
   padding: 8px 0 15px 15px;
   font-family: 'RelayMedium';
   font-size: 16px;
-  color: #97e56e;
+  color: #94e869;
   line-height: 20px;
   white-space: normal;
 }
@@ -10846,4 +10854,27 @@ form#user-login {
     display: block;
     float: right;
   }
+}
+.footer.container .block#block-menu-menu-legal-menu {
+  margin-top: -20px;
+  width: 100%;
+  text-align: right;
+}
+@media screen and (min-width: 768px) {
+  .footer.container .block#block-menu-menu-legal-menu {
+    margin-top: -40px;
+  }
+}
+.footer.container .block#block-menu-menu-legal-menu ul.menu > li {
+  display: inline-block;
+  padding-left: 10px;
+}
+.footer.container .block#block-menu-menu-legal-menu ul.menu > li a {
+  padding: 0;
+  color: #ffffff;
+}
+.footer.container .block#block-menu-menu-legal-menu ul.menu > li a:hover,
+.footer.container .block#block-menu-menu-legal-menu ul.menu > li a.active {
+  color: #094756;
+  background: rgba(255, 255, 255, 0.8);
 }

@@ -31,15 +31,21 @@
      */
     Drupal.behaviors.fullSizeClickableItems = {
         attach: function () {
+            // get submenues for normal / mobile screens
             var $block = $('#block-views-courses-block-in-depth-menu').add('#block-multiblock-2'),
-                $clickableItems = $block.find('.views-row');
+                $clickableItems = $block.find('.views-row'),
+                $activeItem = $block.find('.node-in-depth-course .field-name-title a.active');
 
             $block.once('click', function () {
                 $clickableItems.on('click', function () {
+                    // set new location
                     window.location = $(this).find(".field-item a:first").attr("href");
                     return false;
                 });
             });
+
+            // activate active item via class
+            $activeItem.parents('div.node-in-depth-course').addClass('active');
         }
     };
 
