@@ -10456,7 +10456,7 @@ form#user-login {
   border: none;
 }
 .view-course-times .view-content table thead th {
-  padding: 10px 0 10px 10px;
+  padding: 10px 20px 10px;
   border-bottom: none;
 }
 .view-course-times .view-content table tbody {
@@ -10469,15 +10469,23 @@ form#user-login {
   background: none;
 }
 .view-course-times .view-content table tbody tr th {
-  padding: 10px 0 10px 10px;
+  padding: 10px 20px 10px;
   font-family: 'RelayLight';
   border: none;
 }
 .view-course-times .view-content table tbody tr td {
-  padding: 10px 0 10px 10px;
+  padding: 10px 20px 10px;
   font-family: 'RelayLight';
   border: none;
   background-color: #eeeeee;
+}
+.view-course-times .view-content table tbody tr td.views-field-field-brand {
+  vertical-align: middle;
+  text-align: center;
+}
+.view-course-times .view-content table tbody tr td.views-field-field-brand img {
+  display: inline-block;
+  max-width: 100px;
 }
 .view-course-times .view-content table tbody tr td.views-field-nothing {
   padding: 0 0 0 10px;
