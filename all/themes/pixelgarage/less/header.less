@@ -82,7 +82,7 @@
     .views-row {
       display: inline-block;
       margin: 0 -2px; // inline block correction
-      width: 140px;
+      width: (320 - @grid-gutter-width) / 2;
       height: 100%;
       vertical-align: top;
 
@@ -135,40 +135,55 @@
       display: block;
     }
 
-    .carousel {
-      .carousel-control {
-        background: none;
+    .view-content {
+      margin: 0 -@grid-gutter-width / 2;
 
-        .icon-prev {
-          top: 33%;
-          margin-top: 0;
-          height: 33%;
-          background: transparent url(../images/slider_left.png) top left / contain no-repeat;
-        }
-        .icon-next {
-          top: 33%;
-          margin-top: 0;
-          height: 33%;
-          background: transparent url(../images/slider_right.png) top left / contain no-repeat;
-        }
-        .icon-prev::before,
-        .icon-next::before {
-          content: '';
+      .carousel {
+        .carousel-control {
+          background: none;
+
+          .icon-prev {
+            top: 33%;
+            margin-top: 0;
+            height: 33%;
+            background: transparent url(../images/slider_left.png) top left / contain no-repeat;
+          }
+          .icon-next {
+            top: 33%;
+            margin-top: 0;
+            height: 33%;
+            background: transparent url(../images/slider_right.png) top left / contain no-repeat;
+          }
+          .icon-prev::before,
+          .icon-next::before {
+            content: '';
+          }
         }
       }
     }
+
   }
 }
 
 
 // Main settings
 // -------------------------
+//
+// set background images
 body.navbar-is-fixed-top {
-  padding-top: 110px !important;
+  padding-top: 80px !important;
   background: @kv-college-bg url(../images/HG_Tram.gif) top left / cover no-repeat fixed;
 
   &.admin-menu {
+    padding-top: 80px !important;
+  }
+
+  @media @tablet {
     padding-top: 110px !important;
+
+    &.admin-menu {
+      padding-top: 110px !important;
+    }
   }
 
   &.page-home {
@@ -192,11 +207,16 @@ header#navbar {
   background: transparent none;
 
   .container {
-    padding: @grid-gutter-width @grid-gutter-width / 2 10px;
+    padding: 30px @grid-gutter-width / 2 0;
+
+    @media @tablet {
+      padding: @grid-gutter-width @grid-gutter-width / 2 10px;
+    }
 
     .navbar-header {
       // header (branding)
       a.logo {
+        display: inline-block;
         img {
           display: none;
           max-height: 50px;
@@ -205,22 +225,42 @@ header#navbar {
       }
 
       a.navbar-brand {
+        margin-left: -15px;
         padding: 0;
         font-family: @pxl-text-font-medium;
-        font-size: @font-size-h1;
+        font-size: @font-size-h2;
         color: @kv-college-green-dark;
         line-height: 1;
+
+        @media @normal {
+          font-size: @font-size-h1;
+        }
       }
 
       .navbar-toggle {
         // navbar toggle with burger
-        padding: 5px 10px;
+        margin: 0 @grid-gutter-width / 2 0 0;
+        padding: 0 10px;
+        border: none;
+
+        &:hover, &:focus {
+          background-color: @kv-college-green;
+        }
+
+        span.glyphicon {
+          font-size: @font-size-h3;
+          line-height: 1;
+        }
       }
     }
 
     // collapse part
     .navbar-collapse {
       // main menu
+      &.in {
+        border-bottom: 1px solid #e7e7e7;
+      }
+
       nav.main-navigation {
         ul.navbar-nav {
           margin: 0;

@@ -3,7 +3,7 @@
  * --------------------------------------------------*/
 // Variables
 // -------------------------
-
+@pxl-banner-height: 200px;
 
 // Mixins
 // -------------------------
@@ -14,9 +14,9 @@
 // -------------------------
 .node-banner {
   width: 100%;
-  height: 200px;
+  height: @pxl-banner-height;
   overflow: hidden;
-  padding: @pxl-node-padding @carousel-control-width;
+  padding: 0 @carousel-control-width;
   background: @kv-college-green-light none;
 
   .row {
@@ -36,8 +36,15 @@
     }
 
     .field-name-field-picture {
+      overflow: visible;
       margin: 0 auto;
       width: auto;
+
+      img {
+        height: @pxl-banner-height;
+        width: auto;
+        max-width: none;
+      }
     }
 
     .field-name-field-banner-links {

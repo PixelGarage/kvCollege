@@ -67,16 +67,20 @@
     #tab-1-1 {  // Programm tab
       table.lektionplan {
         tr {
-          th,
           strong {
             font-family: @font-family-medium;
             font-size: @font-size-base;
           }
 
+          th, td {
+            font-family: @font-family-medium;
+            font-size: @font-size-base;
+            padding: 5px 10px;
+            border-bottom: 2px solid @text-color;
+          }
+
           td {
             font-family: @font-family-light;
-            font-size: @font-size-base;
-            padding: 5px 0;
             border-bottom: 1px solid @text-color;
           }
 
