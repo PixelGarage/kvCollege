@@ -9,7 +9,44 @@
 // Mixins
 // -------------------------
 
+.hso-tabs() {
+  // tabs
+  ul.nav-tabs {
+    border-bottom: none;
+    li {
+      margin: 0;
+      height: 30px;
 
+      a {
+        position: relative;
+        #pxl-mixins.three-part-element(@menu-img-left, @menu-img-middle, @menu-img-right, transparent, 30px);
+        padding: 5px 10px;
+        font-family: @pxl-text-font;
+        font-size: @font-size-base;
+        color: @kv-college-green-dark;
+        line-height: 1;
+        border-radius: 0;
+      }
+      &:hover a,
+      &.active a {
+        #pxl-mixins.three-part-element(none, none, none, @kv-college-hover, 25px, 0);
+        top: 5px;
+        left: -5px;
+        margin: 0 5px 0 10px;
+        padding: 5px 15px 5px 20px;
+        color: #ffffff;
+
+      }
+
+    }
+  }
+
+  // tab content
+  div.tab-content {
+    padding: @pxl-node-padding;
+    background: @kv-college-green-light none;
+  }
+}
 
 // Main settings
 // -------------------------
@@ -26,5 +63,9 @@
   .field-name-body {
     #pxl-mixins.wysiwyg-body();
 
+  }
+
+  .field-name-hso-pages {
+    .hso-tabs;
   }
 }
