@@ -128,7 +128,7 @@ function _hso_importer_run_import() {
   try {
 
     if ($brand_id > 0) {
-      $result = _hso_importer_brand_import($hso_importer, $departments_mapping, $brand_id);
+      $result = _hso_importer_brand_import($hso_importer, $brand_id, $departments_mapping);
       watchdog('HSO Importer', 'Result returned: ' . implode('; ', $result), array(), WATCHDOG_DEBUG);
 
     } else {
@@ -143,16 +143,16 @@ function _hso_importer_run_import() {
 
   // display feedback about import, if any
   if ($result) {
-    $importMessage = 'Items imported: ';
+    $importMessage = 'from local DB: ';
     if ($hso_importer->webServiceUsed()) {
-      $importMessage = 'Items imported (via web service): ';
+      $importMessage = 'via web service: ';
     }
     if ($hso_importer->liveImportConnected() ) {
       $importMessage = 'LIVE data import - ' . $importMessage;
     } else {
       $importMessage = 'TEST data import - ' . $importMessage;
     }
-    $importMessage .= ' @nLocations branches, @nContacts contacts, @nCourses courses, @nCourseTimes course times.';
+    $importMessage .= ' @nLocations branches, @nContacts contacts (@updContacts changed), @nCourses courses (@updCourses changed), @nCourseTimes course times (@updCourseTimes changed).';
     drupal_set_message(t($importMessage, $result));
   }
 
@@ -164,44 +164,47 @@ function _hso_importer_run_import() {
  * The import for the brand.
  *
  * @param $hso_importer object The importer object.
- * @param $departments_mapping array The segments (department) map.
  * @param $brand_id int The ID of the subsidiary
+ * @param $departments_mapping array The segments (department) map.
  *
  * @return array  An array with the numbers of processed items: {@nContacts => nContacts, @nCourse => nCourses, @nCourseTimes => nCourseTimes}
  */
-function _hso_importer_brand_import($hso_importer, $departments_mapping, $brand_id) {
+function _hso_importer_brand_import($hso_importer, $brand_id, $departments_mapping) {
   $contacts_processed = 0;
+  $contacts_updated = 0;
   $courses_processed = 0;
+  $courses_updated = 0;
   $course_times_processed = 0;
-
-  // import all locations (branches)
-  $hso_locations = $hso_importer->getLocations();
-  $location_nids = _hso_all_locations($hso_locations);
-  $locations_processed = count($location_nids);
+  $course_times_updated = 0;
 
   // update all course ids
   _hso_update_course_ids($hso_importer);
 
-  // unpublish all contacts
-  _hso_unpublish_contacts();
+  // import all locations (branches)
+  $location_nids = _hso_all_locations($hso_importer);
+  $locations_processed = count($location_nids);
+
+  // unpublish all imported courses (internal id set)
+  _hso_unpublish_imported_courses();
 
   // loop through segments
   foreach ($departments_mapping as $department_internal_id => $segment_taxonomy_id) {
     // Start with courses
     $courses = $hso_importer->getCoursesBySegment($department_internal_id);
     if (count($courses) > 0) {
-      $imported_courses = array();
+      $courses_processed += count($courses);
 
       foreach ($courses as $course) {
         $course->segment_tid = $segment_taxonomy_id;
-        $course_nid = _hso_process_course($course);
 
         // get course times for course
         $course_times = $hso_importer->getTimesOfCourseForBrand($brand_id, $course->id);
         if (count($course_times) > 0) {
+          $course_times_processed += count($course_times);
+
           // only enable course when course times are available for it
-          $imported_courses[] = $course->id;
-          $courses_processed++;
+          $course_nid = _hso_process_course($course);
+          $courses_updated++;
 
           // process course times
           $imported_course_times = array();
@@ -209,17 +212,15 @@ function _hso_importer_brand_import($hso_importer, $departments_mapping, $brand_
             $imported_course_times[$location_nid] = array();
           }
           foreach ($course_times as $course_time) {
-            // don't import course times starting in the past
-            //if (strtotime($course_time->start_date) + 86400 < time()) continue;
-
             // process course time
             $course_time->course_nid = $course_nid;
             $course_time->course_title = $course->title;
             $location_nid = _hso_process_location($course_time->location);
             $course_time->location_nid = $location_nid;
-            _hso_process_course_time($course_time);
+            if(_hso_process_course_time($course_time)) {
+              $course_times_updated++;
+            }
             $imported_course_times[$location_nid][] = $course_time->id;
-            $course_times_processed++;
           }
 
           // cleanup course times of a specific course, that are not used anymore or outdated
@@ -229,6 +230,7 @@ function _hso_importer_brand_import($hso_importer, $departments_mapping, $brand_
           // get the contacts of the course (only if with course times) for the brand
           $contacts = $hso_importer->getContactsOfCourseForBrand($brand_id, $course->id);
           if (count($contacts) > 0) {
+            $contacts_processed += count($contacts);
             $imported_contacts = array();
             foreach ($location_nids as $location_nid) {
               $imported_contacts[$location_nid] = array();
@@ -239,9 +241,10 @@ function _hso_importer_brand_import($hso_importer, $departments_mapping, $brand_
               $contact->location_nid = $location_nid;
               $contact->segment_tid = $segment_taxonomy_id;
               $contact->course_nid = $course_nid;
-              _hso_process_contact($contact);
+              if(_hso_process_contact($contact)) {
+                $contacts_updated++;
+              }
               $imported_contacts[$location_nid][] = $contact->id;
-              $contacts_processed++;
             }
 
             // cleanup all unused contacts
@@ -249,16 +252,20 @@ function _hso_importer_brand_import($hso_importer, $departments_mapping, $brand_
           } // end contacts
 
         } // end course times
-      }
 
-      // unpublish all unused courses of the segment
-      _hso_unpublish_courses($imported_courses, $segment_taxonomy_id);
+      }
 
     } // end courses
 
   } // end segment loop
 
-  return array('@nLocations' => $locations_processed, '@nContacts' => $contacts_processed, '@nCourses' => $courses_processed, '@nCourseTimes' => $course_times_processed);
+  return array('@nLocations' => $locations_processed,
+               '@nContacts' => $contacts_processed,
+               '@updContacts' => $contacts_updated,
+               '@nCourses' => $courses_processed,
+               '@updCourses' => $courses_updated,
+               '@nCourseTimes' => $course_times_processed,
+               '@updCourseTimes' => $course_times_updated);
 }
 
 
@@ -277,30 +284,13 @@ function _hso_departments_mapping() {
     $mapping = array();
     foreach ($result['taxonomy_term'] as $key => $value) {
       $term = taxonomy_term_load($key);
-      $dep_id = $term->field_internal_id[LANGUAGE_NONE][0]['value'];
+      $int_id = $term->field_internal_id[LANGUAGE_NONE][0]['value'];
+      $dep_id = !empty($int_id) ? $int_id : -1;
       $mapping[$dep_id] = $key;
     }
   }
   // return mapping
   return $mapping;
-}
-
-/**
- * Converts the brands internal id to the term id.
- */
-function _hso_brands_id_converter($brand_id) {
-  $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', 'taxonomy_term')
-    ->entityCondition('bundle', 'brands')
-    ->fieldCondition('field_internal_id', 'value', $brand_id);
-  $result = $query->execute();
-  if ($result && $result['taxonomy_term']) {
-    foreach ($result['taxonomy_term'] as $key => $value) {
-      return $key;
-    }
-  }
-  // return undefined
-  return 0;
 }
 
 /**
@@ -335,51 +325,86 @@ function _hso_update_course_ids($hso_importer) {
 }
 
 /**
- * Get all locations (branches) in the db (disable old locations).
+ * Import all locations (branches). Not imported locations are disabled.
  */
-function _hso_all_locations($locations) {
+function _hso_all_locations($hso_importer) {
   // disable all locations first
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'location');
+
   $result = $query->execute();
   if ($result && !empty($result['node'])) {
-    foreach ($result['node'] as $key => $location) {
-      $node = node_load($key);
+    $nodes = node_load_multiple(array_keys($result['node']));
+    foreach ($nodes as $key => $node) {
       $node->status = 0;
       node_save($node);
     }
   }
 
   // process all imported locations
+  $locations = $hso_importer->getLocations();
   $location_nids = array();
-  $imported_locations = array();
-  $locations_processed = 0;
   foreach ($locations as $location) {
     $location_nids[] = _hso_process_location($location);
-    $imported_locations[] = $location->id;
-    $locations_processed++;
   }
   return $location_nids;
 }
 
 /**
- * Unpublish all courses in the db, which are not imported anymore.
- *
- * @param $imported_courses     array   All imported courses
- * @param $segment_taxonomy_id  int     The taxonomy id of the segment
+ * Converts the brands internal id to the term id.
  */
-function _hso_unpublish_courses($imported_courses, $segment_taxonomy_id) {
-  $imported_courses = count($imported_courses) > 0 ? $imported_courses : array(0 => -1);
+function _hso_brands_id_converter($brand_id, $brand_short = '') {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'taxonomy_term')
+    ->entityCondition('bundle', 'brands')
+    ->fieldCondition('field_internal_id', 'value', $brand_id);
+  $result = $query->execute();
+  if ($result && $result['taxonomy_term']) {
+    // brand exists
+    foreach ($result['taxonomy_term'] as $key => $value) {
+      return $key;
+    }
+
+  } else {
+    // get brands vocabulary id
+    $vid = null;
+    foreach(taxonomy_get_vocabularies() as $vocabulary) {
+      if (strtolower($vocabulary->name) == 'brands') {
+        $vid = $vocabulary->vid;
+        break;
+      }
+    }
+
+    // create the new brand in brands vocabulary
+    if (!empty($vid)) {
+      $term = new stdClass();
+      $term->name = $brand_short;
+      $term->vid = $vid;
+      $term->field_internal_id[LANGUAGE_NONE][0]['value'] = $brand_id;
+      taxonomy_term_save($term);
+      return $term->tid;
+    }
+  }
+  // return undefined
+  return 0;
+}
+
+/**
+ * Unpublishes all imported nodes (internal ID set) of type course.
+ * Nodes without internal ID are locally added and should not be unpublished here.
+ * @throws \Exception
+ */
+function _hso_unpublish_imported_courses() {
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'course')
-    ->fieldCondition('field_internal_id', 'value', $imported_courses, 'NOT IN')
-    ->fieldCondition('field_segment', 'tid', $segment_taxonomy_id);
+    ->fieldCondition('field_internal_id', 'value', 'NULL', '<>');
+
   $result = $query->execute();
   if ($result && !empty($result['node'])) {
-    foreach ($result['node'] as $key => $course) {
-      $node = node_load($key);
+    $nodes = node_load_multiple(array_keys($result['node']));
+    foreach ($nodes as $key => $node) {
       $node->status = 0;
       node_save($node);
     }
@@ -400,6 +425,7 @@ function _hso_cleanup_course_times($imported_course_times, $course_nid) {
       ->entityCondition('bundle', 'course_times')
       ->fieldCondition('field_location', 'target_id', $location_nid)
       ->fieldCondition('field_course', 'target_id', $course_nid)
+      ->fieldCondition('field_internal_id', 'value', 'NULL', '<>')
       ->fieldCondition('field_internal_id', 'value', count($course_times) > 0 ? $course_times : array(0 => -1), 'NOT IN');
     $result = $query->execute();
     if (isset($result['node'])) {
@@ -424,24 +450,11 @@ function _hso_cleanup_contacts($imported_contacts, $course_nid) {
       ->entityCondition('bundle', 'contact')
       ->fieldCondition('field_location', 'target_id', $location_nid)
       ->fieldCondition('field_course', 'target_id', $course_nid)
+      ->fieldCondition('field_internal_id', 'value', 'NULL', '<>')
       ->fieldCondition('field_internal_id', 'value', count($contacts) > 0 ? $contacts : array(0 => -1), 'NOT IN');
     $result = $query->execute();
     if (isset($result['node'])) {
       node_delete_multiple(array_keys($result['node']));
-    }
-  }
-}
-
-function _hso_unpublish_contacts() {
-  $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'contact');
-  $result = $query->execute();
-  if ($result && !empty($result['node'])) {
-    foreach ($result['node'] as $key => $contact) {
-      $node = node_load($key);
-      $node->status = 0;
-      node_save($node);
     }
   }
 }
@@ -487,7 +500,7 @@ function _hso_process_location($location) {
 	}
 
   // update all imported fields of node
-	$node->title = $location->brand_short == 'HSO' ? $location->name : $location->name . ' (' . $location->brand_short . ')';
+	$node->title = $location->brand_short == 'HSO' ? $location->name : $location->brand_short . ' ' . $location->name;
   $node->field_tab_text[LANGUAGE_NONE][0]['value'] = $location->name;
   $node->field_internal_id[LANGUAGE_NONE][0]['value'] = $location->id;
 	$node->field_address[LANGUAGE_NONE][0]['country'] = 'CH';
@@ -497,12 +510,69 @@ function _hso_process_location($location) {
 	$node->field_address[LANGUAGE_NONE][0]['phone_number'] = $location->phone;
 	$node->field_address[LANGUAGE_NONE][0]['fax_number'] = $location->fax;
 	$node->field_email[LANGUAGE_NONE][0]['email'] = $location->email;
-  $node->field_brand[LANGUAGE_NONE][0]['tid'] = _hso_brands_id_converter($location->brand_id);
+  $node->field_brand[LANGUAGE_NONE][0]['tid'] = _hso_brands_id_converter($location->brand_id, $location->brand_short);
   $node->field_standorte[LANGUAGE_NONE][0]['value'] = true;
 	$node = node_submit($node);
 	node_save($node);
 	$already_processed[$location->id] = $node->nid;
 	return $node->nid;
+}
+
+/**
+ * Saves imported course in DB, if not processed already.
+ *
+ * @param $course object Imported course object.
+ *
+ * @return mixed  Node ID
+ * @throws \Exception
+ */
+function _hso_process_course($course) {
+  // update an imported course only once
+  static $already_processed = array();
+  if (array_key_exists($course->id, $already_processed)) {
+    return $already_processed[$course->id];
+  }
+
+  // load/create course
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'course')
+    ->fieldCondition('field_internal_id', 'value', $course->id)
+    ->range(0, 1);
+  $result = $query->execute();
+  if (isset($result['node'])) {
+    // Update existing
+    $node = node_load(key($result['node']));
+    $node->status = 1;
+  } else {
+    $node = new stdClass();
+    $node->type = 'course';
+    $node->language = LANGUAGE_NONE;
+    $node->uid = 1;
+    $node->status = 1;
+    node_object_prepare($node);
+  }
+
+  // update all imported fields of node
+  $node->title = $course->title;
+  $node->field_internal_id[LANGUAGE_NONE][0]['value'] = $course->id;
+  if (!empty($course->segment_tid)) {
+    $node->field_segment[LANGUAGE_NONE][0]['tid'] = $course->segment_tid;
+  }
+  $node->field_is_module[LANGUAGE_NONE][0]['value'] = !empty($course->is_module) ? 1 : 0;
+  if (!empty($course->meta->title)) {
+    $node->metatags['title']['value'] = $course->meta->title;
+  }
+  if (!empty($course->meta->keywords)) {
+    $node->metatags['keywords']['value'] = $course->meta->keywords;
+  }
+  if (!empty($course->meta->description)) {
+    $node->metatags['description']['value'] = $course->meta->description;
+  }
+  $node = node_submit($node);
+  node_save($node);
+  $already_processed[$course->id] = $node->nid;
+  return $node->nid;
 }
 
 /**
@@ -515,6 +585,7 @@ function _hso_process_location($location) {
  */
 function _hso_process_contact($contact) {
   // load/create contact
+  $node_update = true;
 	$query = new EntityFieldQuery();
 	$query->entityCondition('entity_type', 'node')
 		->entityCondition('bundle', 'contact')
@@ -534,7 +605,15 @@ function _hso_process_contact($contact) {
 		$node->uid = 1;
 		$node->status = 1;
 		node_object_prepare($node);
+    $node_update = false;
 	}
+
+  // prepare special fields of contact
+  $file = _hso_get_contact_picture($contact);
+  $contact->file = $file ? (array)$file : null;
+
+  // compare objects
+  if ($node_update && _hso_equal_contacts($node, $contact)) return false;
 
   // update all imported fields of node
 	$node->title = $contact->name;
@@ -542,20 +621,12 @@ function _hso_process_contact($contact) {
 	$node->field_phone[LANGUAGE_NONE][0]['value'] = $contact->phone;
 	$node->field_email[LANGUAGE_NONE][0]['email'] = $contact->email;
 	$node->field_location[LANGUAGE_NONE][0]['target_id'] = $contact->location_nid;
-  if (!empty($contact->segment_tid)) {
-    $node->field_segment[LANGUAGE_NONE][0]['tid'] = $contact->segment_tid;
-  }
+  $node->field_segment[LANGUAGE_NONE][0]['tid'] = $contact->segment_tid;
   $node->field_course[LANGUAGE_NONE][0]['target_id'] = $contact->course_nid;
-  // contact picture
-  if ($file = _hso_get_contact_picture($contact)) {
-    $node->field_picture[LANGUAGE_NONE][0] = (array)$file;
-    $node = node_submit($node);
-    node_save($node);
-  } else {
-    $node = node_submit($node);
-    node_save($node);
-  }
-	return $node->nid;
+  $node->field_picture[LANGUAGE_NONE][0] = $contact->file;
+  $node = node_submit($node);
+  node_save($node);
+	return true;
 }
 
 function _hso_get_contact_picture($contact) {
@@ -588,62 +659,28 @@ function _hso_get_contact_picture($contact) {
 }
 
 /**
- * Saves imported course in DB, if not processed already.
+ * Compares the fields of the contact node with the imported one.
  *
- * @param $course object Imported course object.
+ * @param $node
+ * @param $contact
  *
- * @return mixed  Node ID
- * @throws \Exception
+ * @return bool   TRUE, if the node is equal to the imported course time, FALSE otherwise.
  */
-function _hso_process_course($course) {
-  // update an imported course only once
-	static $already_processed = array();
-	if (array_key_exists($course->id, $already_processed)) {
-		return $already_processed[$course->id];
-	}
+function _hso_equal_contacts($node, $contact) {
+  // compare objects
+  if ($node->status != 1) return false;
+  if ($node->title != $contact->name) return false;
+  if ($node->field_internal_id[LANGUAGE_NONE][0]['value'] != $contact->id) return false;
+  if ($node->field_phone[LANGUAGE_NONE][0]['value'] != $contact->phone) return false;
+  if ($node->field_email[LANGUAGE_NONE][0]['email'] != $contact->email) return false;
+  if ($node->field_location[LANGUAGE_NONE][0]['target_id'] != $contact->location_nid) return false;
+  if ($node->field_segment[LANGUAGE_NONE][0]['tid'] != $contact->segment_tid) return false;
+  if ($node->field_course[LANGUAGE_NONE][0]['target_id'] != $contact->course_nid) return false;
+  if ($node->field_picture[LANGUAGE_NONE][0]['fid'] != $contact->file['fid']) return false;
 
-  // load/create course
-	$query = new EntityFieldQuery();
-	$query->entityCondition('entity_type', 'node')
-		->entityCondition('bundle', 'course')
-		->fieldCondition('field_internal_id', 'value', $course->id)
-		->range(0, 1);
-	$result = $query->execute();
-	if (isset($result['node'])) {
-	  // Update existing
-		$node = node_load(key($result['node']));
-    $node->status = 1;
-	} else {
-		$node = new stdClass();
-		$node->type = 'course';
-		$node->language = LANGUAGE_NONE;
-		$node->uid = 1;
-		$node->status = 1;
-		node_object_prepare($node);
-	}
-
-  // update all imported fields of node
-	$node->title = $course->title;
-  $node->field_internal_id[LANGUAGE_NONE][0]['value'] = $course->id;
-  if (!empty($course->segment_tid)) {
-    $node->field_segment[LANGUAGE_NONE][0]['tid'] = $course->segment_tid;
-  }
-	$node->field_is_module[LANGUAGE_NONE][0]['value'] = !empty($course->is_module) ? 1 : 0;
-	if (!empty($course->meta->title)) {
-		$node->metatags['title']['value'] = $course->meta->title;
-	}
-	if (!empty($course->meta->keywords)) {
-		$node->metatags['keywords']['value'] = $course->meta->keywords;
-	}
-	if (!empty($course->meta->description)) {
-		$node->metatags['description']['value'] = $course->meta->description;
-	}
-	$node = node_submit($node);
-	node_save($node);
-	$already_processed[$course->id] = $node->nid;
-	return $node->nid;
+  // objects are equal
+  return true;
 }
-
 /**
  * Saves imported course time in DB. All course times are relevant.
  * Unique course time is defined by course time, course and location.
@@ -655,6 +692,7 @@ function _hso_process_course($course) {
  */
 function _hso_process_course_time($time) {
   // load/create course time
+  $node_update = true;
 	$query = new EntityFieldQuery();
 	$query->entityCondition('entity_type', 'node')
 		->entityCondition('bundle', 'course_times')
@@ -674,41 +712,84 @@ function _hso_process_course_time($time) {
 		$node->uid = 1;
 		$node->status = 1;
 		node_object_prepare($node);
+    $node_update = false;
 	}
 
+  // prepare special fields of course time
+  $start_date = empty($time->start_time) ? strtotime($time->start_date . ' 00:00:00') : strtotime($time->start_date . ' ' . $time->start_time);
+  $start_date_f = empty($time->start_time) ? date('d.m.Y', $start_date) : date('d.m.Y H:i', $start_date);
+
+  $time->title = $time->course_title . ' @' . $time->location->name . ' - ' . $start_date_f;
+  $time->start_date = date('Y-m-d H:i:s', $start_date);
+  $time->end_date = !empty($time->end_date) ? date('Y-m-d H:i:s', strtotime($time->end_date . ' 00:00:00')) : null;
+  $time->has_subsidy = $time->has_subsidy ? 1 : 0;
+  $time->no_vacancy = $time->no_vacancy ? 1 : 0;
+  $time->taken_places = !empty($time->taken_places) ? $time->taken_places : 0;
+  $time->min_places = !empty($time->min_places) ? $time->min_places : 0;
+  $time->max_places = !empty($time->max_places) ? $time->max_places : NULL;
+  $time->template = !empty($time->template) && in_array($time->template, array('ecdl', 'european', 'salesfunnel')) ? $time->template : 'default';
+  $time->brand_tid = _hso_brands_id_converter($time->brand_id);
+
+  // compare objects
+  if ($node_update && _hso_equal_course_times($node, $time)) return false;
+
   // update all imported fields of node
-	$start_date = empty($time->start_time) ? strtotime($time->start_date . ' 00:00:00') : strtotime($time->start_date . ' ' . $time->start_time);
-	$start_date_f = empty($time->start_time) ? date('d.m.Y', $start_date) : date('d.m.Y H:i', $start_date);
-	$node->title = $time->course_title . ' @' . $time->location->name . ' - ' . $start_date_f;
+	$node->title = $time->title;
   $node->field_internal_id[LANGUAGE_NONE][0]['value'] = $time->id;
+  $node->field_course[LANGUAGE_NONE][0]['target_id'] = $time->course_nid;
+  $node->field_location[LANGUAGE_NONE][0]['target_id'] = $time->location_nid;
+  $node->field_brand[LANGUAGE_NONE][0]['tid'] = $time->brand_tid;
 	$node->body[LANGUAGE_NONE][0]['value'] = $time->description;
 	$node->body[LANGUAGE_NONE][0]['format']  = 'html';
-	$node->field_course_date['und'][0]['value'] = date('Y-m-d H:i:s', $start_date);
-	if (!empty($time->end_date)) {
-		$end_date = strtotime($time->end_date . ' 00:00:00');
-		$node->field_course_date['und'][0]['value2'] = date('Y-m-d H:i:s', $end_date);
-	}
-	if (!empty($time->has_subsidy)) {
-		$node->field_has_fsv[LANGUAGE_NONE][0]['value'] = 1;
-	}
-	if (!empty($time->no_vacancy)) {
-		$node->field_no_vacancy[LANGUAGE_NONE][0]['value'] = 1;
-	}
+	$node->field_course_date['und'][0]['value'] = $time->start_date;
+  $node->field_course_date['und'][0]['value2'] = $time->end_date;
+  $node->field_has_fsv[LANGUAGE_NONE][0]['value'] = $time->has_subsidy;
+  $node->field_no_vacancy[LANGUAGE_NONE][0]['value'] = $time->no_vacancy;
   $node->field_brutto_price[LANGUAGE_NONE][0]['value'] = $time->price_brutto;
   $node->field_netto_price[LANGUAGE_NONE][0]['value'] = $time->price_netto;
   $node->field_detailed_price[LANGUAGE_NONE][0]['value'] = $time->price_detailed;
   $node->field_detailed_price[LANGUAGE_NONE][0]['format']  = 'html';
   $node->field_additional_info_price[LANGUAGE_NONE][0]['value'] = $time->price_additional;
   $node->field_additional_info_price[LANGUAGE_NONE][0]['format']  = 'html';
-	$node->field_taken_places[LANGUAGE_NONE][0]['value'] = !empty($time->taken_places) ? $time->taken_places : 0;
-  $node->field_minimum[LANGUAGE_NONE][0]['value'] = !empty($time->min_places) ? $time->min_places : 0;
-  $node->field_maximum[LANGUAGE_NONE][0]['value'] = !empty($time->max_places) ? $time->max_places : NULL;
-  $node->field_template[LANGUAGE_NONE][0]['value'] = !empty($time->template) && in_array($time->template, array('ecdl', 'european', 'salesfunnel')) ? $time->template : 'default';
-	$node->field_course[LANGUAGE_NONE][0]['target_id'] = $time->course_nid;
-  $node->field_location[LANGUAGE_NONE][0]['target_id'] = $time->location_nid;
-  $node->field_brand[LANGUAGE_NONE][0]['tid'] = _hso_brands_id_converter($time->brand_id);
+	$node->field_taken_places[LANGUAGE_NONE][0]['value'] = $time->taken_places;
+  $node->field_minimum[LANGUAGE_NONE][0]['value'] = $time->min_places;
+  $node->field_maximum[LANGUAGE_NONE][0]['value'] = $time->max_places;
+  $node->field_template[LANGUAGE_NONE][0]['value'] = $time->template;
 	$node = node_submit($node);
 	node_save($node);
-	return $node->nid;
+	return true;
 }
 
+/**
+ * Compares the fields of the course time node with the imported one.
+ *
+ * @param $node
+ * @param $time
+ *
+ * @return bool   TRUE, if the node is equal to the imported course time, FALSE otherwise.
+ */
+function _hso_equal_course_times($node, $time) {
+  // compare objects
+  if ($node->status != 1) return false;
+  if ($node->title != $time->title) return false;
+  if ($node->field_internal_id[LANGUAGE_NONE][0]['value'] != $time->id) return false;
+  if ($node->field_course[LANGUAGE_NONE][0]['target_id'] != $time->course_nid) return false;
+  if ($node->field_location[LANGUAGE_NONE][0]['target_id'] != $time->location_nid) return false;
+  if ($node->field_brand[LANGUAGE_NONE][0]['tid'] != $time->brand_tid) return false;
+  if ($node->body[LANGUAGE_NONE][0]['value'] != $time->description) return false;
+  if ($node->field_course_date['und'][0]['value'] != $time->start_date) return false;
+  if ($node->field_course_date['und'][0]['value2'] != $time->end_date) return false;
+  if ($node->field_has_fsv[LANGUAGE_NONE][0]['value'] != $time->has_subsidy) return false;
+  if ($node->field_no_vacancy[LANGUAGE_NONE][0]['value'] != $time->no_vacancy) return false;
+  if ($node->field_brutto_price[LANGUAGE_NONE][0]['value'] != $time->price_brutto) return false;
+  if ($node->field_netto_price[LANGUAGE_NONE][0]['value'] != $time->price_netto) return false;
+  if ($node->field_detailed_price[LANGUAGE_NONE][0]['value'] != $time->price_detailed) return false;
+  if ($node->field_additional_info_price[LANGUAGE_NONE][0]['value'] != $time->price_additional) return false;
+  if ($node->field_taken_places[LANGUAGE_NONE][0]['value'] != $time->taken_places) return false;
+  if ($node->field_minimum[LANGUAGE_NONE][0]['value'] != $time->min_places) return false;
+  if ($node->field_maximum[LANGUAGE_NONE][0]['value'] != $time->max_places) return false;
+  if ($node->field_template[LANGUAGE_NONE][0]['value'] != $time->template) return false;
+
+  // objects are equal
+  return true;
+}
