@@ -50,8 +50,8 @@
   -webkit-font-smoothing: antialiased;
 }
 
-
-// General settings
+//
+// ShareThis block settings
 // -------------------------
 .block-sharethis .block-inner {
   margin: 0;
@@ -98,4 +98,38 @@
 }
 .st_pinterest_large .stButton .stLarge:before {
   content: "\f650";
+}
+
+//
+// Follow site block settings
+// --------------------------
+#block-follow-site {
+  margin-top: -21px;
+
+  .follow-links {
+    .follow-link-wrapper {
+      margin: 0;
+      text-align: right;
+
+      a.follow-link {
+        padding: 0 10px;
+        .ss-social("Circle");
+        font-size: @font-size-large;
+        color: #fff;
+        background-image: none !important;
+
+        &:hover {
+          color: darken(#fff, 5%);
+        }
+
+        &.follow-link-facebook {
+          content: "\f610";
+        }
+        &.follow-link-twitter {
+          content: "\f611";
+        }
+
+      }
+    }
+  }
 }

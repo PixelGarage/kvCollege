@@ -41,7 +41,7 @@ define('BROSCHUERE_BESTELLEN_FORM', 175); // HSO: 1336
 /**
  * AGB nid.
  */
-define('AGB_NID', 1036); // HSO: 1036
+define('AGB_NID', 4); // HSO: 1036
 
 
 /**

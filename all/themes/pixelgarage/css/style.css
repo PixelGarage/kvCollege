@@ -8832,6 +8832,41 @@ form#user-login {
 .st_pinterest_large .stButton .stLarge:before {
   content: "\f650";
 }
+#block-follow-site {
+  margin-top: -21px;
+}
+#block-follow-site .follow-links .follow-link-wrapper {
+  margin: 0;
+  text-align: right;
+}
+#block-follow-site .follow-links .follow-link-wrapper a.follow-link {
+  padding: 0 10px;
+  font-family: "SSSocial-Circle";
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: none;
+  text-rendering: optimizeLegibility;
+  white-space: nowrap;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga=1";
+  -moz-font-feature-settings: "liga";
+  -ms-font-feature-settings: "liga" 1;
+  -o-font-feature-settings: "liga";
+  font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-size: 20px;
+  color: #fff;
+  background-image: none !important;
+}
+#block-follow-site .follow-links .follow-link-wrapper a.follow-link:hover {
+  color: #f2f2f2;
+}
+#block-follow-site .follow-links .follow-link-wrapper a.follow-link.follow-link-facebook {
+  content: "\f610";
+}
+#block-follow-site .follow-links .follow-link-wrapper a.follow-link.follow-link-twitter {
+  content: "\f611";
+}
 /*
  *  Intro page component
  * --------------------------------------------------*/
@@ -9676,14 +9711,17 @@ form#user-login {
   max-width: 100%;
   height: auto;
 }
-.node.node-page .field-name-hso-pages ul.nav-tabs {
+.node.node-page .field-name-hso-pages ul.nav-tabs,
+.node.node-page .field-name-infos-page ul.nav-tabs {
   border-bottom: none;
 }
-.node.node-page .field-name-hso-pages ul.nav-tabs li {
+.node.node-page .field-name-hso-pages ul.nav-tabs li,
+.node.node-page .field-name-infos-page ul.nav-tabs li {
   margin: 0;
   height: 30px;
 }
-.node.node-page .field-name-hso-pages ul.nav-tabs li a {
+.node.node-page .field-name-hso-pages ul.nav-tabs li a,
+.node.node-page .field-name-infos-page ul.nav-tabs li a {
   position: relative;
   display: block;
   height: 30px;
@@ -9701,23 +9739,29 @@ form#user-login {
   border-radius: 0;
 }
 .node.node-page .field-name-hso-pages ul.nav-tabs li a::before,
-.node.node-page .field-name-hso-pages ul.nav-tabs li a::after {
+.node.node-page .field-name-infos-page ul.nav-tabs li a::before,
+.node.node-page .field-name-hso-pages ul.nav-tabs li a::after,
+.node.node-page .field-name-infos-page ul.nav-tabs li a::after {
   content: ' ';
   position: absolute;
   top: 0;
   width: 15px;
   height: 30px;
 }
-.node.node-page .field-name-hso-pages ul.nav-tabs li a::before {
+.node.node-page .field-name-hso-pages ul.nav-tabs li a::before,
+.node.node-page .field-name-infos-page ul.nav-tabs li a::before {
   left: -15px;
   background: transparent url(../images/menu_inact_01.png) top right / auto 100% no-repeat;
 }
-.node.node-page .field-name-hso-pages ul.nav-tabs li a::after {
+.node.node-page .field-name-hso-pages ul.nav-tabs li a::after,
+.node.node-page .field-name-infos-page ul.nav-tabs li a::after {
   right: -15px;
   background: transparent url(../images/menu_inact_03.png) top left / auto 100% no-repeat;
 }
 .node.node-page .field-name-hso-pages ul.nav-tabs li:hover a,
-.node.node-page .field-name-hso-pages ul.nav-tabs li.active a {
+.node.node-page .field-name-infos-page ul.nav-tabs li:hover a,
+.node.node-page .field-name-hso-pages ul.nav-tabs li.active a,
+.node.node-page .field-name-infos-page ul.nav-tabs li.active a {
   position: relative;
   display: block;
   height: 25px;
@@ -9734,9 +9778,13 @@ form#user-login {
   color: #ffffff;
 }
 .node.node-page .field-name-hso-pages ul.nav-tabs li:hover a::before,
+.node.node-page .field-name-infos-page ul.nav-tabs li:hover a::before,
 .node.node-page .field-name-hso-pages ul.nav-tabs li.active a::before,
+.node.node-page .field-name-infos-page ul.nav-tabs li.active a::before,
 .node.node-page .field-name-hso-pages ul.nav-tabs li:hover a::after,
-.node.node-page .field-name-hso-pages ul.nav-tabs li.active a::after {
+.node.node-page .field-name-infos-page ul.nav-tabs li:hover a::after,
+.node.node-page .field-name-hso-pages ul.nav-tabs li.active a::after,
+.node.node-page .field-name-infos-page ul.nav-tabs li.active a::after {
   content: ' ';
   position: absolute;
   top: 0;
@@ -9744,16 +9792,21 @@ form#user-login {
   height: 25px;
 }
 .node.node-page .field-name-hso-pages ul.nav-tabs li:hover a::before,
-.node.node-page .field-name-hso-pages ul.nav-tabs li.active a::before {
+.node.node-page .field-name-infos-page ul.nav-tabs li:hover a::before,
+.node.node-page .field-name-hso-pages ul.nav-tabs li.active a::before,
+.node.node-page .field-name-infos-page ul.nav-tabs li.active a::before {
   left: 0;
   background: #094756 none top right / auto 100% no-repeat;
 }
 .node.node-page .field-name-hso-pages ul.nav-tabs li:hover a::after,
-.node.node-page .field-name-hso-pages ul.nav-tabs li.active a::after {
+.node.node-page .field-name-infos-page ul.nav-tabs li:hover a::after,
+.node.node-page .field-name-hso-pages ul.nav-tabs li.active a::after,
+.node.node-page .field-name-infos-page ul.nav-tabs li.active a::after {
   right: 0;
   background: #094756 none top left / auto 100% no-repeat;
 }
-.node.node-page .field-name-hso-pages div.tab-content {
+.node.node-page .field-name-hso-pages div.tab-content,
+.node.node-page .field-name-infos-page div.tab-content {
   padding: 15px;
   background: #e9fadf none;
 }
@@ -10597,6 +10650,9 @@ body.node-type-course header#navbar .container .navbar-collapse nav.sub-navigati
 body.node-type-in-depth-course header#navbar .container .navbar-collapse nav.sub-navigation .view-courses {
   margin: 0 auto 20px;
 }
+body.node-type-in-depth-course header#navbar .container .navbar-collapse nav.sub-navigation .view-courses .view-header {
+  margin: 20px auto;
+}
 body.node-type-in-depth-course header#navbar .container .navbar-collapse nav.sub-navigation .view-courses .views-row {
   display: inline-block;
   margin: 0 -2px;
@@ -10789,6 +10845,9 @@ body.node-type-course .main-container #page-header .region-header .view-courses 
 }
 body.node-type-in-depth-course .main-container #page-header .region-header .view-courses {
   margin: 0 auto 20px;
+}
+body.node-type-in-depth-course .main-container #page-header .region-header .view-courses .view-header {
+  margin: 20px auto;
 }
 body.node-type-in-depth-course .main-container #page-header .region-header .view-courses .views-row {
   display: inline-block;
@@ -10987,17 +11046,12 @@ body.front .main-container #page-header .region-header .view-banners .view-conte
   .footer.container .block .field-name-body img {
     display: block;
     float: right;
+    margin-top: 40px;
   }
 }
 .footer.container .block#block-menu-menu-legal-menu {
-  margin-top: -20px;
   width: 100%;
   text-align: right;
-}
-@media screen and (min-width: 768px) {
-  .footer.container .block#block-menu-menu-legal-menu {
-    margin-top: -40px;
-  }
 }
 .footer.container .block#block-menu-menu-legal-menu ul.menu > li {
   display: inline-block;
