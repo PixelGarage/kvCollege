@@ -10206,22 +10206,22 @@ form#user-login {
     column-gap: 50px;
   }
 }
-.view-course-tabs div.tab-content #tab-1-1 table.lektionplan tr strong {
+.view-course-tabs div.tab-content div.tab-pane table.lektionplan tr strong {
   font-family: 'RelayMedium';
   font-size: 16px;
 }
-.view-course-tabs div.tab-content #tab-1-1 table.lektionplan tr th,
-.view-course-tabs div.tab-content #tab-1-1 table.lektionplan tr td {
+.view-course-tabs div.tab-content div.tab-pane table.lektionplan tr th,
+.view-course-tabs div.tab-content div.tab-pane table.lektionplan tr td {
   font-family: 'RelayMedium';
   font-size: 16px;
   padding: 5px 10px;
   border-bottom: 2px solid #094756;
 }
-.view-course-tabs div.tab-content #tab-1-1 table.lektionplan tr td {
+.view-course-tabs div.tab-content div.tab-pane table.lektionplan tr td {
   font-family: 'RelayLight';
   border-bottom: 1px solid #094756;
 }
-.view-course-tabs div.tab-content #tab-1-1 table.lektionplan tr:last-child td {
+.view-course-tabs div.tab-content div.tab-pane table.lektionplan tr:last-child td {
   border-bottom: none;
 }
 /*

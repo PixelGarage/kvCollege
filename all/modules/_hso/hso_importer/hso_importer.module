@@ -10,7 +10,7 @@
  */
 function hso_importer_cron() {
   $last_time = variable_get('hso_importer_cron_last_run', 0);
-  $cron_from_outside = $_GET['kickFromHsoCronJob'];
+  $cron_from_outside = isset($_GET['kickFromHsoCronJob']) ? $_GET['kickFromHsoCronJob'] : '';
 
   if ($cron_from_outside == 'RunItBaby' || REQUEST_TIME - $last_time >= 48*3600) {
   	_hso_importer_run_import();

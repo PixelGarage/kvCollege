@@ -344,7 +344,8 @@ function _hso_make_anmeldung_pdf($location, $segment, $contact, $grussformel, $c
 
     // convert html string to pdf
     $dir_uri = file_stream_wrapper_get_instance_by_uri('private://anmeldung');
-    $filepath = $dir_uri->realpath() . '/anmeldung_' . ($to_client ? 'logo_' : '' ) . md5($submission_sid . '2I7L1N1') . '.pdf';
+		$filename = 'anmeldung_' . ($to_client ? 'logo_' : '' ) . md5($submission_sid . '2I7L1N1') . '.pdf';
+    $filepath = $dir_uri->realpath() . '/' . $filename;
     $options = array(
       'title' => $to_client ? 'Anmeldereservation' : 'Anmeldung',
       'subject' => $brand_short,
@@ -381,7 +382,7 @@ function _hso_make_anmeldung_pdf($location, $segment, $contact, $grussformel, $c
 		} else {
 			$file->filename = $to_client ? 'ausbildungsvertrag.pdf' : 'anmeldung.pdf';
 		}
-		$file->filepath = $filepath;
+		$file->filepath = variable_get('file_private_path') . '/anmeldung/' . $filename;
     $file->filemime = 'application/pdf';
     return $file;
 
