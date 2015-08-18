@@ -9215,6 +9215,154 @@ form#user-login {
   max-width: 100%;
   height: auto;
 }
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs {
+  border-bottom: 1px solid #dddddd;
+  margin-bottom: 10px;
+  border-bottom: none;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs > li {
+  float: left;
+  margin-bottom: -1px;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs > li > a {
+  margin-right: 2px;
+  line-height: 1.25;
+  border: 1px solid transparent;
+  border-radius: 4px 4px 0 0;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs > li > a:hover {
+  border-color: #eeeeee #eeeeee #dddddd;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs > li.active > a,
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs > li.active > a:hover,
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs > li.active > a:focus {
+  color: #555555;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-bottom-color: transparent;
+  cursor: default;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified {
+  width: 100%;
+  border-bottom: 0;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified > li {
+  float: none;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified > li > a {
+  text-align: center;
+  margin-bottom: 5px;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified > .dropdown .dropdown-menu {
+  top: auto;
+  left: auto;
+}
+@media (min-width: 768px) {
+  .node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified > li {
+    display: table-cell;
+    width: 1%;
+  }
+  .node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified > li > a {
+    margin-bottom: 0;
+  }
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified > li > a {
+  margin-right: 0;
+  border-radius: 4px;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified > .active > a,
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified > .active > a:hover,
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified > .active > a:focus {
+  border: 1px solid #dddddd;
+}
+@media (min-width: 768px) {
+  .node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified > li > a {
+    border-bottom: 1px solid #dddddd;
+    border-radius: 4px 4px 0 0;
+  }
+  .node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified > .active > a,
+  .node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified > .active > a:hover,
+  .node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs.nav-justified > .active > a:focus {
+    border-bottom-color: #ffffff;
+  }
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li {
+  margin: 0;
+  height: 30px;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li a {
+  position: relative;
+  display: block;
+  height: 30px;
+  width: auto;
+  /* give the pseudo-elements space due to absolute positioning */
+  margin: 0 15px;
+  border: 0;
+  outline: 0;
+  background: transparent url(../images/menu_inact_02.png) top left / auto 100% repeat-x;
+  padding: 5px 10px;
+  font-family: 'RelayLight';
+  font-size: 16px;
+  color: #094756;
+  line-height: 1;
+  border-radius: 0;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li a::before,
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li a::after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  width: 15px;
+  height: 30px;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li a::before {
+  left: -15px;
+  background: transparent url(../images/menu_inact_01.png) top right / auto 100% no-repeat;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li a::after {
+  right: -15px;
+  background: transparent url(../images/menu_inact_03.png) top left / auto 100% no-repeat;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li:hover a,
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li.active a {
+  position: relative;
+  display: block;
+  height: 25px;
+  width: auto;
+  /* give the pseudo-elements space due to absolute positioning */
+  margin: 0 0;
+  border: 0;
+  outline: 0;
+  background: #094756 none top left / auto 100% repeat-x;
+  top: 5px;
+  left: -5px;
+  margin: 0 5px 0 10px;
+  padding: 5px 15px 5px 20px;
+  color: #ffffff;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li:hover a::before,
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li.active a::before,
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li:hover a::after,
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li.active a::after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 25px;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li:hover a::before,
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li.active a::before {
+  left: 0;
+  background: #094756 none top right / auto 100% no-repeat;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li:hover a::after,
+.node-in-depth-course.view-mode-full .row .group-tabs ul.nav-tabs li.active a::after {
+  right: 0;
+  background: #094756 none top left / auto 100% no-repeat;
+}
+.node-in-depth-course.view-mode-full .row .group-tabs .tab-content .tab-pane {
+  background: none;
+}
 /*
  *  Location content type
  * --------------------------------------------------*/
