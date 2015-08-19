@@ -99,6 +99,25 @@
   }
 
 
+  //
+  // Language dependant word hyphenation (language has to be set in html element)
+  //
+  .hyphenate(@mode: auto) {
+    // Warning: Needed for oldIE support, but words are broken up letter-by-letter
+    -ms-word-break: break-all;
+    //word-break: break-all;
+
+    // Non standard for webkit, breaks between words
+    word-break: break-word;
+
+    // uses dictionaries for correct word breaking in supported languages
+    -webkit-hyphens: @mode;
+    -moz-hyphens: @mode;
+    -ms-hyphens: @mode;
+    -o-hyphens: @mode;
+    hyphens: @mode;
+  }
+
   // wysiwyg body
   .wysiwyg-body() {
     h1, h2, h3, h4, h5, h6 {
@@ -112,6 +131,7 @@
     p, tbody td {
       font-family: @pxl-text-font;
       font-size: @font-size-base;
+      .hyphenate;
     }
 
     pre, address {
