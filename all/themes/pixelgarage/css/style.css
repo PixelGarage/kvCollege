@@ -11271,7 +11271,8 @@ body.front .main-container #page-header .region-header .view-banners .view-conte
   .footer.container .block .field-name-body img {
     display: block;
     float: right;
-    margin-top: 40px;
+    margin-top: 20px;
+    max-width: 45%;
   }
 }
 .footer.container .block#block-menu-menu-legal-menu {
