@@ -43,29 +43,39 @@ if ($course_time_nid) {
 
   <p><a href="<?php print url('node/' . $course->nid); ?>">Zurück zum Kurs/Lehrgang</a></p>
 </div>
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', '<?php print variable_get('googleanalytics_account', ''); ?>']);
-	_gaq.push(['_addTrans',
-    '<?php print $sid; ?>-<?php print $submission->remote_addr; ?>', // transaction ID - required
-    'HSO <?php print addslashes($location->title); ?>', // affiliation or store name
-    '<?php print $tracking_price; ?>', // total - required
-    '0', // tax
-    '0', // shipping
-    '<?php print addslashes($location->title); ?>', // city
-    'XX', // state or province
-    'CH' // country
-  ]);
-  _gaq.push(['_addItem',
-    '<?php print $sid; ?>-<?php print $submission->remote_addr; ?>', // transaction ID - required
-    '<?php print $course_time_node->field_internal_id[LANGUAGE_NONE][0]['value']; ?>', // SKU/code - required
-    '<?php print addslashes($course->title); ?>', // product name
-    '<?php print addslashes($segment->name); ?>', // category or variation
-    '<?php print $tracking_price; ?>', // unit price - required
-    '1' // quantity - required
-  ]);
-  _gaq.push(['_trackTrans']); //submits transaction to the Analytics servers
-</script>
+
+<?php if ($course_time_nid): ?>
+  <script type="text/javascript">
+    // check existance (opt-out doesn't create ga)
+    if (typeof ga == 'function') {
+      // Load the ecommerce plug-in.
+      ga('require', 'ecommerce');
+
+      // add transaction
+      ga('ecommerce:addTransaction', {
+        'id': '<?php print $sid; ?>-<?php print $submission->remote_addr; ?>',    // Transaction ID. Required
+        'affiliation': 'HSO <?php print addslashes($location->title); ?>',        // Affiliation or store name
+        'revenue': '<?php print $tracking_price; ?>',                             // Grand Total
+        'shipping': '0',                                                          // Shipping
+        'tax': '0.0'                                                              // Tax
+      });
+
+      // add ecommerce item
+      ga('ecommerce:addItem', {
+        'id': '<?php print $sid; ?>-<?php print $submission->remote_addr; ?>',    // Transaction ID. Required
+        'name': '<?php print addslashes($course->title); ?>',                     // Product name. Required
+        'sku': '<?php print $course_time_node->field_internal_id[LANGUAGE_NONE][0]['value']; ?>', // SKU/code
+        'category': '<?php print addslashes($segment->name); ?>',                 // Category or variation
+        'price': '<?php print $tracking_price; ?>',                               // Unit price
+        'quantity': '1'                                                           // Quantity
+      });
+
+      // submit transaction
+      ga('ecommerce:send');      // Send transaction and item data to Google Analytics.
+    }
+  </script>
+<?php endif; ?>
+
 <script src="http://cdn.cxense.com/cx.js" type="text/javascript"></script>
 <script>cX.library.setCustomParameters({'u_hsoch':'hsosignoff'});</script>
 <div id="cX-root" style="display:none"></div>
